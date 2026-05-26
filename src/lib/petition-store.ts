@@ -1,26 +1,9 @@
 import { Redis } from '@upstash/redis';
+import { getRedis } from '@/lib/redis';
 import type { CitizenPetition, PetitionStats } from '@/types/petition';
 
 const PETITIONS_KEY = 'voto_informado:petitions';
 const STATS_KEY = 'voto_informado:petition_stats';
-
-function getRedis(): Redis | null {
-  try {
-    if (!process.env.KV_REST_API_URL || !process.env.KV_REST_API_TOKEN) {
-      console.error(
-        '[petition-store] Redis not configured. Missing KV_REST_API_URL or KV_REST_API_TOKEN env vars.'
-      );
-      return null;
-    }
-    return new Redis({
-      url: process.env.KV_REST_API_URL,
-      token: process.env.KV_REST_API_TOKEN,
-    });
-  } catch (error) {
-    console.error('[petition-store] Failed to create Redis client:', error);
-    return null;
-  }
-}
 
 export async function savePetition(petition: CitizenPetition): Promise<boolean> {
   const redis = getRedis();

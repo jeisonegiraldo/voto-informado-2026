@@ -1,22 +1,8 @@
-import { Redis } from '@upstash/redis';
+import { getRedis } from '@/lib/redis';
 import type { NewsArticle } from '@/types/news';
 
 const CACHE_KEY = 'voto_informado:news';
 const CACHE_TTL = 48 * 60 * 60; // 48 hours in seconds
-
-function getRedis(): Redis | null {
-  try {
-    if (!process.env.KV_REST_API_URL || !process.env.KV_REST_API_TOKEN) {
-      return null;
-    }
-    return new Redis({
-      url: process.env.KV_REST_API_URL,
-      token: process.env.KV_REST_API_TOKEN,
-    });
-  } catch {
-    return null;
-  }
-}
 
 export async function getCachedNews(): Promise<NewsArticle[]> {
   const redis = getRedis();

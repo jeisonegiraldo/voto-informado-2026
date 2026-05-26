@@ -23,6 +23,7 @@ export function SpectrumBar({ labels, positions }: SpectrumBarProps) {
         <TooltipProvider delay={100}>
           {positions.map((pos) => {
             const pct = ((pos.score + 5) / 10) * 100;
+            const lastName = pos.candidate.name.split(' ').slice(-1)[0];
             return (
               <Tooltip key={pos.candidate.id}>
                 <TooltipTrigger
@@ -45,9 +46,32 @@ export function SpectrumBar({ labels, positions }: SpectrumBarProps) {
           })}
         </TooltipProvider>
       </div>
+
+      {/* Spectrum labels */}
       <div className="mt-1 flex justify-between">
         <span className="text-[10px] font-medium text-gray-400 sm:text-xs">{labels[0]}</span>
         <span className="text-[10px] font-medium text-gray-400 sm:text-xs">{labels[1]}</span>
+      </div>
+
+      {/* Candidate names positioned under dots */}
+      <div className="relative h-4">
+        {positions.map((pos) => {
+          const pct = ((pos.score + 5) / 10) * 100;
+          const clampedPct = Math.max(8, Math.min(92, pct));
+          const lastName = pos.candidate.name.split(' ').slice(-1)[0];
+          return (
+            <span
+              key={pos.candidate.id}
+              className="absolute -translate-x-1/2 text-[9px] font-semibold leading-none sm:text-[10px]"
+              style={{
+                left: `${clampedPct}%`,
+                color: pos.candidate.color,
+              }}
+            >
+              {lastName}
+            </span>
+          );
+        })}
       </div>
     </div>
   );

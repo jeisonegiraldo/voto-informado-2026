@@ -1,4 +1,4 @@
-import { ComparisonMatrix } from '@/components/comparison/comparison-matrix';
+import { ComparadorClient } from '@/components/comparison/comparador-client';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -13,11 +13,11 @@ export default function CompararPage() {
       <div className="mb-8 text-center">
         <h1 className="text-3xl font-bold text-gray-900">Comparar Candidatos</h1>
         <p className="mt-2 text-gray-500">
-          12 dimensiones clave para entender las diferencias entre los 4 candidatos presidenciales.
-          Pasa el cursor sobre cada punto para ver el detalle.
+          12 dimensiones clave para entender las diferencias entre los candidatos presidenciales.
+          Toca cada dimensión para ver propuestas y riesgos en detalle.
         </p>
       </div>
-      <ComparisonMatrix />
+      <ComparadorClient />
     </div>
   );
 }

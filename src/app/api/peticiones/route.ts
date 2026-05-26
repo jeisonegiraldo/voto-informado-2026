@@ -60,8 +60,12 @@ export async function POST(req: NextRequest) {
     const country = req.headers.get('x-vercel-ip-country') || 'CO';
 
     // Classify with LLM — non-blocking, use defaults if it fails
-    let classificationResult = {
-      classification: 'comentario' as const,
+    let classificationResult: {
+      classification: 'comentario' | 'peticion' | 'pregunta' | 'apoyo' | 'critica';
+      dimensionId: string;
+      dimensionLabel: string;
+    } = {
+      classification: 'comentario',
       dimensionId: 'ideology',
       dimensionLabel: 'General',
     };

@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Send, Bot, User, Loader2, AlertCircle, MessageSquare, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import Markdown from 'react-markdown';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -171,11 +172,44 @@ export function ChatEngine() {
                   }`}
                 >
                   {msg.role === 'assistant' ? (
-                    <div className="whitespace-pre-wrap">
-                      {msg.content || (
-                        <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
-                      )}
-                    </div>
+                    msg.content ? (
+                      <Markdown
+                        components={{
+                          h2: ({ children }) => (
+                            <h2 className="mb-2 mt-3 text-base font-bold text-gray-900 first:mt-0">{children}</h2>
+                          ),
+                          h3: ({ children }) => (
+                            <h3 className="mb-1.5 mt-3 text-sm font-bold text-gray-800 first:mt-0">{children}</h3>
+                          ),
+                          p: ({ children }) => (
+                            <p className="mb-2 last:mb-0">{children}</p>
+                          ),
+                          ul: ({ children }) => (
+                            <ul className="mb-2 ml-1 space-y-1 last:mb-0">{children}</ul>
+                          ),
+                          ol: ({ children }) => (
+                            <ol className="mb-2 ml-4 list-decimal space-y-1 last:mb-0">{children}</ol>
+                          ),
+                          li: ({ children }) => (
+                            <li className="flex items-start gap-1.5">
+                              <span className="mt-1.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-blue-400" />
+                              <span>{children}</span>
+                            </li>
+                          ),
+                          strong: ({ children }) => (
+                            <strong className="font-semibold text-gray-900">{children}</strong>
+                          ),
+                          em: ({ children }) => (
+                            <em className="text-gray-600 italic">{children}</em>
+                          ),
+                          hr: () => <hr className="my-3 border-gray-200" />,
+                        }}
+                      >
+                        {msg.content}
+                      </Markdown>
+                    ) : (
+                      <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+                    )
                   ) : (
                     msg.content
                   )}

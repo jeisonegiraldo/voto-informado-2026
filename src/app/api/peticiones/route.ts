@@ -1,0 +1,111 @@
+import { NextRequest } from 'next/server';
+import { classifyPetition } from '@/lib/petition-classifier';
+import { savePetition, getPetitionStats } from '@/lib/petition-store';
+import type { CitizenPetition } from '@/types/petition';
+import type { CandidateId } from '@/types/candidate';
+
+const VALID_CANDIDATES: CandidateId[] = ['cepeda', 'espriella', 'valencia', 'fajardo'];
+
+// Simple rate limit: max 5 petitions per IP per hour
+const petitionRateMap = new Map<string, { count: number; resetAt: number }>();
+
+function checkPetitionRate(ip: string): boolean {
+  const now = Date.now();
+  const entry = petitionRateMap.get(ip);
+  if (!entry || now > entry.resetAt) {
+    petitionRateMap.set(ip, { count: 1, resetAt: now + 60 * 60 * 1000 });
+    return true;
+  }
+  if (entry.count >= 5) return false;
+  entry.count++;
+  return true;
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json();
+    const { candidateId, text, name } = body;
+
+    // Validate
+    if (!candidateId || !VALID_CANDIDATES.includes(candidateId)) {
+      return Response.json({ error: 'Candidato inválido' }, { status: 400 });
+    }
+
+    if (!text || typeof text !== 'string' || text.trim().length < 10) {
+      return Response.json(
+        { error: 'El mensaje debe tener al menos 10 caracteres' },
+        { status: 400 }
+      );
+    }
+
+    if (text.length > 1000) {
+      return Response.json(
+        { error: 'El mensaje no puede exceder 1000 caracteres' },
+        { status: 400 }
+      );
+    }
+
+    // Rate limit
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'anonymous';
+    if (!checkPetitionRate(ip)) {
+      return Response.json(
+        { error: 'Has enviado demasiados mensajes. Intenta más tarde.' },
+        { status: 429 }
+      );
+    }
+
+    // Capture geo from Vercel headers (automatically set on Vercel)
+    const city = req.headers.get('x-vercel-ip-city') || undefined;
+    const region = req.headers.get('x-vercel-ip-country-region') || undefined;
+    const country = req.headers.get('x-vercel-ip-country') || 'CO';
+
+    // Classify with LLM
+    const classification = await classifyPetition(text.trim(), candidateId);
+
+    // Build petition object
+    const petition: CitizenPetition = {
+      id: `pet_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+      candidateId,
+      text: text.trim(),
+      name: name?.trim() || undefined,
+      classification: classification.classification,
+      dimension: classification.dimensionId as CitizenPetition['dimension'],
+      dimensionLabel: classification.dimensionLabel,
+      region: region ? decodeURIComponent(region) : undefined,
+      city: city ? decodeURIComponent(city) : undefined,
+      country,
+      createdAt: new Date().toISOString(),
+    };
+
+    // Save
+    const saved = await savePetition(petition);
+
+    if (!saved) {
+      return Response.json(
+        { error: 'No se pudo guardar el mensaje. Intenta más tarde.' },
+        { status: 500 }
+      );
+    }
+
+    return Response.json({
+      success: true,
+      classification: petition.classification,
+      dimension: petition.dimensionLabel,
+      message: 'Tu mensaje ha sido registrado. Gracias por participar.',
+    });
+  } catch (error) {
+    console.error('[peticiones] Error:', error);
+    return Response.json({ error: 'Error interno' }, { status: 500 });
+  }
+}
+
+export async function GET() {
+  try {
+    const stats = await getPetitionStats();
+    return Response.json(stats);
+  } catch {
+    return Response.json(
+      { total: 0, byCandidateId: {}, byClassification: {}, byDimension: {}, byRegion: {} }
+    );
+  }
+}

@@ -8,7 +8,9 @@ import { Button } from '@/components/ui/button';
 const navItems = [
   { href: '/comparar', label: 'Comparar' },
   { href: '/candidatos', label: 'Candidatos' },
-  { href: '/quiz', label: 'Quiz de afinidad' },
+  { href: '/quiz', label: 'Quiz' },
+  { href: '/chat', label: 'Chat IA' },
+  { href: '/buzon', label: 'Buzón' },
   { href: '/noticias', label: 'Noticias' },
   { href: '/metodologia', label: 'Metodología' },
 ];

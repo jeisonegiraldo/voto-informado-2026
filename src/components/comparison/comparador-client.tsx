@@ -27,7 +27,7 @@ export function ComparadorClient() {
             onClick={() => setViewMode('all')}
             className={`flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-all ${
               viewMode === 'all'
-                ? 'bg-blue-600 text-white shadow-sm'
+                ? 'bg-teal-600 text-white shadow-sm'
                 : 'text-gray-600 hover:bg-gray-100'
             }`}
           >
@@ -39,7 +39,7 @@ export function ComparadorClient() {
             onClick={() => setViewMode('compare2')}
             className={`flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-all ${
               viewMode === 'compare2'
-                ? 'bg-blue-600 text-white shadow-sm'
+                ? 'bg-teal-600 text-white shadow-sm'
                 : 'text-gray-600 hover:bg-gray-100'
             }`}
           >

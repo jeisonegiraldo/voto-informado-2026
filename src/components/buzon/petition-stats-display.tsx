@@ -34,8 +34,8 @@ export function PetitionStatsDisplay() {
   return (
     <div className="space-y-4">
       {/* Total count */}
-      <div className="rounded-xl border bg-gradient-to-r from-blue-50 to-purple-50 p-4 text-center">
-        <p className="text-3xl font-bold text-blue-700">{stats.total}</p>
+      <div className="rounded-xl border bg-gradient-to-r from-teal-50 to-slate-50 p-4 text-center">
+        <p className="text-3xl font-bold text-teal-700">{stats.total}</p>
         <p className="text-xs text-gray-500">mensajes ciudadanos registrados</p>
       </div>
 
@@ -89,7 +89,7 @@ export function PetitionStatsDisplay() {
               return (
                 <div key={dimId} className="flex items-center justify-between text-xs">
                   <span className="text-gray-600">{dim?.name || dimId}</span>
-                  <span className="font-medium text-blue-600">{count}</span>
+                  <span className="font-medium text-teal-600">{count}</span>
                 </div>
               );
             })}

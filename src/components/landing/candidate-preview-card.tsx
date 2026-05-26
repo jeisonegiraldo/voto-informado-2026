@@ -17,7 +17,7 @@ export function CandidatePreviewCard({ candidate }: CandidatePreviewCardProps) {
         <div className="flex items-start gap-3">
           <CandidateAvatar candidate={candidate} size="lg" />
           <div className="min-w-0 flex-1">
-            <h3 className="text-lg font-bold text-gray-900 group-hover:text-blue-700">
+            <h3 className="text-lg font-bold text-gray-900 group-hover:text-teal-700">
               {candidate.name}
             </h3>
             <p className="text-sm text-gray-500">{candidate.coalition}</p>

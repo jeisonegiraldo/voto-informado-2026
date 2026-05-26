@@ -98,7 +98,7 @@ export default function QuizPage() {
               key={option.id}
               className={`cursor-pointer transition-all ${
                 isSelected
-                  ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-200'
+                  ? 'border-teal-500 bg-teal-50 ring-2 ring-teal-200'
                   : 'hover:border-gray-300 hover:shadow-sm'
               }`}
               onClick={() => handleSelect(option.id)}
@@ -107,7 +107,7 @@ export default function QuizPage() {
                 <div
                   className={`flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full border-2 transition-colors ${
                     isSelected
-                      ? 'border-blue-500 bg-blue-500'
+                      ? 'border-teal-500 bg-teal-500'
                       : 'border-gray-300'
                   }`}
                 >
@@ -115,7 +115,7 @@ export default function QuizPage() {
                     <div className="h-2 w-2 rounded-full bg-white" />
                   )}
                 </div>
-                <p className={`text-sm ${isSelected ? 'font-medium text-blue-900' : 'text-gray-700'}`}>
+                <p className={`text-sm ${isSelected ? 'font-medium text-teal-900' : 'text-gray-700'}`}>
                   {option.text}
                 </p>
               </CardContent>

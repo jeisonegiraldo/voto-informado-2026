@@ -145,12 +145,12 @@ export function PetitionForm() {
               : 'Primero selecciona un candidato arriba...'
           }
           rows={4}
-          className="w-full resize-none rounded-xl border bg-gray-50 px-4 py-3 text-sm outline-none transition-colors focus:border-blue-300 focus:bg-white"
+          className="w-full resize-none rounded-xl border bg-gray-50 px-4 py-3 text-sm outline-none transition-colors focus:border-teal-300 focus:bg-white"
           disabled={!selectedCandidate}
         />
         <div className="mt-1 flex items-center justify-between">
           <span
-            className={`text-xs ${charCount > 900 ? 'text-amber-600' : 'text-gray-400'}`}
+            className={`text-xs ${charCount > 900 ? 'text-rose-600' : 'text-gray-400'}`}
           >
             {charCount}/1000 caracteres
           </span>
@@ -167,7 +167,7 @@ export function PetitionForm() {
             type="checkbox"
             checked={showName}
             onChange={(e) => setShowName(e.target.checked)}
-            className="h-4 w-4 rounded border-gray-300 text-blue-600"
+            className="h-4 w-4 rounded border-gray-300 text-teal-600"
           />
           <span className="text-sm text-gray-600">
             Quiero incluir mi nombre <span className="text-gray-400">(opcional)</span>
@@ -181,7 +181,7 @@ export function PetitionForm() {
               value={name}
               onChange={(e) => setName(e.target.value.slice(0, 100))}
               placeholder="Tu nombre"
-              className="flex-1 rounded-lg border bg-gray-50 px-3 py-2 text-sm outline-none focus:border-blue-300 focus:bg-white"
+              className="flex-1 rounded-lg border bg-gray-50 px-3 py-2 text-sm outline-none focus:border-teal-300 focus:bg-white"
             />
           </div>
         )}
@@ -230,7 +230,7 @@ export function PetitionForm() {
                   </span>
                 )}
                 {result.dimension && (
-                  <span className="rounded-full bg-blue-100 px-2 py-1 text-blue-700">
+                  <span className="rounded-full bg-teal-100 px-2 py-1 text-teal-700">
                     📊 {result.dimension}
                   </span>
                 )}

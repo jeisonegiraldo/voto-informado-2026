@@ -86,7 +86,7 @@ function ResultsContent() {
       <Card className="mb-6">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">
-            <BarChart3 className="h-5 w-5 text-blue-600" />
+            <BarChart3 className="h-5 w-5 text-teal-600" />
             Afinidad con todos los candidatos
           </CardTitle>
         </CardHeader>

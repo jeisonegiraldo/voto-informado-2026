@@ -89,7 +89,7 @@ export default async function CandidateProfilePage({ params }: { params: Params 
             <Link
               href={candidate.governmentPlanPdf}
               target="_blank"
-              className="text-sm font-medium text-blue-600 hover:underline"
+              className="text-sm font-medium text-teal-600 hover:underline"
             >
               Descargar PDF
             </Link>
@@ -114,7 +114,7 @@ export default async function CandidateProfilePage({ params }: { params: Params 
             <Card key={pos.dimensionId}>
               <CardHeader className="pb-2">
                 <div className="flex items-center gap-2">
-                  <Icon className="h-5 w-5 text-blue-600" />
+                  <Icon className="h-5 w-5 text-teal-600" />
                   <CardTitle className="text-base">{dim.name}</CardTitle>
                 </div>
               </CardHeader>
@@ -151,7 +151,7 @@ export default async function CandidateProfilePage({ params }: { params: Params 
 
                 {pos.risks.length > 0 && (
                   <div className="mt-3">
-                    <p className="text-xs font-semibold uppercase text-amber-600">Riesgos y críticas</p>
+                    <p className="text-xs font-semibold uppercase text-rose-600">Riesgos y críticas</p>
                     <ul className="mt-1 space-y-1">
                       {pos.risks.map((risk, i) => (
                         <li key={i} className="text-xs text-gray-500">

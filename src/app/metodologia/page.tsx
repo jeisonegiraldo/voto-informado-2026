@@ -138,11 +138,11 @@ export default function MetodologiaPage() {
             participación ciudadana.
           </p>
           <p className="mt-2">
-            <Link href="/comparar" className="text-blue-600 underline">
+            <Link href="/comparar" className="text-teal-600 underline">
               Ir al comparador
             </Link>{' '}
             &middot;{' '}
-            <Link href="/quiz" className="text-blue-600 underline">
+            <Link href="/quiz" className="text-teal-600 underline">
               Hacer el quiz
             </Link>
           </p>

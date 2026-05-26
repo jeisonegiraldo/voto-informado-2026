@@ -132,7 +132,7 @@ export function ComparisonMatrix({
               onClick={() => toggleDimension(dim.id)}
               className="flex w-full items-center gap-2 p-4 text-left"
             >
-              <Icon className="h-5 w-5 shrink-0 text-blue-600" />
+              <Icon className="h-5 w-5 shrink-0 text-teal-600" />
               <div className="min-w-0 flex-1">
                 <h3 className="font-semibold text-gray-900">{dim.name}</h3>
                 <p className="text-xs text-gray-500">{dim.description}</p>
@@ -209,14 +209,14 @@ export function ComparisonMatrix({
                         )}
                         {fullPos && fullPos.risks && fullPos.risks.length > 0 && (
                           <div className="mt-2">
-                            <p className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-amber-600">
+                            <p className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-rose-600">
                               Riesgos
                             </p>
                             <ul className="space-y-0.5">
                               {fullPos.risks.map((risk, i) => (
                                 <li
                                   key={i}
-                                  className="text-[10px] leading-tight text-amber-700"
+                                  className="text-[10px] leading-tight text-rose-700"
                                 >
                                   ⚠ {risk}
                                 </li>

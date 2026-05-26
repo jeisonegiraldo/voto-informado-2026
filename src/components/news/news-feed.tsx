@@ -117,7 +117,7 @@ export function NewsFeed() {
                 href={article.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block rounded-xl border bg-white p-4 shadow-sm transition-all hover:border-blue-200 hover:shadow-md"
+                className="block rounded-xl border bg-white p-4 shadow-sm transition-all hover:border-teal-200 hover:shadow-md"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0 flex-1">
@@ -128,7 +128,7 @@ export function NewsFeed() {
                       {article.summary}
                     </p>
                     <div className="mt-3 flex flex-wrap items-center gap-3">
-                      <span className="text-xs font-medium text-blue-600">
+                      <span className="text-xs font-medium text-teal-600">
                         {article.sourceName}
                       </span>
                       <span className="flex items-center gap-1 text-xs text-gray-400">

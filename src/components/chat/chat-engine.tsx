@@ -124,8 +124,8 @@ export function ChatEngine() {
       <div className="flex-1 overflow-y-auto p-4">
         {messages.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center gap-6 text-center">
-            <div className="rounded-full bg-blue-50 p-4">
-              <Sparkles className="h-8 w-8 text-blue-600" />
+            <div className="rounded-full bg-teal-50 p-4">
+              <Sparkles className="h-8 w-8 text-teal-600" />
             </div>
             <div>
               <h2 className="text-lg font-semibold text-gray-900">
@@ -142,9 +142,9 @@ export function ChatEngine() {
                   key={q}
                   type="button"
                   onClick={() => handleSend(q)}
-                  className="rounded-lg border bg-gray-50 px-3 py-2 text-left text-xs text-gray-700 transition-colors hover:border-blue-300 hover:bg-blue-50"
+                  className="rounded-lg border bg-gray-50 px-3 py-2 text-left text-xs text-gray-700 transition-colors hover:border-teal-300 hover:bg-teal-50"
                 >
-                  <MessageSquare className="mb-1 inline h-3 w-3 text-blue-500" />{' '}
+                  <MessageSquare className="mb-1 inline h-3 w-3 text-teal-500" />{' '}
                   {q}
                 </button>
               ))}
@@ -160,14 +160,14 @@ export function ChatEngine() {
                 }`}
               >
                 {msg.role === 'assistant' && (
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-100">
-                    <Bot className="h-4 w-4 text-blue-600" />
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-teal-100">
+                    <Bot className="h-4 w-4 text-teal-600" />
                   </div>
                 )}
                 <div
                   className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                     msg.role === 'user'
-                      ? 'bg-blue-600 text-white'
+                      ? 'bg-teal-600 text-white'
                       : 'bg-gray-100 text-gray-800'
                   }`}
                 >
@@ -192,7 +192,7 @@ export function ChatEngine() {
                           ),
                           li: ({ children }) => (
                             <li className="flex items-start gap-1.5">
-                              <span className="mt-1.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-blue-400" />
+                              <span className="mt-1.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-teal-400" />
                               <span>{children}</span>
                             </li>
                           ),
@@ -235,7 +235,7 @@ export function ChatEngine() {
       )}
 
       {/* Disclaimer */}
-      <div className="border-t bg-amber-50 px-4 py-1.5 text-center text-[10px] text-amber-700">
+      <div className="border-t bg-gray-100 px-4 py-1.5 text-center text-[10px] text-gray-600">
         ⚠️ Respuestas generadas por IA basadas en planes de gobierno oficiales. Verifica siempre con las fuentes originales.
       </div>
 
@@ -249,7 +249,7 @@ export function ChatEngine() {
             onKeyDown={handleKeyDown}
             placeholder="Escribe tu pregunta sobre las elecciones..."
             rows={1}
-            className="max-h-24 min-h-[40px] flex-1 resize-none rounded-xl border bg-gray-50 px-4 py-2.5 text-sm outline-none transition-colors focus:border-blue-300 focus:bg-white"
+            className="max-h-24 min-h-[40px] flex-1 resize-none rounded-xl border bg-gray-50 px-4 py-2.5 text-sm outline-none transition-colors focus:border-teal-300 focus:bg-white"
             disabled={isStreaming}
           />
           <Button

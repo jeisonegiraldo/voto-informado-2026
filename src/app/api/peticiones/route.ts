@@ -59,8 +59,18 @@ export async function POST(req: NextRequest) {
     const region = req.headers.get('x-vercel-ip-country-region') || undefined;
     const country = req.headers.get('x-vercel-ip-country') || 'CO';
 
-    // Classify with LLM
-    const classification = await classifyPetition(text.trim(), candidateId);
+    // Classify with LLM — non-blocking, use defaults if it fails
+    let classificationResult = {
+      classification: 'comentario' as const,
+      dimensionId: 'ideology',
+      dimensionLabel: 'General',
+    };
+
+    try {
+      classificationResult = await classifyPetition(text.trim(), candidateId);
+    } catch (err) {
+      console.error('[peticiones] Classification failed, using defaults:', err);
+    }
 
     // Build petition object
     const petition: CitizenPetition = {
@@ -68,9 +78,9 @@ export async function POST(req: NextRequest) {
       candidateId,
       text: text.trim(),
       name: name?.trim() || undefined,
-      classification: classification.classification,
-      dimension: classification.dimensionId as CitizenPetition['dimension'],
-      dimensionLabel: classification.dimensionLabel,
+      classification: classificationResult.classification,
+      dimension: classificationResult.dimensionId as CitizenPetition['dimension'],
+      dimensionLabel: classificationResult.dimensionLabel,
       region: region ? decodeURIComponent(region) : undefined,
       city: city ? decodeURIComponent(city) : undefined,
       country,
@@ -81,8 +91,17 @@ export async function POST(req: NextRequest) {
     const saved = await savePetition(petition);
 
     if (!saved) {
+      // Check what's missing to give a useful error
+      const hasRedis = !!(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
+      console.error(
+        `[peticiones] Save failed. Redis configured: ${hasRedis}`
+      );
       return Response.json(
-        { error: 'No se pudo guardar el mensaje. Intenta más tarde.' },
+        {
+          error: hasRedis
+            ? 'Error al guardar. Intenta más tarde.'
+            : 'El servicio de almacenamiento no está configurado. Contacta al administrador.',
+        },
         { status: 500 }
       );
     }
@@ -95,7 +114,7 @@ export async function POST(req: NextRequest) {
     });
   } catch (error) {
     console.error('[peticiones] Error:', error);
-    return Response.json({ error: 'Error interno' }, { status: 500 });
+    return Response.json({ error: 'Error interno del servidor' }, { status: 500 });
   }
 }
 

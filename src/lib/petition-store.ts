@@ -7,13 +7,17 @@ const STATS_KEY = 'voto_informado:petition_stats';
 function getRedis(): Redis | null {
   try {
     if (!process.env.KV_REST_API_URL || !process.env.KV_REST_API_TOKEN) {
+      console.error(
+        '[petition-store] Redis not configured. Missing KV_REST_API_URL or KV_REST_API_TOKEN env vars.'
+      );
       return null;
     }
     return new Redis({
       url: process.env.KV_REST_API_URL,
       token: process.env.KV_REST_API_TOKEN,
     });
-  } catch {
+  } catch (error) {
+    console.error('[petition-store] Failed to create Redis client:', error);
     return null;
   }
 }
@@ -21,7 +25,7 @@ function getRedis(): Redis | null {
 export async function savePetition(petition: CitizenPetition): Promise<boolean> {
   const redis = getRedis();
   if (!redis) {
-    console.error('[petition-store] Redis not configured');
+    console.error('[petition-store] Cannot save: Redis not available');
     return false;
   }
 
@@ -29,8 +33,10 @@ export async function savePetition(petition: CitizenPetition): Promise<boolean> 
     // Store as list (push to front for latest-first)
     await redis.lpush(PETITIONS_KEY, JSON.stringify(petition));
 
-    // Update aggregate stats
-    await updateStats(redis, petition);
+    // Update aggregate stats (non-blocking — don't fail the save if stats fail)
+    updateStats(redis, petition).catch((err) =>
+      console.error('[petition-store] Stats update failed (non-critical):', err)
+    );
 
     return true;
   } catch (error) {
@@ -40,43 +46,39 @@ export async function savePetition(petition: CitizenPetition): Promise<boolean> 
 }
 
 async function updateStats(redis: Redis, petition: CitizenPetition): Promise<void> {
-  try {
-    let stats = await redis.get<PetitionStats>(STATS_KEY);
+  let stats = await redis.get<PetitionStats>(STATS_KEY);
 
-    if (!stats) {
-      stats = {
-        total: 0,
-        byCandidateId: {},
-        byClassification: {},
-        byDimension: {},
-        byRegion: {},
-      };
-    }
-
-    stats.total += 1;
-
-    stats.byCandidateId[petition.candidateId] =
-      (stats.byCandidateId[petition.candidateId] || 0) + 1;
-
-    if (petition.classification) {
-      stats.byClassification[petition.classification] =
-        (stats.byClassification[petition.classification] || 0) + 1;
-    }
-
-    if (petition.dimension) {
-      stats.byDimension[petition.dimension] =
-        (stats.byDimension[petition.dimension] || 0) + 1;
-    }
-
-    if (petition.region) {
-      stats.byRegion[petition.region] =
-        (stats.byRegion[petition.region] || 0) + 1;
-    }
-
-    await redis.set(STATS_KEY, stats);
-  } catch (error) {
-    console.error('[petition-store] Failed to update stats:', error);
+  if (!stats) {
+    stats = {
+      total: 0,
+      byCandidateId: {},
+      byClassification: {},
+      byDimension: {},
+      byRegion: {},
+    };
   }
+
+  stats.total += 1;
+
+  stats.byCandidateId[petition.candidateId] =
+    (stats.byCandidateId[petition.candidateId] || 0) + 1;
+
+  if (petition.classification) {
+    stats.byClassification[petition.classification] =
+      (stats.byClassification[petition.classification] || 0) + 1;
+  }
+
+  if (petition.dimension) {
+    stats.byDimension[petition.dimension] =
+      (stats.byDimension[petition.dimension] || 0) + 1;
+  }
+
+  if (petition.region) {
+    stats.byRegion[petition.region] =
+      (stats.byRegion[petition.region] || 0) + 1;
+  }
+
+  await redis.set(STATS_KEY, stats);
 }
 
 export async function getPetitionStats(): Promise<PetitionStats> {

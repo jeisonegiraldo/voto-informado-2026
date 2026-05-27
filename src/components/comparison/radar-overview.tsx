@@ -4,6 +4,7 @@ import {
   RadarChart,
   PolarGrid,
   PolarAngleAxis,
+  PolarRadiusAxis,
   Radar,
   ResponsiveContainer,
   Legend,
@@ -22,7 +23,9 @@ export function RadarOverview({ selectedCandidates }: RadarOverviewProps) {
     ? candidates.filter((c) => selectedCandidates.includes(c.id))
     : candidates;
 
-  // Normalize scores from [-5,+5] to [0,10] for radar display
+  // Use absolute value of scores for radar display
+  // The radar shows HOW DEFINED a position is (distance from center),
+  // not whether it's left or right (that's the spectrum bar's job)
   const data = dimensions.map((dim) => {
     const row: Record<string, string | number> = {
       dimension: dim.name.length > 14 ? dim.name.slice(0, 12) + '...' : dim.name,
@@ -30,7 +33,7 @@ export function RadarOverview({ selectedCandidates }: RadarOverviewProps) {
     };
     for (const c of activeCandidates) {
       const pos = getPosition(c.id, dim.id);
-      row[c.id] = pos ? pos.score + 5 : 5; // normalize to 0-10
+      row[c.id] = pos ? Math.abs(pos.score) : 0;
     }
     return row;
   });
@@ -40,6 +43,7 @@ export function RadarOverview({ selectedCandidates }: RadarOverviewProps) {
       <ResponsiveContainer width="100%" height={380}>
         <RadarChart data={data} cx="50%" cy="50%" outerRadius="70%">
           <PolarGrid stroke="#e5e7eb" />
+          <PolarRadiusAxis domain={[0, 5]} tick={false} axisLine={false} />
           <PolarAngleAxis
             dataKey="dimension"
             tick={{ fontSize: 10, fill: '#6b7280' }}

@@ -50,10 +50,28 @@ export function Footer() {
                   Metodología
                 </Link>
               </li>
+              <li>
+                <a
+                  href="https://github.com/jeisonegiraldo/voto-informado-2026"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-gray-500 transition-colors hover:text-teal-600"
+                >
+                  Código abierto
+                </a>
+              </li>
             </ul>
             <p className="mt-4 text-xs leading-relaxed text-gray-400">
-              Fuentes: planes de gobierno oficiales, medios verificados (El Tiempo, Semana, La Silla
-              Vacía, Blu Radio, RCN, Caracol).
+              ¿Error en los datos o sesgo?{' '}
+              <a
+                href="mailto:contacto@votainformadoco.org"
+                className="text-teal-600 hover:underline"
+              >
+                contacto@votainformadoco.org
+              </a>
+            </p>
+            <p className="mt-1 text-xs leading-relaxed text-gray-400">
+              Fuentes: planes de gobierno oficiales, medios verificados.
             </p>
           </div>
         </div>

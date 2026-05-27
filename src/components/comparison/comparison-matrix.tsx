@@ -6,6 +6,7 @@ import { candidates } from '@/data/candidates';
 import { getPosition } from '@/data/positions';
 import { SpectrumBar } from './spectrum-bar';
 import { CandidateAvatar } from '@/components/shared/candidate-avatar';
+import { ReportButton } from '@/components/shared/report-button';
 import {
   Compass, TrendingUp, Receipt, Building2, Globe, Shield,
   Leaf, Heart, GraduationCap, Cpu, Stethoscope, ArrowLeftRight,
@@ -239,6 +240,15 @@ export function ComparisonMatrix({
                             </ul>
                           </div>
                         )}
+                        <div className="mt-2 border-t border-gray-100 pt-2">
+                          <ReportButton
+                            candidateId={pos.candidate.id}
+                            candidateName={pos.candidate.name}
+                            dimensionId={dim.id}
+                            dimensionLabel={dim.name}
+                            sourcePage="/comparar"
+                          />
+                        </div>
                       </div>
                     );
                   })}

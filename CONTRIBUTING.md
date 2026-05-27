@@ -123,7 +123,7 @@ Estas reglas son **obligatorias** para que un PR sea aceptado:
 
 ## Preguntas?
 
-Abre un Issue con el tag `pregunta` o escribe a jeisonegiraldo@gmail.com.
+Abre un Issue con el tag `pregunta` o escribe a contacto@votainformadoco.org.
 
 ---
 

@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
+import { ReportButton } from '@/components/shared/report-button';
 import {
   Compass, TrendingUp, Receipt, Building2, Globe, Shield,
   Leaf, Heart, GraduationCap, Cpu, Stethoscope, ArrowLeftRight, HelpCircle,
@@ -193,6 +194,16 @@ export default async function CandidateProfilePage({ params }: { params: Params 
                     </ul>
                   </div>
                 )}
+
+                <div className="mt-3 border-t border-gray-100 pt-3">
+                  <ReportButton
+                    candidateId={candidate.id}
+                    candidateName={candidate.name}
+                    dimensionId={pos.dimensionId}
+                    dimensionLabel={dim?.name}
+                    sourcePage={`/candidatos/${candidate.slug}`}
+                  />
+                </div>
               </CardContent>
             </Card>
           );

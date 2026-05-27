@@ -4,7 +4,7 @@
 
 Si encuentras una vulnerabilidad de seguridad, **no abras un Issue publico**. En su lugar:
 
-1. Envia un correo a **jeisonegiraldo@gmail.com** con el asunto "Seguridad - VotaInformado"
+1. Envia un correo a **contacto@votainformadoco.org** con el asunto "Seguridad - VotaInformado"
 2. Describe la vulnerabilidad con el mayor detalle posible
 3. Te responderemos en un plazo de 48 horas
 

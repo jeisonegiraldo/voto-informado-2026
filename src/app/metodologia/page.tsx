@@ -204,10 +204,50 @@ export default function MetodologiaPage() {
           </CardContent>
         </Card>
 
+        <Card className="border-amber-200 bg-gradient-to-br from-amber-50 to-orange-50">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <span className="text-lg">📢</span>
+              Para Campañas y Ciudadanos
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3 text-sm text-gray-700">
+            <p>
+              Si encuentras un dato incorrecto, una propuesta mal representada o percibes
+              sesgo en algún componente, puedes reportarlo de dos formas:
+            </p>
+            <ul className="space-y-2">
+              <li>
+                <strong>Desde la app:</strong> Cada posición en el comparador y los perfiles
+                de candidatos tiene un botón{' '}
+                <span className="inline-flex items-center gap-0.5 text-xs text-gray-500">
+                  🚩 ¿Algo incorrecto?
+                </span>{' '}
+                que te permite reportar directamente.
+              </li>
+              <li>
+                <strong>Por correo:</strong> Si representas a una campaña o tienes una
+                corrección con fuente oficial, escribe a{' '}
+                <a
+                  href="mailto:contacto@votainformadoco.org"
+                  className="font-semibold text-teal-600 hover:underline"
+                >
+                  contacto@votainformadoco.org
+                </a>{' '}
+                con la corrección y la referencia (página del plan de gobierno o artículo
+                verificable). Respondemos en 24 horas.
+              </li>
+            </ul>
+            <p className="text-xs text-gray-500">
+              Todas las correcciones se verifican contra fuentes oficiales antes de
+              aplicarse. No se aceptan cambios sin respaldo documental.
+            </p>
+          </CardContent>
+        </Card>
+
         <div className="text-center text-xs text-gray-400">
           <p>
-            Si encuentras un error o sesgo, por favor repórtalo. La herramienta se mejora con la
-            participación ciudadana.
+            La herramienta se mejora con la participación ciudadana.
           </p>
           <p className="mt-2">
             <Link href="/comparar" className="text-teal-600 underline">

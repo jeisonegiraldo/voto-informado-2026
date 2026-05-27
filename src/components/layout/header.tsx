@@ -17,6 +17,9 @@ const navItems = [
   { href: '/noticias', label: 'Noticias' },
 ];
 
+// Items excluded from nav when shown as CTA button
+const CTA_HREF = '/brujula';
+
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -33,7 +36,7 @@ export function Header() {
         </Link>
 
         <nav className="hidden items-center gap-0.5 md:flex">
-          {navItems.map((item) => (
+          {navItems.filter((item) => item.href !== CTA_HREF).map((item) => (
             <Link
               key={item.href}
               href={item.href}
@@ -42,12 +45,12 @@ export function Header() {
               {item.label}
             </Link>
           ))}
-          <Link href="/quiz" className="ml-2">
+          <Link href="/brujula" className="ml-2">
             <Button
               size="sm"
-              className="bg-gradient-to-r from-teal-500 to-emerald-500 text-white shadow-sm transition-all hover:brightness-110"
+              className="gap-1.5 bg-gradient-to-r from-teal-500 to-emerald-500 text-white shadow-sm transition-all hover:brightness-110"
             >
-              Hacer el Quiz
+              🧭 Brújula A Ciegas
             </Button>
           </Link>
         </nav>
@@ -75,9 +78,9 @@ export function Header() {
               {item.label}
             </Link>
           ))}
-          <Link href="/quiz" onClick={() => setMobileOpen(false)}>
-            <Button className="mt-2 w-full bg-gradient-to-r from-teal-500 to-emerald-500 text-white">
-              Hacer el Quiz
+          <Link href="/brujula" onClick={() => setMobileOpen(false)}>
+            <Button className="mt-2 w-full gap-1.5 bg-gradient-to-r from-teal-500 to-emerald-500 text-white">
+              🧭 Brújula A Ciegas
             </Button>
           </Link>
         </nav>

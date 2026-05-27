@@ -52,12 +52,12 @@ export default function HomePage() {
             </p>
 
             <div className="animate-fade-up-delay-4 mt-8 flex flex-col items-center gap-3 sm:mt-10 sm:flex-row sm:justify-center sm:gap-4">
-              <Link href="/quiz" className="w-full sm:w-auto">
+              <Link href="/brujula" className="w-full sm:w-auto">
                 <Button
                   size="lg"
                   className="group relative w-full overflow-hidden bg-gradient-to-r from-teal-500 to-emerald-500 px-8 text-white shadow-lg shadow-teal-500/25 transition-all hover:shadow-xl hover:shadow-teal-500/30 hover:brightness-110 sm:w-auto"
                 >
-                  Hacer el Quiz de Afinidad
+                  🧭 Brújula Electoral &ldquo;A Ciegas&rdquo;
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Button>
               </Link>
@@ -96,18 +96,26 @@ export default function HomePage() {
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {[
               {
-                icon: BarChart3,
-                title: 'Comparador visual',
-                desc: '12 dimensiones para comparar a los 4 candidatos de manera clara y objetiva.',
-                href: '/comparar',
-                gradient: 'from-teal-500 to-emerald-500',
-              },
-              {
                 icon: Compass,
                 title: 'Brújula "A Ciegas"',
                 desc: '20 propuestas sin nombres. Descubre tu candidato basándote solo en ideas.',
                 href: '/brujula',
+                gradient: 'from-teal-500 to-emerald-500',
+                badge: 'Popular',
+              },
+              {
+                icon: BarChart3,
+                title: 'Comparador visual',
+                desc: '12 dimensiones para comparar a los 4 candidatos de manera clara y objetiva.',
+                href: '/comparar',
                 gradient: 'from-slate-700 to-slate-900',
+              },
+              {
+                icon: CheckCircle,
+                title: 'Quiz de Afinidad',
+                desc: '12 preguntas para descubrir tu afinidad ideológica con cada candidato.',
+                href: '/quiz',
+                gradient: 'from-violet-500 to-purple-600',
               },
               {
                 icon: Users,
@@ -116,16 +124,14 @@ export default function HomePage() {
                 href: '/candidatos',
                 gradient: 'from-amber-500 to-orange-500',
               },
-              {
-                icon: Newspaper,
-                title: 'Noticias en tiempo real',
-                desc: 'Rastreo automatizado de medios verificados cada 5 horas.',
-                href: '/noticias',
-                gradient: 'from-blue-500 to-cyan-500',
-              },
             ].map((feature) => (
               <Link key={feature.title} href={feature.href}>
-                <div className="group h-full rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-gray-200">
+                <div className="group relative h-full rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-gray-200">
+                  {'badge' in feature && feature.badge && (
+                    <span className="absolute -top-2 right-4 rounded-full bg-rose-500 px-2.5 py-0.5 text-[10px] font-bold text-white shadow-sm">
+                      {feature.badge}
+                    </span>
+                  )}
                   <div className={`inline-flex rounded-xl bg-gradient-to-br ${feature.gradient} p-2.5`}>
                     <feature.icon className="h-5 w-5 text-white" />
                   </div>
@@ -139,25 +145,31 @@ export default function HomePage() {
           </div>
 
           {/* Secondary tools row */}
-          <div className="mt-5 grid gap-5 sm:grid-cols-3">
+          <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {[
               {
                 icon: Shield,
-                title: 'Verificador de afirmaciones',
-                desc: 'Comprueba si lo que dicen los candidatos coincide con sus planes.',
+                title: 'Verificador',
+                desc: 'Comprueba si lo que dicen coincide con sus planes.',
                 href: '/verificador',
               },
               {
                 icon: Search,
                 title: 'Buscar por tema',
-                desc: 'Busca un tema y compara la postura de cada candidato al instante.',
+                desc: 'Compara la postura de cada candidato al instante.',
                 href: '/buscar',
               },
               {
                 icon: MessageSquare,
                 title: 'Chat con IA',
-                desc: 'Pregunta lo que quieras sobre los candidatos y sus propuestas.',
+                desc: 'Pregunta lo que quieras sobre candidatos y propuestas.',
                 href: '/chat',
+              },
+              {
+                icon: Newspaper,
+                title: 'Noticias',
+                desc: 'Rastreo automatizado de medios verificados.',
+                href: '/noticias',
               },
             ].map((tool) => (
               <Link key={tool.title} href={tool.href}>

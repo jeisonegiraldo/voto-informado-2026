@@ -14,17 +14,16 @@ import { CandidateAvatar } from '@/components/shared/candidate-avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
+import { ShareInvite } from '@/components/shared/share-invite';
 import {
   RefreshCw,
-  Share2,
   BarChart3,
-  MessageCircle,
-  Copy,
   ThumbsUp,
   ThumbsDown,
   SkipForward,
   Eye,
   Compass,
+  Sparkles,
 } from 'lucide-react';
 import type { CandidateId } from '@/types/candidate';
 
@@ -71,30 +70,7 @@ function RevealContent() {
 
   const shareText = `🧭 Mi Brújula Electoral "A Ciegas" en VotoInformado 2026:\n\n${sorted.map((c) => `${c.name}: ${result.candidatePercentages[c.id as CandidateId]}%`).join('\n')}\n\nVoté sin saber quién proponía cada idea. Mi mayor afinidad: ${topCandidate?.name}\n\n¿Y tú? Descúbrelo:`;
 
-  const handleShare = async () => {
-    const url = window.location.href;
-    if (navigator.share) {
-      await navigator.share({
-        title: 'Mi Brújula Electoral - VotoInformado 2026',
-        text: shareText,
-        url,
-      });
-    } else {
-      await navigator.clipboard.writeText(`${shareText}\n${url}`);
-      alert('Enlace copiado al portapapeles');
-    }
-  };
-
-  const handleWhatsApp = () => {
-    const url = window.location.href;
-    const waUrl = `https://wa.me/?text=${encodeURIComponent(`${shareText}\n${url}`)}`;
-    window.open(waUrl, '_blank');
-  };
-
-  const handleCopy = async () => {
-    const url = window.location.href;
-    await navigator.clipboard.writeText(`${shareText}\n${url}`);
-  };
+  const inviteText = '🧭 ¿Ya sabes cuál candidato se alinea con lo que piensas? Hice la Brújula Electoral "A Ciegas" — 20 propuestas reales sin saber de quién son. ¡Inténtalo!';
 
   const handleReveal = () => {
     setShowReveal(true);
@@ -333,39 +309,38 @@ function RevealContent() {
               </Card>
             )}
 
-            {/* Share section */}
-            <Card className="mb-6">
-              <CardContent className="py-4">
-                <p className="mb-3 text-center text-sm font-semibold text-gray-700">
-                  Comparte tu resultado
-                </p>
-                <div className="flex flex-col gap-2 sm:flex-row sm:justify-center">
-                  <Button
-                    onClick={handleWhatsApp}
-                    className="gap-2 bg-[#25D366] text-white hover:bg-[#20bd5a]"
-                  >
-                    <MessageCircle className="h-4 w-4" />
-                    WhatsApp
-                  </Button>
-                  <Button
-                    onClick={handleShare}
-                    variant="outline"
-                    className="gap-2"
-                  >
-                    <Share2 className="h-4 w-4" />
-                    Compartir
-                  </Button>
-                  <Button
-                    onClick={handleCopy}
-                    variant="outline"
-                    className="gap-2"
-                  >
-                    <Copy className="h-4 w-4" />
-                    Copiar
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            {/* Invite friends */}
+            <div className="mb-6">
+              <ShareInvite
+                url={typeof window !== 'undefined' ? `${window.location.origin}/brujula` : '/brujula'}
+                shareText={inviteText}
+                shareTitle="Brújula Electoral A Ciegas — VotoInformado 2026"
+                heading="Invita a alguien a jugar"
+                subheading="Comparte la Brújula con amigos y familiares. Que ellos también descubran su candidato sin sesgo."
+              />
+            </div>
+
+            {/* Profundizar con Quiz */}
+            <div className="mb-6 rounded-xl border border-violet-200 bg-gradient-to-r from-violet-50 to-purple-50 p-4 text-center">
+              <div className="flex items-center justify-center gap-2">
+                <Sparkles className="h-5 w-5 text-violet-500" />
+                <h3 className="text-sm font-bold text-gray-900">
+                  ¿Quieres profundizar?
+                </h3>
+              </div>
+              <p className="mt-1 text-xs text-gray-500">
+                El Quiz de Afinidad evalúa 12 dimensiones ideológicas para un análisis más detallado.
+              </p>
+              <Link href="/quiz">
+                <Button
+                  size="sm"
+                  className="mt-3 gap-2 bg-gradient-to-r from-violet-500 to-purple-600 text-white hover:from-violet-600 hover:to-purple-700"
+                >
+                  <BarChart3 className="h-4 w-4" />
+                  Hacer el Quiz de Afinidad
+                </Button>
+              </Link>
+            </div>
 
             {/* Actions */}
             <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
@@ -373,12 +348,6 @@ function RevealContent() {
                 <Button variant="outline" className="w-full gap-2 sm:w-auto">
                   <RefreshCw className="h-4 w-4" />
                   Repetir brújula
-                </Button>
-              </Link>
-              <Link href="/quiz">
-                <Button variant="outline" className="w-full gap-2 sm:w-auto">
-                  <BarChart3 className="h-4 w-4" />
-                  Quiz de afinidad
                 </Button>
               </Link>
               <Link href="/comparar">

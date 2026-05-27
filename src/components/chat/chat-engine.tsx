@@ -1,8 +1,10 @@
 'use client';
 
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Send, Bot, User, Loader2, AlertCircle, MessageSquare, Sparkles, ThumbsUp, ThumbsDown, X, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { candidates } from '@/data/candidates';
 import Markdown from 'react-markdown';
 
 interface Message {
@@ -65,12 +67,17 @@ const CANDIDATE_QUESTIONS: Record<string, string[]> = {
   ],
 };
 
-interface ChatEngineProps {
-  candidateFilter?: string;
-  candidateName?: string;
-}
+export function ChatEngine() {
+  // Read candidate filter from URL search params (client-side)
+  const searchParams = useSearchParams();
+  const candidateSlug = searchParams.get('candidato');
+  const candidate = useMemo(
+    () => (candidateSlug ? candidates.find((c) => c.slug === candidateSlug) : undefined),
+    [candidateSlug]
+  );
+  const candidateFilter = candidate?.id;
+  const candidateName = candidate?.name;
 
-export function ChatEngine({ candidateFilter, candidateName }: ChatEngineProps) {
   const suggestedQuestions = candidateFilter
     ? CANDIDATE_QUESTIONS[candidateFilter] || GENERAL_QUESTIONS
     : GENERAL_QUESTIONS;

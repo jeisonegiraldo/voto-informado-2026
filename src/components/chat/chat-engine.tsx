@@ -10,7 +10,7 @@ interface Message {
   content: string;
 }
 
-const SUGGESTED_QUESTIONS = [
+const GENERAL_QUESTIONS = [
   '¿Qué propone cada candidato sobre seguridad?',
   '¿En qué se diferencian Cepeda y Valencia en economía?',
   '¿Quién propone eliminar las EPS?',
@@ -19,7 +19,50 @@ const SUGGESTED_QUESTIONS = [
   '¿Qué propone Espriella sobre el tamaño del Estado?',
 ];
 
-export function ChatEngine() {
+const CANDIDATE_QUESTIONS: Record<string, string[]> = {
+  cepeda: [
+    '¿Qué propone Cepeda sobre seguridad?',
+    '¿Cuál es su modelo económico?',
+    '¿Qué dice sobre educación pública?',
+    '¿Cuál es su posición frente a Petro?',
+    '¿Qué propone sobre reforma agraria?',
+    '¿Cuáles son sus riesgos principales?',
+  ],
+  espriella: [
+    '¿Qué propone Espriella sobre seguridad?',
+    '¿Qué es el modelo Bukele que propone?',
+    '¿Cuál es su política tributaria?',
+    '¿Qué dice sobre el tamaño del Estado?',
+    '¿Cuál es su posición sobre la familia?',
+    '¿Cuáles son sus riesgos principales?',
+  ],
+  valencia: [
+    '¿Qué propone Valencia sobre seguridad?',
+    '¿Cuál es su modelo económico?',
+    '¿Qué dice sobre inversión extranjera?',
+    '¿Cuál es su política de educación?',
+    '¿Qué propone sobre tecnología e IA?',
+    '¿Cuáles son sus riesgos principales?',
+  ],
+  fajardo: [
+    '¿Qué propone Fajardo sobre educación?',
+    '¿Cuál es su modelo económico?',
+    '¿Qué dice sobre seguridad?',
+    '¿Cuál es su posición sobre salud?',
+    '¿Qué propone sobre ciencia y tecnología?',
+    '¿Cuáles son sus riesgos principales?',
+  ],
+};
+
+interface ChatEngineProps {
+  candidateFilter?: string;
+  candidateName?: string;
+}
+
+export function ChatEngine({ candidateFilter, candidateName }: ChatEngineProps) {
+  const suggestedQuestions = candidateFilter
+    ? CANDIDATE_QUESTIONS[candidateFilter] || GENERAL_QUESTIONS
+    : GENERAL_QUESTIONS;
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isStreaming, setIsStreaming] = useState(false);
@@ -59,6 +102,7 @@ export function ChatEngine() {
         body: JSON.stringify({
           messages: newMessages.map((m) => ({ role: m.role, content: m.content })),
           sessionId,
+          candidateFilter,
         }),
       });
 
@@ -129,15 +173,18 @@ export function ChatEngine() {
             </div>
             <div>
               <h2 className="text-lg font-semibold text-gray-900">
-                Pregunta sobre las elecciones 2026
+                {candidateName
+                  ? `Pregunta sobre ${candidateName}`
+                  : 'Pregunta sobre las elecciones 2026'}
               </h2>
               <p className="mt-1 max-w-md text-sm text-gray-500">
-                Resuelve tus dudas sobre propuestas, candidatos y comparaciones.
-                Respuestas basadas en los planes de gobierno oficiales.
+                {candidateName
+                  ? `Resuelve tus dudas sobre las propuestas de ${candidateName}. Respuestas basadas en su plan de gobierno.`
+                  : 'Resuelve tus dudas sobre propuestas, candidatos y comparaciones. Respuestas basadas en los planes de gobierno oficiales.'}
               </p>
             </div>
             <div className="grid gap-2 sm:grid-cols-2">
-              {SUGGESTED_QUESTIONS.map((q) => (
+              {suggestedQuestions.map((q) => (
                 <button
                   key={q}
                   type="button"

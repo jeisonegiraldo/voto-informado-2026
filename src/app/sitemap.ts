@@ -38,6 +38,30 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     ...candidatePages,
     {
+      url: `${baseUrl}/resumen`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/verificador`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/buscar`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/guia-votante`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
       url: `${baseUrl}/chat`,
       lastModified: new Date(),
       changeFrequency: 'weekly',

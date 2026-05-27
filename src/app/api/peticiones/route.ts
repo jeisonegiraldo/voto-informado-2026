@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { classifyPetition } from '@/lib/petition-classifier';
-import { savePetition, getPetitionStats } from '@/lib/petition-store';
+import { savePetition, getPetitionStats, getRecentPetitions } from '@/lib/petition-store';
 import type { CitizenPetition } from '@/types/petition';
 import type { CandidateId } from '@/types/candidate';
 
@@ -122,9 +122,16 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const includeTrending = searchParams.get('trending') === '1';
+
   try {
     const stats = await getPetitionStats();
+    if (includeTrending) {
+      const recent = await getRecentPetitions(15);
+      return Response.json({ ...stats, recentPetitions: recent });
+    }
     return Response.json(stats);
   } catch {
     return Response.json(

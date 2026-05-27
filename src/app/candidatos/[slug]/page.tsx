@@ -7,9 +7,11 @@ import { PartyBadge } from '@/components/shared/party-badge';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { Button } from '@/components/ui/button';
 import {
   Compass, TrendingUp, Receipt, Building2, Globe, Shield,
   Leaf, Heart, GraduationCap, Cpu, Stethoscope, ArrowLeftRight, HelpCircle,
+  MessageSquare, Send,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import type { Metadata } from 'next';
@@ -97,6 +99,25 @@ export default async function CandidateProfilePage({ params }: { params: Params 
         </div>
 
         <p className="mt-4 text-sm leading-relaxed text-gray-700">{candidate.shortBio}</p>
+
+        {/* CTA buttons */}
+        <div className="mt-4 flex flex-wrap gap-2">
+          <Link href={`/chat?candidato=${candidate.slug}`}>
+            <Button
+              size="sm"
+              className="gap-1.5 bg-teal-500 text-white hover:bg-teal-400"
+            >
+              <MessageSquare className="h-3.5 w-3.5" />
+              Pregúntale al plan de gobierno
+            </Button>
+          </Link>
+          <Link href={`/buzon?candidato=${candidate.slug}`}>
+            <Button size="sm" variant="outline" className="gap-1.5">
+              <Send className="h-3.5 w-3.5" />
+              Enviar mensaje al candidato
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* Positions */}

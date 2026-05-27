@@ -38,7 +38,7 @@ function getSystemPrompt(): string {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { messages, sessionId } = body;
+    const { messages, sessionId, candidateFilter } = body;
 
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
       return Response.json(
@@ -65,11 +65,17 @@ export async function POST(req: NextRequest) {
       content: String(msg.content).slice(0, 1000), // Cap message length
     }));
 
+    // Build system prompt, optionally filtered by candidate
+    let systemPrompt = getSystemPrompt();
+    if (candidateFilter && typeof candidateFilter === 'string') {
+      systemPrompt += `\n\n## CONTEXTO ADICIONAL:\nEl ciudadano está preguntando específicamente sobre el candidato con ID "${candidateFilter}". Enfoca tus respuestas en este candidato, pero si es relevante compara brevemente con otros. Si la pregunta no menciona a un candidato específico, asume que se refiere a "${candidateFilter}".`;
+    }
+
     // Stream response
     const stream = await anthropic.messages.stream({
       model: 'claude-sonnet-4-20250514',
       max_tokens: 800,
-      system: getSystemPrompt(),
+      system: systemPrompt,
       messages: validMessages,
     });
 

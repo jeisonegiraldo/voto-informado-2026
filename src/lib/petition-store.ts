@@ -78,6 +78,25 @@ export async function getPetitionStats(): Promise<PetitionStats> {
   }
 }
 
+export async function getRecentPetitions(limit = 20): Promise<CitizenPetition[]> {
+  const redis = getRedis();
+  if (!redis) return [];
+
+  try {
+    const raw = await redis.lrange(PETITIONS_KEY, 0, limit - 1);
+    return (
+      raw.map((item) =>
+        typeof item === 'string' ? JSON.parse(item) : item
+      ) as CitizenPetition[]
+    ).map((p) => ({
+      ...p,
+      name: undefined, // Always anonymize for public display
+    }));
+  } catch {
+    return [];
+  }
+}
+
 export async function getAllPetitions(): Promise<CitizenPetition[]> {
   const redis = getRedis();
   if (!redis) return [];

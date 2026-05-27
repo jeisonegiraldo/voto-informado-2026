@@ -16,13 +16,13 @@ export function Footer() {
             <h3 className="text-sm font-semibold text-gray-900">Explorar</h3>
             <ul className="mt-2 space-y-1">
               <li>
-                <Link href="/comparar" className="text-sm text-gray-500 hover:text-gray-900">
-                  Comparador
+                <Link href="/resumen" className="text-sm text-gray-500 hover:text-gray-900">
+                  Resumen ejecutivo
                 </Link>
               </li>
               <li>
-                <Link href="/candidatos" className="text-sm text-gray-500 hover:text-gray-900">
-                  Candidatos
+                <Link href="/comparar" className="text-sm text-gray-500 hover:text-gray-900">
+                  Comparador
                 </Link>
               </li>
               <li>
@@ -31,8 +31,18 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/noticias" className="text-sm text-gray-500 hover:text-gray-900">
-                  Noticias
+                <Link href="/verificador" className="text-sm text-gray-500 hover:text-gray-900">
+                  Verificador
+                </Link>
+              </li>
+              <li>
+                <Link href="/buscar" className="text-sm text-gray-500 hover:text-gray-900">
+                  Buscar por tema
+                </Link>
+              </li>
+              <li>
+                <Link href="/guia-votante" className="text-sm text-gray-500 hover:text-gray-900">
+                  Guía del votante
                 </Link>
               </li>
             </ul>

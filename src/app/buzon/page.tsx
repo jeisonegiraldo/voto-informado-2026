@@ -1,5 +1,6 @@
 import { PetitionForm } from '@/components/buzon/petition-form';
 import { PetitionStatsDisplay } from '@/components/buzon/petition-stats-display';
+import { TrendingPetitions } from '@/components/buzon/trending-petitions';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -27,13 +28,16 @@ export default function BuzonPage() {
           </div>
         </div>
 
-        {/* Stats sidebar */}
+        {/* Stats & Trending sidebar */}
         <div className="lg:col-span-2">
-          <div className="sticky top-20">
-            <h2 className="mb-4 text-sm font-semibold text-gray-500">
-              📊 Participación ciudadana
-            </h2>
-            <PetitionStatsDisplay />
+          <div className="sticky top-20 space-y-6">
+            <div>
+              <h2 className="mb-4 text-sm font-semibold text-gray-500">
+                📊 Participación ciudadana
+              </h2>
+              <PetitionStatsDisplay />
+            </div>
+            <TrendingPetitions />
           </div>
         </div>
       </div>

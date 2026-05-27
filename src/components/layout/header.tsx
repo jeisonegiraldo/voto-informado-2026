@@ -6,13 +6,14 @@ import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const navItems = [
+  { href: '/resumen', label: 'Resumen' },
   { href: '/comparar', label: 'Comparar' },
-  { href: '/candidatos', label: 'Candidatos' },
   { href: '/quiz', label: 'Quiz' },
+  { href: '/verificador', label: 'Verificador' },
+  { href: '/buscar', label: 'Buscar' },
   { href: '/chat', label: 'Chat IA' },
   { href: '/buzon', label: 'Buzón' },
   { href: '/noticias', label: 'Noticias' },
-  { href: '/metodologia', label: 'Metodología' },
 ];
 
 export function Header() {

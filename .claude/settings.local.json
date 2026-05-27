@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -E \"\\\\.\\(md|json|txt|yml|yaml|gitignore\\)$|^d\")",
+      "Bash(file \"C:\\\\Dev\\\\voto_informado\\\\planes_gobierno\"/*.pdf)",
+      "Bash(pdfinfo \"C:\\\\Dev\\\\voto_informado\\\\planes_gobierno\\\\P000B.pdf\")",
+      "Bash(pdfinfo \"C:/Dev/voto_informado/planes_gobierno/P000A.pdf\")",
+      "Bash(pdfinfo \"C:/Dev/voto_informado/planes_gobierno/P000C.pdf\")",
+      "Bash(pdfinfo \"C:/Dev/voto_informado/planes_gobierno/P000D.pdf\")"
+    ]
+  }
+}

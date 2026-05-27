@@ -8,6 +8,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'cepeda',
     dimensionId: 'ideology',
     score: -4,
+    depth: 4,
     summary:
       'Izquierda continuista. Candidato del Pacto Histórico, propone profundizar el modelo del gobierno Petro con énfasis en justicia social, reforma agraria, paz total y transformación del Estado.',
     keyProposals: [
@@ -29,6 +30,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'espriella',
     dimensionId: 'ideology',
     score: 4,
+    depth: 3,
     summary:
       'Derecha disruptiva. Se define como "el Bukele colombiano". Propone una transformación radical basada en fe, familia, autoridad y ética pública como principios innegociables.',
     keyProposals: [
@@ -50,6 +52,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'valencia',
     dimensionId: 'ideology',
     score: 3,
+    depth: 4,
     summary:
       'Centro-derecha uribista. Primera mujer candidata del Centro Democrático. Propone orden, firmeza en seguridad y crecimiento económico con responsabilidad social.',
     keyProposals: [
@@ -71,6 +74,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'fajardo',
     dimensionId: 'ideology',
     score: 0,
+    depth: 4,
     summary:
       'Centro institucional. Tercera candidatura presidencial. Propone un modelo basado en evidencia, sin extremos, con énfasis en educación, institucionalidad y desarrollo productivo.',
     keyProposals: [
@@ -96,6 +100,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'cepeda',
     dimensionId: 'economic-model',
     score: -4,
+    depth: 4,
     summary:
       'Intervención estatal fuerte. Propone austeridad republicana, protección de la industria nacional, revolución agraria y redistribución de la riqueza como motor económico.',
     keyProposals: [
@@ -117,6 +122,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'espriella',
     dimensionId: 'economic-model',
     score: 4,
+    depth: 2,
     summary:
       'Economía libertaria. Propone crecimiento explosivo basado en libre mercado, empleo masivo, zonas económicas especiales y reducción drástica de la intervención estatal.',
     keyProposals: [
@@ -137,6 +143,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'valencia',
     dimensionId: 'economic-model',
     score: 3,
+    depth: 4,
     summary:
       'Libre mercado con seguridad jurídica. Busca crecer al 5% del PIB con inversión al 25%, sector exportador como motor, reducción de impuestos empresariales y confianza inversionista.',
     keyProposals: [
@@ -157,6 +164,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'fajardo',
     dimensionId: 'economic-model',
     score: 1,
+    depth: 4,
     summary:
       'Economía mixta con vocación exportadora. Desarrollo productivo con reconversión tecnológica, diversificación de la economía, Estado como facilitador del emprendimiento.',
     keyProposals: [
@@ -182,6 +190,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'cepeda',
     dimensionId: 'tax-policy',
     score: -4,
+    depth: 3,
     summary:
       'Reforma tributaria progresiva. Propone aumentar impuestos a grandes capitales y fortunas para financiar programas sociales, redistribución fiscal y lucha contra la evasión.',
     keyProposals: [
@@ -203,6 +212,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'espriella',
     dimensionId: 'tax-policy',
     score: 4,
+    depth: 2,
     summary:
       'Simplificación fiscal sin subir impuestos. Propone reforma tributaria libertaria: menos impuestos, menos trámites, y financiar el Estado con ahorro por reducción burocrática ($25-30B).',
     keyProposals: [
@@ -224,6 +234,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'valencia',
     dimensionId: 'tax-policy',
     score: 3,
+    depth: 4,
     summary:
       'Menos impuestos para reactivar la economía. Reducir renta empresarial, eliminar impuesto al patrimonio, simplificar el estatuto tributario y respetar la regla fiscal.',
     keyProposals: [
@@ -244,6 +255,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'fajardo',
     dimensionId: 'tax-policy',
     score: 0,
+    depth: 4,
     summary:
       'Modernizar el recaudo sin subir la carga fiscal. Modernizar la DIAN, combatir evasión agresivamente, revisar beneficios tributarios y ordenar los subsidios energéticos.',
     keyProposals: [
@@ -268,6 +280,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'cepeda',
     dimensionId: 'state-size',
     score: -3,
+    depth: 3,
     summary:
       'Estado ampliado con presencia territorial. Más programas sociales, más presencia del Estado en regiones, la política social como centro del programa, fortalecimiento de lo público.',
     keyProposals: [
@@ -289,6 +302,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'espriella',
     dimensionId: 'state-size',
     score: 5,
+    depth: 2,
     summary:
       'Reducción radical del 40% del aparato estatal. Eliminar ministerios inútiles, meritocracia estricta, depuración de funcionarios, ahorro de $25-30 billones anuales.',
     keyProposals: [
@@ -309,6 +323,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'valencia',
     dimensionId: 'state-size',
     score: 3,
+    depth: 4,
     summary:
       'Estado eficiente, pequeño y digital. Reducir 25% ministerios, congelar OPS en 30%, IA al servicio del Estado, Plan Nacional de Inteligencia Artificial como política pública.',
     keyProposals: [
@@ -329,6 +344,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'fajardo',
     dimensionId: 'state-size',
     score: 1,
+    depth: 3,
     summary:
       'Estado eficiente y descentralizado. Modernizar sin desmantelar, gasto público con propósito, presupuesto transparente, reducir gastos duplicados sin afectar cobertura social.',
     keyProposals: [
@@ -353,6 +369,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'cepeda',
     dimensionId: 'foreign-investment',
     score: -3,
+    depth: 3,
     summary:
       'Inversión extranjera condicionada a soberanía nacional. Prioriza la industria local, condiciones estrictas para inversión extranjera, política exterior autónoma.',
     keyProposals: [
@@ -374,6 +391,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'espriella',
     dimensionId: 'foreign-investment',
     score: 4,
+    depth: 2,
     summary:
       'Apertura total con alianzas estratégicas. Plan Colombia II con EE.UU., cooperación con Israel, diplomacia comercial agresiva, zonas económicas especiales desreguladas.',
     keyProposals: [
@@ -395,6 +413,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'valencia',
     dimensionId: 'foreign-investment',
     score: 4,
+    depth: 4,
     summary:
       'Inversión abierta con seguridad jurídica. Atraer $2 mil millones USD/año en IED, respeto a contratos, Escudo de las Américas contra narcotráfico, libre competencia con China.',
     keyProposals: [
@@ -415,6 +434,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'fajardo',
     dimensionId: 'foreign-investment',
     score: 2,
+    depth: 4,
     summary:
       'Inversión con reglas claras y equilibrio diplomático. Ventanilla Única de Inversiones modernizada, marco de protección actualizado, relación pragmática con todos los bloques.',
     keyProposals: [
@@ -440,6 +460,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'cepeda',
     dimensionId: 'security',
     score: -4,
+    depth: 4,
     summary:
       'Paz Total y diálogo como estrategia central. Continuar negociaciones con todos los grupos armados, inversión social como antídoto a la violencia, justicia transicional.',
     keyProposals: [
@@ -461,6 +482,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'espriella',
     dimensionId: 'security',
     score: 5,
+    depth: 3,
     summary:
       'Mano dura militar total. 90 días para recuperar control territorial, ofensiva masiva contra el crimen, captura de 10 cabecillas, Plan Colombia II con apoyo internacional.',
     keyProposals: [
@@ -481,6 +503,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'valencia',
     dimensionId: 'security',
     score: 3,
+    depth: 5,
     summary:
       'Seguridad articulada con justicia e inteligencia. Plan 30-30 (30 mil militares + 30 mil policías), $20 billones en defensa, drones y ciberinteligencia, pero también oferta social.',
     keyProposals: [
@@ -501,6 +524,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'fajardo',
     dimensionId: 'security',
     score: 1,
+    depth: 4,
     summary:
       'Seguridad institucional e integral. Plan Guardián con 40.000 policías, inteligencia estratégica, atacar rentas criminales, protección de niños y jóvenes frente al reclutamiento.',
     keyProposals: [
@@ -525,6 +549,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'cepeda',
     dimensionId: 'drug-policy',
     score: -4,
+    depth: 3,
     summary:
       'Sustitución voluntaria y reforma de la política de drogas. Privilegia programas de sustitución de cultivos, desarrollo alternativo y reformas al enfoque prohibicionista.',
     keyProposals: [
@@ -546,6 +571,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'espriella',
     dimensionId: 'drug-policy',
     score: 5,
+    depth: 2,
     summary:
       'Fumigación aérea masiva y erradicación total. 330.000 hectáreas de fumigación, Plan Colombia II para desmantelar narcotráfico, cero tolerancia con cultivos ilícitos.',
     keyProposals: [
@@ -566,6 +592,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'valencia',
     dimensionId: 'drug-policy',
     score: 2,
+    depth: 3,
     summary:
       'Enfoque mixto: sustitución donde funcione, fumigación donde haya cultivos industriales. Incautación de precursores químicos, hacer la legalidad más rentable que el crimen.',
     keyProposals: [
@@ -586,6 +613,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'fajardo',
     dimensionId: 'drug-policy',
     score: -1,
+    depth: 3,
     summary:
       'Enfoque institucional: atacar rentas y economías ilícitas, desarrollo territorial integral. Prioriza inteligencia financiera y presencia estatal sobre fumigación masiva.',
     keyProposals: [
@@ -610,6 +638,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'cepeda',
     dimensionId: 'family-values',
     score: -4,
+    depth: 3,
     summary:
       'Enfoque de género, diversidad e inclusión. Derechos LGBTIQ+, reconocimiento de pueblos indígenas y afro, igualdad de género como eje transversal del programa.',
     keyProposals: [
@@ -631,6 +660,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'espriella',
     dimensionId: 'family-values',
     score: 5,
+    depth: 3,
     summary:
       'Familia tradicional y fe como pilares de la nación. Brújula Moral: familia como núcleo sagrado, fe en Dios como cimiento ético, valores cristianos como base social.',
     keyProposals: [
@@ -652,6 +682,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'valencia',
     dimensionId: 'family-values',
     score: 1,
+    depth: 4,
     summary:
       'Protección de la mujer y la familia con perspectiva moderada. Cerrar brechas de género en mujeres cabeza de hogar, autonomía económica, pero dentro de un marco institucional.',
     keyProposals: [
@@ -672,6 +703,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'fajardo',
     dimensionId: 'family-values',
     score: -2,
+    depth: 3,
     summary:
       'Inclusión, diversidad y cuidado como políticas de Estado. Reconoce a LGBTIQ+, pueblos indígenas, afro y comunidades diversas; enfoque de género en política exterior.',
     keyProposals: [
@@ -697,6 +729,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'cepeda',
     dimensionId: 'education',
     score: -4,
+    depth: 3,
     summary:
       'Educación pública universal y gratuita. Fortalecimiento de la universidad pública, formación integral, educación como derecho fundamental y motor de transformación social.',
     keyProposals: [
@@ -718,6 +751,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'espriella',
     dimensionId: 'education',
     score: 3,
+    depth: 2,
     summary:
       'Educación para ciudadanos autónomos, competitivos y patriotas. Enfoque en valores, competitividad individual y formación para el trabajo dentro del marco libertario.',
     keyProposals: [
@@ -738,6 +772,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'valencia',
     dimensionId: 'education',
     score: 3,
+    depth: 4,
     summary:
       'Libertad de elección y bonos educativos. 150.000 bonos para los más vulnerables, libre elección entre colegios públicos y privados, 1 millón de jóvenes formados en IA.',
     keyProposals: [
@@ -758,6 +793,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'fajardo',
     dimensionId: 'education',
     score: -1,
+    depth: 4,
     summary:
       'Educación pública de calidad con enfoque STEAM. Transformar la escuela pública, fortalecer docentes, educación inclusiva, infraestructura digna y conectada en todo el territorio.',
     keyProposals: [
@@ -782,6 +818,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'cepeda',
     dimensionId: 'technology',
     score: -2,
+    depth: 2,
     summary:
       'Conectividad y soberanía tecnológica. Prioriza cerrar la brecha digital, llevar internet a territorios rurales, soberanía sobre datos y tecnología al servicio de lo público.',
     keyProposals: [
@@ -802,6 +839,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'espriella',
     dimensionId: 'technology',
     score: 2,
+    depth: 2,
     summary:
       'Tecnología de punta para seguridad y eficiencia estatal. Foco en tecnología militar e inteligencia, modernización del Estado con eficiencia, pero sin plan digital detallado.',
     keyProposals: [
@@ -822,6 +860,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'valencia',
     dimensionId: 'technology',
     score: 4,
+    depth: 5,
     summary:
       'Estado digital con IA como política central. Plan Nacional de IA (PNIA), Estado plataforma con blockchain, IA en trámites públicos, centros de datos de bajo costo para IA global.',
     keyProposals: [
@@ -843,6 +882,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'fajardo',
     dimensionId: 'technology',
     score: 3,
+    depth: 4,
     summary:
       'Transformación digital integral con Instituto Nacional de IA. Estado Digital 2030, Colombia Hub tech, Plan de Talento Digital, IA desde la educación media.',
     keyProposals: [
@@ -867,6 +907,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'cepeda',
     dimensionId: 'healthcare',
     score: -4,
+    depth: 3,
     summary:
       'Sistema público sin intermediarios. Eliminar las EPS, sistema único público de salud, salud como derecho fundamental no sujeto a intermediación del sector privado.',
     keyProposals: [
@@ -887,6 +928,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'espriella',
     dimensionId: 'healthcare',
     score: 2,
+    depth: 3,
     summary:
       'Salud eficiente con autoridad y sin burocracia. $10 billones de plan de choque, APP para hospitales, intervención implacable a EPS ineficientes, prevención desde la infancia.',
     keyProposals: [
@@ -907,6 +949,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'valencia',
     dimensionId: 'healthcare',
     score: 2,
+    depth: 5,
     summary:
       'Sistema mixto público-privado estabilizado. $9 billones de inyección, PMU 24/7, resolver 10M de atenciones represadas, telemedicina en zonas rurales, hospitales padrinos.',
     keyProposals: [
@@ -927,6 +970,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'fajardo',
     dimensionId: 'healthcare',
     score: 0,
+    depth: 4,
     summary:
       'Ordenar el sistema sin destruirlo. Fortalecer lo que funciona, corregir lo que falló. Modelo territorial con Atención Primaria en Salud, transparencia financiera, salud mental.',
     keyProposals: [
@@ -951,6 +995,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'cepeda',
     dimensionId: 'petro-stance',
     score: -5,
+    depth: 3,
     summary:
       'Continuismo total. Candidato del Pacto Histórico, busca profundizar y completar las reformas del gobierno Petro. Defiende la Paz Total, la reforma agraria y el modelo social.',
     keyProposals: [
@@ -971,6 +1016,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'espriella',
     dimensionId: 'petro-stance',
     score: 5,
+    depth: 3,
     summary:
       'Oposición total y radical. Propone desmontar completamente el modelo del gobierno Petro: eliminar la JEP, revertir reformas, reducir el Estado y aplicar un modelo opuesto.',
     keyProposals: [
@@ -992,6 +1038,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'valencia',
     dimensionId: 'petro-stance',
     score: 4,
+    depth: 4,
     summary:
       'Oposición fuerte e institucional. Desactivar las "5 bombas" heredadas del gobierno Petro: seguridad, salud, energía, confianza y corrupción. Cambio de rumbo sin ruptura institucional.',
     keyProposals: [
@@ -1013,6 +1060,7 @@ export const positions: CandidatePosition[] = [
     candidateId: 'fajardo',
     dimensionId: 'petro-stance',
     score: 2,
+    depth: 4,
     summary:
       'Crítico moderado que busca corregir el rumbo. Reconoce errores del gobierno Petro sin negar todo. Propone recuperar lo perdido con método, seriedad y sin extremos.',
     keyProposals: [

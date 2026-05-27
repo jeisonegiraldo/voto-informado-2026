@@ -33,6 +33,7 @@ export interface CandidatePosition {
   candidateId: CandidateId;
   dimensionId: DimensionId;
   score: number; // -5 to +5 on the dimension spectrum
+  depth: number; // 1-5: profundidad y coherencia del plan en esta dimensión
   summary: string;
   keyProposals: string[];
   sourceRefs: SourceRef[];

@@ -13,6 +13,10 @@ import {
   Sparkles,
   Minimize2,
   ArrowRight,
+  ThumbsUp,
+  ThumbsDown,
+  Volume2,
+  VolumeX,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Markdown from 'react-markdown';
@@ -21,7 +25,18 @@ import Link from 'next/link';
 interface Message {
   role: 'user' | 'assistant';
   content: string;
+  feedback?: 'up' | 'down';
+  feedbackCategory?: string;
+  feedbackComment?: string;
 }
+
+const FEEDBACK_CATEGORIES = [
+  'Falta de contexto',
+  'Información incorrecta',
+  'Sesgo político',
+  'Respuesta incompleta',
+  'Otra',
+];
 
 const QUICK_QUESTIONS = [
   '¿Qué propone cada candidato sobre seguridad?',
@@ -43,8 +58,69 @@ export function FloatingChat() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Feedback + TTS state
+  const [feedbackModalIndex, setFeedbackModalIndex] = useState<number | null>(null);
+  const [feedbackCategory, setFeedbackCategory] = useState('');
+  const [feedbackComment, setFeedbackComment] = useState('');
+  const [speakingIndex, setSpeakingIndex] = useState<number | null>(null);
+
   // Hide on /chat page
   if (pathname === '/chat') return null;
+
+  function handleFeedback(index: number, type: 'up' | 'down') {
+    const updated = [...messages];
+    if (updated[index].feedback === type) {
+      updated[index].feedback = undefined;
+      updated[index].feedbackCategory = undefined;
+      updated[index].feedbackComment = undefined;
+      setMessages(updated);
+      return;
+    }
+    updated[index].feedback = type;
+    setMessages(updated);
+    if (type === 'down') {
+      setFeedbackModalIndex(index);
+      setFeedbackCategory('');
+      setFeedbackComment('');
+    }
+  }
+
+  function submitNegativeFeedback() {
+    if (feedbackModalIndex === null) return;
+    const updated = [...messages];
+    updated[feedbackModalIndex].feedbackCategory = feedbackCategory || 'Otra';
+    updated[feedbackModalIndex].feedbackComment = feedbackComment;
+    setMessages(updated);
+    setFeedbackModalIndex(null);
+  }
+
+  function handleSpeak(index: number, text: string) {
+    if (typeof window === 'undefined' || !window.speechSynthesis) return;
+    if (speakingIndex === index) {
+      window.speechSynthesis.cancel();
+      setSpeakingIndex(null);
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const cleanText = text
+      .replace(/#{1,6}\s/g, '')
+      .replace(/\*\*([^*]+)\*\*/g, '$1')
+      .replace(/\*([^*]+)\*/g, '$1')
+      .replace(/`([^`]+)`/g, '$1')
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+      .replace(/[-•]\s/g, '')
+      .trim();
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.lang = 'es-CO';
+    utterance.rate = 1;
+    const voices = window.speechSynthesis.getVoices();
+    const esVoice = voices.find((v) => v.lang.startsWith('es-CO') || v.lang.startsWith('es-'));
+    if (esVoice) utterance.voice = esVoice;
+    utterance.onend = () => setSpeakingIndex(null);
+    utterance.onerror = () => setSpeakingIndex(null);
+    setSpeakingIndex(index);
+    window.speechSynthesis.speak(utterance);
+  }
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -248,63 +324,111 @@ export function FloatingChat() {
               ) : (
                 <div className="space-y-3">
                   {messages.map((msg, i) => (
-                    <div
-                      key={i}
-                      className={`flex gap-2 ${
-                        msg.role === 'user' ? 'justify-end' : 'justify-start'
-                      }`}
-                    >
-                      {msg.role === 'assistant' && (
-                        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-teal-100">
-                          <Bot className="h-3 w-3 text-teal-600" />
-                        </div>
-                      )}
+                    <div key={i}>
                       <div
-                        className={`max-w-[85%] rounded-2xl px-3 py-2 text-xs leading-relaxed ${
-                          msg.role === 'user'
-                            ? 'bg-teal-600 text-white'
-                            : 'bg-gray-100 text-gray-800'
+                        className={`flex gap-2 ${
+                          msg.role === 'user' ? 'justify-end' : 'justify-start'
                         }`}
                       >
-                        {msg.role === 'assistant' ? (
-                          msg.content ? (
-                            <Markdown
-                              components={{
-                                h2: ({ children }) => (
-                                  <h2 className="mb-1 mt-2 text-xs font-bold text-gray-900 first:mt-0">{children}</h2>
-                                ),
-                                h3: ({ children }) => (
-                                  <h3 className="mb-1 mt-2 text-xs font-bold text-gray-800 first:mt-0">{children}</h3>
-                                ),
-                                p: ({ children }) => (
-                                  <p className="mb-1.5 last:mb-0">{children}</p>
-                                ),
-                                ul: ({ children }) => (
-                                  <ul className="mb-1.5 ml-1 space-y-0.5 last:mb-0">{children}</ul>
-                                ),
-                                li: ({ children }) => (
-                                  <li className="flex items-start gap-1">
-                                    <span className="mt-1 inline-block h-1 w-1 shrink-0 rounded-full bg-teal-400" />
-                                    <span>{children}</span>
-                                  </li>
-                                ),
-                                strong: ({ children }) => (
-                                  <strong className="font-semibold text-gray-900">{children}</strong>
-                                ),
-                              }}
-                            >
-                              {msg.content}
-                            </Markdown>
+                        {msg.role === 'assistant' && (
+                          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-teal-100">
+                            <Bot className="h-3 w-3 text-teal-600" />
+                          </div>
+                        )}
+                        <div
+                          className={`max-w-[85%] rounded-2xl px-3 py-2 text-xs leading-relaxed ${
+                            msg.role === 'user'
+                              ? 'bg-teal-600 text-white'
+                              : 'bg-gray-100 text-gray-800'
+                          }`}
+                        >
+                          {msg.role === 'assistant' ? (
+                            msg.content ? (
+                              <Markdown
+                                components={{
+                                  h2: ({ children }) => (
+                                    <h2 className="mb-1 mt-2 text-xs font-bold text-gray-900 first:mt-0">{children}</h2>
+                                  ),
+                                  h3: ({ children }) => (
+                                    <h3 className="mb-1 mt-2 text-xs font-bold text-gray-800 first:mt-0">{children}</h3>
+                                  ),
+                                  p: ({ children }) => (
+                                    <p className="mb-1.5 last:mb-0">{children}</p>
+                                  ),
+                                  ul: ({ children }) => (
+                                    <ul className="mb-1.5 ml-1 space-y-0.5 last:mb-0">{children}</ul>
+                                  ),
+                                  li: ({ children }) => (
+                                    <li className="flex items-start gap-1">
+                                      <span className="mt-1 inline-block h-1 w-1 shrink-0 rounded-full bg-teal-400" />
+                                      <span>{children}</span>
+                                    </li>
+                                  ),
+                                  strong: ({ children }) => (
+                                    <strong className="font-semibold text-gray-900">{children}</strong>
+                                  ),
+                                }}
+                              >
+                                {msg.content}
+                              </Markdown>
+                            ) : (
+                              <Loader2 className="h-3 w-3 animate-spin text-gray-400" />
+                            )
                           ) : (
-                            <Loader2 className="h-3 w-3 animate-spin text-gray-400" />
-                          )
-                        ) : (
-                          msg.content
+                            msg.content
+                          )}
+                        </div>
+                        {msg.role === 'user' && (
+                          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gray-200">
+                            <User className="h-3 w-3 text-gray-600" />
+                          </div>
                         )}
                       </div>
-                      {msg.role === 'user' && (
-                        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gray-200">
-                          <User className="h-3 w-3 text-gray-600" />
+                      {/* Feedback + TTS */}
+                      {msg.role === 'assistant' && msg.content && !isStreaming && (
+                        <div className="ml-8 mt-0.5 flex items-center gap-0.5">
+                          <button
+                            type="button"
+                            onClick={() => handleFeedback(i, 'up')}
+                            className={`rounded p-0.5 transition-colors ${
+                              msg.feedback === 'up'
+                                ? 'bg-emerald-100 text-emerald-600'
+                                : 'text-gray-300 hover:text-gray-500'
+                            }`}
+                          >
+                            <ThumbsUp className="h-3 w-3" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleFeedback(i, 'down')}
+                            className={`rounded p-0.5 transition-colors ${
+                              msg.feedback === 'down'
+                                ? 'bg-rose-100 text-rose-600'
+                                : 'text-gray-300 hover:text-gray-500'
+                            }`}
+                          >
+                            <ThumbsDown className="h-3 w-3" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleSpeak(i, msg.content)}
+                            className={`rounded p-0.5 transition-colors ${
+                              speakingIndex === i
+                                ? 'bg-teal-100 text-teal-600'
+                                : 'text-gray-300 hover:text-gray-500'
+                            }`}
+                          >
+                            {speakingIndex === i ? (
+                              <VolumeX className="h-3 w-3" />
+                            ) : (
+                              <Volume2 className="h-3 w-3" />
+                            )}
+                          </button>
+                          {msg.feedback === 'down' && msg.feedbackCategory && (
+                            <span className="ml-0.5 rounded bg-rose-50 px-1.5 py-0.5 text-[9px] text-rose-500">
+                              {msg.feedbackCategory}
+                            </span>
+                          )}
                         </div>
                       )}
                     </div>
@@ -349,6 +473,66 @@ export function FloatingChat() {
                 </button>
               </div>
             </div>
+
+            {/* Negative feedback modal */}
+            {feedbackModalIndex !== null && (
+              <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+                <div className="mx-3 w-full max-w-xs rounded-xl border bg-white p-4 shadow-xl">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-xs font-semibold text-gray-900">
+                      ¿Qué estuvo mal?
+                    </h3>
+                    <button
+                      type="button"
+                      onClick={() => setFeedbackModalIndex(null)}
+                      className="rounded-md p-0.5 text-gray-400 hover:bg-gray-100"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    {FEEDBACK_CATEGORIES.map((cat) => (
+                      <button
+                        key={cat}
+                        type="button"
+                        onClick={() => setFeedbackCategory(cat)}
+                        className={`rounded-full border px-2.5 py-1 text-[10px] font-medium transition-colors ${
+                          feedbackCategory === cat
+                            ? 'border-rose-300 bg-rose-50 text-rose-700'
+                            : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+                        }`}
+                      >
+                        {cat}
+                      </button>
+                    ))}
+                  </div>
+                  <textarea
+                    value={feedbackComment}
+                    onChange={(e) => setFeedbackComment(e.target.value)}
+                    placeholder="Cuéntanos más (opcional)..."
+                    rows={2}
+                    className="mt-2 w-full resize-none rounded-lg border bg-gray-50 px-2.5 py-1.5 text-[10px] outline-none focus:border-teal-300 focus:bg-white"
+                  />
+                  <div className="mt-2 flex justify-end gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setFeedbackModalIndex(null)}
+                      className="rounded-lg px-2.5 py-1 text-[10px] font-medium text-gray-500 hover:bg-gray-100"
+                    >
+                      Cancelar
+                    </button>
+                    <button
+                      type="button"
+                      onClick={submitNegativeFeedback}
+                      disabled={!feedbackCategory}
+                      className="rounded-lg bg-rose-500 px-3 py-1 text-[10px] font-medium text-white hover:bg-rose-600 disabled:opacity-40"
+                    >
+                      Enviar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

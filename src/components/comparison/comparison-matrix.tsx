@@ -130,29 +130,49 @@ export function ComparisonMatrix({
             <button
               type="button"
               onClick={() => toggleDimension(dim.id)}
-              className="flex w-full items-center gap-2 p-4 text-left"
+              className="flex w-full items-center gap-2 p-4 text-left transition-colors hover:bg-gray-50/50"
             >
               <Icon className="h-5 w-5 shrink-0 text-teal-600" />
               <div className="min-w-0 flex-1">
                 <h3 className="font-semibold text-gray-900">{dim.name}</h3>
                 <p className="text-xs text-gray-500">{dim.description}</p>
               </div>
-              <ChevronDown
-                className={`h-5 w-5 shrink-0 text-gray-400 transition-transform duration-200 ${
-                  isExpanded ? 'rotate-180' : ''
-                }`}
-              />
+              <div className="flex shrink-0 items-center gap-1.5">
+                {!isExpanded && (
+                  <span className="hidden text-[10px] font-medium text-teal-600 sm:inline">
+                    Ver detalle
+                  </span>
+                )}
+                <ChevronDown
+                  className={`h-5 w-5 text-teal-500 transition-transform duration-200 ${
+                    isExpanded ? 'rotate-180' : ''
+                  }`}
+                />
+              </div>
             </button>
 
             {/* Spectrum bar — always visible */}
-            <div className="px-4 pb-3">
+            <div className="px-4 pb-2">
               <SpectrumBar labels={dim.spectrumLabels} positions={positionsData} />
             </div>
+
+            {/* Expand hint — visible when collapsed */}
+            {!isExpanded && (
+              <button
+                type="button"
+                onClick={() => toggleDimension(dim.id)}
+                className="flex w-full items-center justify-center gap-1 border-t border-dashed border-gray-200 py-2 text-[10px] font-medium text-teal-600 transition-colors hover:bg-teal-50/50 hover:text-teal-700"
+              >
+                <Users className="h-3 w-3" />
+                Toca para ver propuestas de cada candidato
+                <ChevronDown className="h-3 w-3" />
+              </button>
+            )}
 
             {/* Expandable detail panel */}
             <div
               className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                isExpanded ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'
+                isExpanded ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
               }`}
             >
               <div className="border-t bg-gray-50/50 px-3 py-3 sm:px-4">
@@ -223,6 +243,14 @@ export function ComparisonMatrix({
                     );
                   })}
                 </div>
+                <button
+                  type="button"
+                  onClick={() => toggleDimension(dim.id)}
+                  className="mt-3 flex w-full items-center justify-center gap-1 rounded-lg py-1.5 text-[10px] font-medium text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+                >
+                  <ChevronDown className="h-3 w-3 rotate-180" />
+                  Cerrar detalle
+                </button>
               </div>
             </div>
           </div>

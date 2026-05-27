@@ -20,29 +20,32 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b bg-white/80 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
+    <header className="sticky top-0 z-50 border-b border-gray-100 bg-white/80 backdrop-blur-lg">
+      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:h-16">
         <Link href="/" className="flex items-center gap-2">
-          <span className="text-xl font-bold tracking-tight">
+          <span className="text-xl font-extrabold tracking-tight text-gray-900">
             Voto<span className="text-teal-600">Informado</span>
           </span>
-          <span className="hidden rounded-full bg-teal-100 px-2 py-0.5 text-xs font-medium text-teal-800 sm:inline">
+          <span className="hidden rounded-md bg-teal-50 px-2 py-0.5 text-[11px] font-bold text-teal-700 sm:inline">
             2026
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-1 md:flex">
+        <nav className="hidden items-center gap-0.5 md:flex">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="rounded-lg px-3 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900"
+              className="rounded-lg px-3 py-1.5 text-[13px] font-medium text-gray-500 transition-colors hover:bg-gray-50 hover:text-gray-900"
             >
               {item.label}
             </Link>
           ))}
-          <Link href="/quiz">
-            <Button size="sm" className="ml-2">
+          <Link href="/quiz" className="ml-2">
+            <Button
+              size="sm"
+              className="bg-gradient-to-r from-teal-500 to-emerald-500 text-white shadow-sm transition-all hover:brightness-110"
+            >
               Hacer el Quiz
             </Button>
           </Link>
@@ -60,19 +63,21 @@ export function Header() {
       </div>
 
       {mobileOpen && (
-        <nav className="border-t bg-white px-4 pb-4 md:hidden">
+        <nav className="border-t border-gray-100 bg-white px-4 pb-4 md:hidden">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               onClick={() => setMobileOpen(false)}
-              className="block rounded-lg px-3 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100"
+              className="block rounded-lg px-3 py-2.5 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50 hover:text-gray-900"
             >
               {item.label}
             </Link>
           ))}
           <Link href="/quiz" onClick={() => setMobileOpen(false)}>
-            <Button className="mt-2 w-full">Hacer el Quiz</Button>
+            <Button className="mt-2 w-full bg-gradient-to-r from-teal-500 to-emerald-500 text-white">
+              Hacer el Quiz
+            </Button>
           </Link>
         </nav>
       )}

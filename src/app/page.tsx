@@ -3,46 +3,68 @@ import { Button } from '@/components/ui/button';
 import { ElectionCountdown } from '@/components/landing/election-countdown';
 import { CandidatePreviewCard } from '@/components/landing/candidate-preview-card';
 import { candidates } from '@/data/candidates';
-import { BarChart3, CheckCircle, Newspaper, Users } from 'lucide-react';
+import {
+  BarChart3,
+  CheckCircle,
+  Newspaper,
+  Users,
+  ArrowRight,
+  Shield,
+  Search,
+  MessageSquare,
+} from 'lucide-react';
 
 export default function HomePage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-gray-900">
-        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
-        <div className="relative mx-auto max-w-7xl px-4 py-16 sm:py-24">
+      <section className="relative overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-slate-800">
+        {/* Animated grid pattern */}
+        <div className="bg-grid-pattern absolute inset-0" />
+        {/* Radial glow */}
+        <div className="absolute left-1/2 top-0 -translate-x-1/2 h-[500px] w-[800px] rounded-full bg-teal-500/10 blur-3xl" />
+
+        <div className="relative mx-auto max-w-7xl px-4 py-20 sm:py-28 lg:py-32">
           <div className="text-center">
-            <span className="inline-block rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium text-white/90 backdrop-blur-sm">
+            <span className="animate-fade-up inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-sm font-medium text-teal-300 backdrop-blur-sm">
+              <span className="h-1.5 w-1.5 rounded-full bg-teal-400 animate-pulse" />
               Elecciones Presidenciales Colombia 2026
             </span>
-            <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
+
+            <h1 className="animate-fade-up-delay-1 mt-8 text-5xl font-extrabold tracking-tight text-white sm:text-6xl lg:text-7xl">
               Vota{' '}
-              <span className="bg-gradient-to-r from-teal-300 to-emerald-200 bg-clip-text text-transparent">
+              <span className="text-gradient-teal">
                 Informado
               </span>
             </h1>
-            <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-300 sm:text-xl">
-              Compara propuestas, descubre tu afinidad y decide con claridad. Herramienta ciudadana
-              100% no-partidista.
+
+            <p className="animate-fade-up-delay-2 mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-300 sm:text-xl">
+              Compara propuestas, descubre tu afinidad y decide con claridad.
+              Herramienta ciudadana 100% no-partidista.
             </p>
 
-            <div className="mt-8 flex justify-center">
+            <div className="animate-fade-up-delay-3 mt-10 flex justify-center">
               <ElectionCountdown />
             </div>
-            <p className="mt-3 text-sm text-slate-400">Primera vuelta: 31 de mayo de 2026</p>
+            <p className="mt-3 text-sm font-medium text-slate-500">
+              Primera vuelta: 31 de mayo de 2026
+            </p>
 
-            <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+            <div className="animate-fade-up-delay-4 mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               <Link href="/quiz">
-                <Button size="lg" className="bg-teal-500 text-white hover:bg-teal-400">
+                <Button
+                  size="lg"
+                  className="group relative overflow-hidden bg-gradient-to-r from-teal-500 to-emerald-500 px-8 text-white shadow-lg shadow-teal-500/25 transition-all hover:shadow-xl hover:shadow-teal-500/30 hover:brightness-110"
+                >
                   Hacer el Quiz de Afinidad
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Button>
               </Link>
               <Link href="/comparar">
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-white/30 text-white hover:bg-white/10"
+                  className="border-white/20 bg-white/5 text-white backdrop-blur-sm transition-all hover:bg-white/10 hover:border-white/30"
                 >
                   Comparar Candidatos
                 </Button>
@@ -50,46 +72,113 @@ export default function HomePage() {
             </div>
           </div>
         </div>
+
+        {/* Bottom wave divider */}
+        <div className="absolute bottom-0 left-0 right-0">
+          <svg viewBox="0 0 1440 56" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
+            <path d="M0 56h1440V28C1320 8 1200 0 1080 8 960 16 840 40 720 44 600 48 480 32 360 24 240 16 120 16 60 20L0 24v32z" fill="#f9fafb"/>
+          </svg>
+        </div>
       </section>
 
       {/* Features Section */}
-      <section className="bg-gray-50 py-12">
+      <section className="bg-gray-50 py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4">
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">
+              Todo lo que necesitas para decidir
+            </h2>
+            <p className="mt-2 text-gray-500">
+              Herramientas objetivas y datos verificados, sin favorecer a nadie.
+            </p>
+          </div>
+          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {[
               {
                 icon: BarChart3,
                 title: 'Comparador visual',
                 desc: '12 dimensiones para comparar a los 4 candidatos de manera clara y objetiva.',
+                href: '/comparar',
+                gradient: 'from-teal-500 to-emerald-500',
               },
               {
                 icon: CheckCircle,
                 title: 'Quiz de afinidad',
                 desc: '12 preguntas para descubrir con qué candidato tienes más afinidad.',
+                href: '/quiz',
+                gradient: 'from-violet-500 to-purple-500',
               },
               {
                 icon: Users,
                 title: 'Perfiles completos',
                 desc: 'Propuestas, fuentes y planes de gobierno de cada candidato.',
+                href: '/candidatos',
+                gradient: 'from-amber-500 to-orange-500',
               },
               {
                 icon: Newspaper,
                 title: 'Noticias en tiempo real',
                 desc: 'Rastreo automatizado de medios verificados cada 5 horas.',
+                href: '/noticias',
+                gradient: 'from-blue-500 to-cyan-500',
               },
             ].map((feature) => (
-              <div key={feature.title} className="rounded-xl bg-white p-5 shadow-sm">
-                <feature.icon className="h-8 w-8 text-teal-600" />
-                <h3 className="mt-3 font-semibold text-gray-900">{feature.title}</h3>
-                <p className="mt-1 text-sm text-gray-500">{feature.desc}</p>
-              </div>
+              <Link key={feature.title} href={feature.href}>
+                <div className="group h-full rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-gray-200">
+                  <div className={`inline-flex rounded-xl bg-gradient-to-br ${feature.gradient} p-2.5`}>
+                    <feature.icon className="h-5 w-5 text-white" />
+                  </div>
+                  <h3 className="mt-4 font-bold text-gray-900 group-hover:text-teal-700 transition-colors">
+                    {feature.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-gray-500">{feature.desc}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          {/* Secondary tools row */}
+          <div className="mt-5 grid gap-5 sm:grid-cols-3">
+            {[
+              {
+                icon: Shield,
+                title: 'Verificador de afirmaciones',
+                desc: 'Comprueba si lo que dicen los candidatos coincide con sus planes.',
+                href: '/verificador',
+              },
+              {
+                icon: Search,
+                title: 'Buscar por tema',
+                desc: 'Busca un tema y compara la postura de cada candidato al instante.',
+                href: '/buscar',
+              },
+              {
+                icon: MessageSquare,
+                title: 'Chat con IA',
+                desc: 'Pregunta lo que quieras sobre los candidatos y sus propuestas.',
+                href: '/chat',
+              },
+            ].map((tool) => (
+              <Link key={tool.title} href={tool.href}>
+                <div className="group flex items-start gap-4 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md hover:border-gray-200">
+                  <div className="rounded-lg bg-gray-100 p-2 transition-colors group-hover:bg-teal-50">
+                    <tool.icon className="h-5 w-5 text-gray-500 transition-colors group-hover:text-teal-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 group-hover:text-teal-700 transition-colors">
+                      {tool.title}
+                    </h3>
+                    <p className="mt-1 text-sm text-gray-500">{tool.desc}</p>
+                  </div>
+                </div>
+              </Link>
             ))}
           </div>
         </div>
       </section>
 
       {/* Candidates Section */}
-      <section className="py-12">
+      <section className="py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">
@@ -99,7 +188,7 @@ export default function HomePage() {
               Primera vuelta presidencial — 31 de mayo de 2026
             </p>
           </div>
-          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {candidates.map((candidate) => (
               <CandidatePreviewCard key={candidate.id} candidate={candidate} />
             ))}
@@ -108,17 +197,25 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-slate-900 py-12 text-center">
-        <div className="mx-auto max-w-2xl px-4">
-          <h2 className="text-2xl font-bold text-white sm:text-3xl">
-            No votes a ciegas. Vota informado.
+      <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-16 sm:py-20">
+        <div className="bg-grid-pattern absolute inset-0" />
+        <div className="absolute right-0 top-0 h-[300px] w-[400px] rounded-full bg-teal-500/10 blur-3xl" />
+        <div className="relative mx-auto max-w-2xl px-4 text-center">
+          <h2 className="text-3xl font-bold text-white sm:text-4xl">
+            No votes a ciegas.
+            <br />
+            <span className="text-gradient-teal">Vota informado.</span>
           </h2>
-          <p className="mt-3 text-slate-400">
+          <p className="mt-4 text-lg text-slate-400">
             Responde 12 preguntas y descubre cuál candidato se alinea más con tus ideas.
           </p>
-          <Link href="/quiz" className="mt-6 inline-block">
-            <Button size="lg" className="bg-teal-500 text-white hover:bg-teal-400">
+          <Link href="/quiz" className="mt-8 inline-block">
+            <Button
+              size="lg"
+              className="group bg-gradient-to-r from-teal-500 to-emerald-500 px-8 text-white shadow-lg shadow-teal-500/25 transition-all hover:shadow-xl hover:shadow-teal-500/30 hover:brightness-110"
+            >
               Comenzar el Quiz
+              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
           </Link>
         </div>

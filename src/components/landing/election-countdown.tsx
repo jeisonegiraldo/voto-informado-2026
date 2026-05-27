@@ -21,18 +21,22 @@ export function ElectionCountdown() {
   ];
 
   return (
-    <div className="flex gap-3">
-      {blocks.map((block) => (
-        <div
-          key={block.label}
-          className="flex flex-col items-center rounded-xl bg-white/10 px-3 py-2 backdrop-blur-sm sm:px-4 sm:py-3"
-        >
-          <span className="text-2xl font-bold tabular-nums text-white sm:text-3xl">
-            {String(block.value).padStart(2, '0')}
-          </span>
-          <span className="text-[10px] font-medium uppercase tracking-wider text-white/70 sm:text-xs">
-            {block.label}
-          </span>
+    <div className="flex items-center gap-2 sm:gap-3">
+      {blocks.map((block, i) => (
+        <div key={block.label} className="flex items-center gap-2 sm:gap-3">
+          <div className="flex flex-col items-center">
+            <div className="rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 backdrop-blur-md sm:px-5 sm:py-3">
+              <span className="text-2xl font-extrabold tabular-nums text-white sm:text-4xl">
+                {String(block.value).padStart(2, '0')}
+              </span>
+            </div>
+            <span className="mt-1.5 text-[10px] font-semibold uppercase tracking-widest text-slate-400 sm:text-xs">
+              {block.label}
+            </span>
+          </div>
+          {i < blocks.length - 1 && (
+            <span className="text-xl font-bold text-white/20 sm:text-2xl">:</span>
+          )}
         </div>
       ))}
     </div>

@@ -212,12 +212,12 @@ function ResultsContent() {
     (a, b) => result.candidatePercentages[b.id as CandidateId] - result.candidatePercentages[a.id as CandidateId]
   );
 
-  const shareText = `🗳️ Mi afinidad política en VotoInformado 2026:\n\n${sorted.map((c) => `${c.name}: ${result.candidatePercentages[c.id as CandidateId]}%`).join('\n')}\n\nMi mayor afinidad: ${topCandidate?.name} (${result.candidatePercentages[result.topCandidate]}%)\n\n¿Y tú con quién tienes más afinidad? Descúbrelo:`;
+  const shareText = `🗳️ Mi afinidad política en VotaInformado 2026:\n\n${sorted.map((c) => `${c.name}: ${result.candidatePercentages[c.id as CandidateId]}%`).join('\n')}\n\nMi mayor afinidad: ${topCandidate?.name} (${result.candidatePercentages[result.topCandidate]}%)\n\n¿Y tú con quién tienes más afinidad? Descúbrelo:`;
 
   const handleShare = async () => {
     const url = window.location.href;
     if (navigator.share) {
-      await navigator.share({ title: 'Mi resultado - VotoInformado 2026', text: shareText, url });
+      await navigator.share({ title: 'Mi resultado - VotaInformado 2026', text: shareText, url });
     } else {
       await navigator.clipboard.writeText(`${shareText}\n${url}`);
       alert('Enlace copiado al portapapeles');

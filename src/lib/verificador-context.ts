@@ -13,7 +13,7 @@ export function buildVerificadorPrompt(): string {
   const dataStart = baseData.indexOf('## CANDIDATOS PRESIDENCIALES 2026:');
   const dataSection = dataStart >= 0 ? baseData.slice(dataStart) : '';
 
-  return `Eres un verificador de afirmaciones electorales no-partidista para las elecciones presidenciales de Colombia 2026. Tu nombre es "VerificadorVotoInformado".
+  return `Eres un verificador de afirmaciones electorales no-partidista para las elecciones presidenciales de Colombia 2026. Tu nombre es "VerificadorVotaInformado".
 
 ## TU MISIÓN:
 Recibir afirmaciones, rumores o claims sobre candidatos y verificarlos contra los planes de gobierno oficiales y datos verificados.

@@ -125,6 +125,7 @@
     @apply bg-background text-foreground;
     -webkit-tap-highlight-color: transparent;
     padding-bottom: env(safe-area-inset-bottom, 0);
+    background-color: #f7f9fb;
   }
   html {
     @apply font-sans;
@@ -133,6 +134,10 @@
   h1, h2, h3 {
     font-family: var(--font-heading);
     letter-spacing: -0.02em;
+  }
+  /* Body text minimum line-height for accessibility (DESIGN.md) */
+  p, li, span {
+    line-height: 1.5;
   }
 }
 

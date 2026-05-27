@@ -20,8 +20,8 @@ const jakarta = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   title: {
-    default: 'VotoInformado 2026 — Compara candidatos y vota informado',
-    template: '%s | VotoInformado 2026',
+    default: 'VotaInformado 2026 — Compara candidatos y vota informado',
+    template: '%s | VotaInformado 2026',
   },
   description:
     'Herramienta ciudadana no-partidista para comparar candidatos presidenciales de Colombia 2026. Compara propuestas, haz el quiz de afinidad y vota informado.',
@@ -30,18 +30,23 @@ export const metadata: Metadata = {
     'candidatos presidenciales',
     'comparar candidatos',
     'quiz electoral',
-    'voto informado',
+    'vota informado',
     'cepeda',
     'espriella',
     'valencia',
     'fajardo',
   ],
+  icons: {
+    icon: '/favicon.svg',
+  },
+  metadataBase: new URL('https://votainformadoco.org'),
   openGraph: {
-    title: 'VotoInformado 2026 — Compara candidatos y vota informado',
+    title: 'VotaInformado 2026 — Compara candidatos y vota informado',
     description:
       'Compara propuestas de los 4 candidatos presidenciales de Colombia. Quiz de afinidad y noticias actualizadas.',
     type: 'website',
     locale: 'es_CO',
+    url: 'https://votainformadoco.org',
   },
 };
 

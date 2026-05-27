@@ -28,7 +28,7 @@ export function Header() {
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:h-16">
         <Link href="/" className="flex items-center gap-2">
           <span className="text-xl font-extrabold tracking-tight text-gray-900">
-            Voto<span className="text-teal-600">Informado</span>
+            Vota<span className="text-teal-600">Informado</span>
           </span>
           <span className="hidden rounded-md bg-teal-50 px-2 py-0.5 text-[11px] font-bold text-teal-700 sm:inline">
             2026

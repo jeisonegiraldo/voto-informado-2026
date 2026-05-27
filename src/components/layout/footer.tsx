@@ -7,7 +7,7 @@ export function Footer() {
         <div className="grid gap-8 sm:grid-cols-3">
           <div>
             <h3 className="font-extrabold text-gray-900">
-              Voto<span className="text-teal-600">Informado</span>
+              Vota<span className="text-teal-600">Informado</span>
               <span className="ml-1.5 text-xs font-bold text-gray-400">2026</span>
             </h3>
             <p className="mt-3 text-sm leading-relaxed text-gray-500">

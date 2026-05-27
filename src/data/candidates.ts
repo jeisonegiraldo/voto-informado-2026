@@ -14,6 +14,7 @@ export const candidates: Candidate[] = [
     color: '#7B2D8E',
     colorLight: '#E8D5F0',
     slug: 'cepeda',
+    photo: '/images/candidates/cepeda.jpg',
     runningMate: 'Aída Quilcué',
     runningMateRole: 'Senadora indígena',
     shortBio:
@@ -35,6 +36,7 @@ export const candidates: Candidate[] = [
     color: '#1A1A5E',
     colorLight: '#D4D4F0',
     slug: 'espriella',
+    photo: '/images/candidates/espriella.jpg',
     runningMate: 'José Manuel Restrepo',
     runningMateRole: 'Exministro de Hacienda y Comercio',
     shortBio:
@@ -56,6 +58,7 @@ export const candidates: Candidate[] = [
     color: '#003399',
     colorLight: '#D0DFFF',
     slug: 'valencia',
+    photo: '/images/candidates/valencia.jpg',
     runningMate: 'Juan Daniel Oviedo',
     runningMateRole: 'Exdirector del DANE',
     shortBio:
@@ -77,6 +80,7 @@ export const candidates: Candidate[] = [
     color: '#F5A623',
     colorLight: '#FEF0D5',
     slug: 'fajardo',
+    photo: '/images/candidates/fajardo.jpg',
     runningMate: 'Por confirmar',
     runningMateRole: 'Coalición ¡Ahora Colombia!',
     shortBio:

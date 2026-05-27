@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next';
 import { candidates } from '@/data/candidates';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://votoinformado.co';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://votainformadoco.org';
 
   const candidatePages = candidates.map((c) => ({
     url: `${baseUrl}/candidatos/${c.slug}`,

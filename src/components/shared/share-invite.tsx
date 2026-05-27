@@ -27,7 +27,7 @@ interface ShareInviteProps {
 export function ShareInvite({
   url,
   shareText,
-  shareTitle = 'VotoInformado 2026',
+  shareTitle = 'VotaInformado 2026',
   heading = 'Invita a alguien a jugar',
   subheading = 'Comparte la Brújula con amigos y familiares para que también descubran su candidato.',
   variant = 'card',

@@ -68,7 +68,7 @@ function RevealContent() {
       result.candidatePercentages[a.id as CandidateId]
   );
 
-  const shareText = `🧭 Mi Brújula Electoral "A Ciegas" en VotoInformado 2026:\n\n${sorted.map((c) => `${c.name}: ${result.candidatePercentages[c.id as CandidateId]}%`).join('\n')}\n\nVoté sin saber quién proponía cada idea. Mi mayor afinidad: ${topCandidate?.name}\n\n¿Y tú? Descúbrelo:`;
+  const shareText = `🧭 Mi Brújula Electoral "A Ciegas" en VotaInformado 2026:\n\n${sorted.map((c) => `${c.name}: ${result.candidatePercentages[c.id as CandidateId]}%`).join('\n')}\n\nVoté sin saber quién proponía cada idea. Mi mayor afinidad: ${topCandidate?.name}\n\n¿Y tú? Descúbrelo:`;
 
   const inviteText = '🧭 ¿Ya sabes cuál candidato se alinea con lo que piensas? Hice la Brújula Electoral "A Ciegas" — 20 propuestas reales sin saber de quién son. ¡Inténtalo!';
 
@@ -314,7 +314,7 @@ function RevealContent() {
               <ShareInvite
                 url={typeof window !== 'undefined' ? `${window.location.origin}/brujula` : '/brujula'}
                 shareText={inviteText}
-                shareTitle="Brújula Electoral A Ciegas — VotoInformado 2026"
+                shareTitle="Brújula Electoral A Ciegas — VotaInformado 2026"
                 heading="Invita a alguien a jugar"
                 subheading="Comparte la Brújula con amigos y familiares. Que ellos también descubran su candidato sin sesgo."
               />

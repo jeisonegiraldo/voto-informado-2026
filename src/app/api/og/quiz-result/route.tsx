@@ -161,7 +161,7 @@ export async function GET(req: NextRequest) {
         {/* Footer */}
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
           <span style={{ color: '#64748b', fontSize: '16px' }}>
-            Descubre tu afinidad en votoinformado.co/quiz
+            Descubre tu afinidad en votainformadoco.org/quiz
           </span>
         </div>
       </div>

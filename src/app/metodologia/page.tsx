@@ -6,7 +6,7 @@ import Link from 'next/link';
 export const metadata: Metadata = {
   title: 'Metodología',
   description:
-    'Cómo funciona VotoInformado 2026: fuentes, algoritmo del quiz, dimensiones de comparación y principios de neutralidad.',
+    'Cómo funciona VotaInformado 2026: fuentes, algoritmo del quiz, dimensiones de comparación y principios de neutralidad.',
 };
 
 export default function MetodologiaPage() {
@@ -14,7 +14,7 @@ export default function MetodologiaPage() {
     <div className="mx-auto max-w-3xl px-4 py-8">
       <h1 className="text-3xl font-bold text-gray-900">Metodología</h1>
       <p className="mt-2 text-gray-500">
-        Transparencia total: así funciona VotoInformado 2026.
+        Transparencia total: así funciona VotaInformado 2026.
       </p>
 
       <div className="mt-8 space-y-6">

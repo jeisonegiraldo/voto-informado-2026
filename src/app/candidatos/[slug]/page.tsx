@@ -53,12 +53,23 @@ export default async function CandidateProfilePage({ params }: { params: Params 
     <div className="mx-auto max-w-4xl px-4 py-6 sm:py-8">
       {/* Hero */}
       <div
-        className="rounded-2xl p-4 sm:p-6 lg:p-8"
-        style={{ background: `linear-gradient(135deg, ${candidate.color}22, ${candidate.color}08)` }}
+        className="overflow-hidden rounded-2xl p-4 sm:p-6 lg:p-8"
+        style={{ background: `linear-gradient(135deg, ${candidate.color}15, ${candidate.color}05)` }}
       >
-        <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-4">
-          <CandidateAvatar candidate={candidate} size="lg" />
-          <div className="flex-1">
+        <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start sm:gap-6">
+          {/* Photo — larger on profile page */}
+          {candidate.photo ? (
+            <div className="relative h-28 w-28 shrink-0 overflow-hidden rounded-2xl shadow-lg ring-4 ring-white sm:h-32 sm:w-32">
+              <img
+                src={candidate.photo}
+                alt={candidate.fullName}
+                className="h-full w-full object-cover"
+              />
+            </div>
+          ) : (
+            <CandidateAvatar candidate={candidate} size="lg" />
+          )}
+          <div className="flex-1 text-center sm:text-left">
             <h1 className="text-xl font-bold text-gray-900 sm:text-2xl lg:text-3xl">{candidate.fullName}</h1>
             <div className="mt-1 flex flex-wrap items-center gap-2">
               <PartyBadge party={candidate.party} color={candidate.color} />

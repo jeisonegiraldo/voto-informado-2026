@@ -25,6 +25,7 @@ export interface Candidate {
   runningMate: string;
   runningMateRole: string;
   shortBio: string;
+  photo?: string; // Path to candidate photo in /images/candidates/
   governmentPlanPdf: string;
   governmentPlanPages: number;
   keyProposalCount: number;

@@ -7,7 +7,7 @@ import type { DimensionId } from '@/types/dimension';
 const parser = new Parser({
   timeout: 10000,
   headers: {
-    'User-Agent': 'VotoInformado2026/1.0 (news-aggregator)',
+    'User-Agent': 'VotaInformado2026/1.0 (news-aggregator)',
   },
 });
 

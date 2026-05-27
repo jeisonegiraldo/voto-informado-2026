@@ -77,13 +77,13 @@ export default function HomePage() {
         {/* Bottom wave divider */}
         <div className="absolute bottom-0 left-0 right-0">
           <svg viewBox="0 0 1440 56" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
-            <path d="M0 56h1440V28C1320 8 1200 0 1080 8 960 16 840 40 720 44 600 48 480 32 360 24 240 16 120 16 60 20L0 24v32z" fill="#f9fafb"/>
+            <path d="M0 56h1440V28C1320 8 1200 0 1080 8 960 16 840 40 720 44 600 48 480 32 360 24 240 16 120 16 60 20L0 24v32z" fill="#f7f9fb"/>
           </svg>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="bg-gray-50 py-16 sm:py-20">
+      <section className="py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">

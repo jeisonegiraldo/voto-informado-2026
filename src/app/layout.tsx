@@ -47,6 +47,21 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'es_CO',
     url: 'https://votainformadoco.org',
+    images: [
+      {
+        url: '/api/og/home',
+        width: 1200,
+        height: 630,
+        alt: 'VotaInformado 2026 — Compara candidatos presidenciales de Colombia',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'VotaInformado 2026 — Compara candidatos y vota informado',
+    description:
+      'Compara propuestas de los 4 candidatos presidenciales de Colombia. Descubre tu afinidad y noticias actualizadas.',
+    images: ['/api/og/home'],
   },
 };
 

@@ -58,6 +58,7 @@ Los datos de posiciones (`src/data/positions.ts`) son el nucleo de la app y fuer
 4. **Quiz transparente** — la metodologia y formula estan en `/metodologia`
 5. **Brujula sin sesgo** — propuestas anonimas con shuffle aleatorio
 6. **Codigo abierto** — cualquiera puede auditar la logica, los datos y el algoritmo
+7. **Transparencia algoritmica** — todos los prompts de IA son publicos. Ver [TRANSPARENCY.md](TRANSPARENCY.md)
 
 ## Ejecutar Localmente
 
@@ -103,10 +104,15 @@ public/
   planes_gobierno/ # PDFs de planes de gobierno
 ```
 
+## Transparencia Algoritmica
+
+Publicamos **todos los System Prompts** (instrucciones que recibe la IA) para que cualquier ciudadano pueda verificar que opera de forma neutral. Ver documento completo: **[TRANSPARENCY.md](TRANSPARENCY.md)**
+
 ## Contribuir
 
-Las contribuciones son bienvenidas. Si encuentras un error en los datos, un sesgo en el quiz, o quieres mejorar la accesibilidad:
+Las contribuciones son bienvenidas. Consulta la guia completa en **[CONTRIBUTING.md](CONTRIBUTING.md)**.
 
+En resumen:
 1. Abre un **Issue** describiendo el problema o mejora
 2. Si quieres contribuir codigo, haz un **Fork** y envia un **Pull Request**
 3. Para reportar sesgo o inexactitudes en datos, usa el tag `datos` o `sesgo`

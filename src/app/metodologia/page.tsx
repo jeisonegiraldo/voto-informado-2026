@@ -132,6 +132,78 @@ export default function MetodologiaPage() {
           </CardContent>
         </Card>
 
+        <Card className="border-teal-200 bg-gradient-to-br from-teal-50 to-emerald-50">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <span className="text-lg">🔍</span>
+              Transparencia Algorítmica (IA)
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3 text-sm text-gray-700">
+            <p>
+              La IA de VotaInformado opera bajo instrucciones estrictas de neutralidad que son
+              <strong> públicas y auditables</strong>. Publicamos textualmente los
+              &ldquo;System Prompts&rdquo; — las instrucciones que recibe cada componente de IA.
+            </p>
+            <p>
+              Hay 5 componentes de IA en la plataforma: Chat Electoral, Verificador de
+              Afirmaciones, Buscador por Tema, Resumidor de Noticias y Clasificador de Peticiones.
+              Todos tienen prohibido recomendar candidatos o tomar posición ideológica.
+            </p>
+            <p>
+              <strong>Audita tú mismo:</strong> El documento completo con todos los prompts,
+              las reglas de neutralidad y la guía de auditoría está disponible en el repositorio
+              público:
+            </p>
+            <a
+              href="https://github.com/jeisonegiraldo/voto-informado-2026/blob/main/TRANSPARENCY.md"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-lg bg-teal-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-teal-500"
+            >
+              Ver Transparencia Algorítmica en GitHub
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <span className="text-lg">🤝</span>
+              Código Abierto
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3 text-sm text-gray-700">
+            <p>
+              Todo el código fuente de VotaInformado es público. Cualquier persona puede auditar
+              la lógica, los datos, los algoritmos y las instrucciones de la IA.
+            </p>
+            <p>
+              Si eres programador y quieres contribuir (mejorar diseño, corregir datos, agregar
+              funcionalidades), consulta la guía de contribución en el repositorio.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <a
+                href="https://github.com/jeisonegiraldo/voto-informado-2026"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+              >
+                Repositorio en GitHub
+              </a>
+              <a
+                href="https://github.com/jeisonegiraldo/voto-informado-2026/blob/main/CONTRIBUTING.md"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+              >
+                Guía de Contribución
+              </a>
+            </div>
+          </CardContent>
+        </Card>
+
         <div className="text-center text-xs text-gray-400">
           <p>
             Si encuentras un error o sesgo, por favor repórtalo. La herramienta se mejora con la
@@ -144,6 +216,10 @@ export default function MetodologiaPage() {
             &middot;{' '}
             <Link href="/quiz" className="text-teal-600 underline">
               Hacer el quiz
+            </Link>{' '}
+            &middot;{' '}
+            <Link href="/brujula" className="text-teal-600 underline">
+              Brújula a ciegas
             </Link>
           </p>
         </div>

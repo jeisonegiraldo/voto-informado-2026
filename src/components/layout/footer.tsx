@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ShareInvite } from '@/components/shared/share-invite';
 
 function GitHubIcon({ className }: { className?: string }) {
   return (
@@ -90,8 +91,19 @@ export function Footer() {
           </div>
         </div>
 
+        {/* Share invite */}
+        <div className="mt-8">
+          <ShareInvite
+            url="https://votainformadoco.org"
+            shareText="🗳️ Conoce las propuestas de los candidatos presidenciales de Colombia 2026. Compara, descubre tu afinidad y vota informado."
+            shareTitle="VotaInformado 2026"
+            heading="Comparte con amigos y familiares"
+            subheading="Que todos puedan comparar candidatos y votar informados. Comparte esta herramienta."
+          />
+        </div>
+
         {/* GitHub contribution banner */}
-        <div className="mt-8 rounded-xl border border-gray-200 bg-white p-4 sm:p-5">
+        <div className="mt-4 rounded-xl border border-gray-200 bg-white p-4 sm:p-5">
           <div className="flex flex-col items-center gap-3 text-center sm:flex-row sm:text-left">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gray-900">
               <GitHubIcon className="h-5 w-5 text-white" />

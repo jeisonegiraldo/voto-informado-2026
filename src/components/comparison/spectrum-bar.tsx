@@ -32,7 +32,7 @@ export function SpectrumBar({ labels, positions }: SpectrumBarProps) {
                     backgroundColor: pos.candidate.color,
                   }}
                 >
-                  {pos.candidate.name.charAt(0)}
+                  {pos.candidate.name.split(' ').slice(-1)[0].charAt(0)}
                 </TooltipTrigger>
                 <TooltipContent side="top" className="max-w-xs">
                   <p className="font-semibold" style={{ color: pos.candidate.color }}>

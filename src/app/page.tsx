@@ -12,6 +12,7 @@ import {
   Shield,
   Search,
   MessageSquare,
+  Compass,
 } from 'lucide-react';
 
 export default function HomePage() {
@@ -102,11 +103,11 @@ export default function HomePage() {
                 gradient: 'from-teal-500 to-emerald-500',
               },
               {
-                icon: CheckCircle,
-                title: 'Quiz de afinidad',
-                desc: '12 preguntas para descubrir con qué candidato tienes más afinidad.',
-                href: '/quiz',
-                gradient: 'from-violet-500 to-purple-500',
+                icon: Compass,
+                title: 'Brújula "A Ciegas"',
+                desc: '20 propuestas sin nombres. Descubre tu candidato basándote solo en ideas.',
+                href: '/brujula',
+                gradient: 'from-slate-700 to-slate-900',
               },
               {
                 icon: Users,
@@ -207,17 +208,28 @@ export default function HomePage() {
             <span className="text-gradient-teal">Vota informado.</span>
           </h2>
           <p className="mt-4 text-lg text-slate-400">
-            Responde 12 preguntas y descubre cuál candidato se alinea más con tus ideas.
+            Descubre tu candidato ideal basándote solo en propuestas — sin nombres ni colores.
           </p>
-          <Link href="/quiz" className="mt-8 inline-block">
-            <Button
-              size="lg"
-              className="group bg-gradient-to-r from-teal-500 to-emerald-500 px-8 text-white shadow-lg shadow-teal-500/25 transition-all hover:shadow-xl hover:shadow-teal-500/30 hover:brightness-110"
-            >
-              Comenzar el Quiz
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Button>
-          </Link>
+          <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+            <Link href="/brujula">
+              <Button
+                size="lg"
+                className="group w-full bg-gradient-to-r from-teal-500 to-emerald-500 px-8 text-white shadow-lg shadow-teal-500/25 transition-all hover:shadow-xl hover:shadow-teal-500/30 hover:brightness-110 sm:w-auto"
+              >
+                Brújula "A Ciegas"
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Button>
+            </Link>
+            <Link href="/quiz">
+              <Button
+                size="lg"
+                variant="outline"
+                className="w-full border-white/20 bg-white/5 text-white backdrop-blur-sm transition-all hover:bg-white/10 hover:border-white/30 sm:w-auto"
+              >
+                Quiz de Afinidad
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
     </>

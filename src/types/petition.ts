@@ -6,6 +6,7 @@ export interface CitizenPetition {
   candidateId: CandidateId;
   text: string;
   name?: string; // optional, citizen decides
+  likes?: number;
   // LLM-classified fields (filled after submission)
   classification?: 'comentario' | 'peticion' | 'pregunta' | 'apoyo' | 'critica';
   dimension?: DimensionId;

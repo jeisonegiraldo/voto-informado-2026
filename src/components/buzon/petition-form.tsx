@@ -30,6 +30,23 @@ const classificationLabels: Record<string, string> = {
   critica: '⚠️ Crítica constructiva',
 };
 
+const MAX_PETITIONS_PER_SESSION = 3;
+
+function getSessionCount(): number {
+  try {
+    return parseInt(localStorage.getItem('vi_petition_count') || '0', 10);
+  } catch {
+    return 0;
+  }
+}
+
+function incrementSessionCount(): void {
+  try {
+    const current = getSessionCount();
+    localStorage.setItem('vi_petition_count', String(current + 1));
+  } catch {}
+}
+
 export function PetitionForm() {
   const [selectedCandidate, setSelectedCandidate] = useState<CandidateId | null>(null);
   const [text, setText] = useState('');
@@ -37,9 +54,18 @@ export function PetitionForm() {
   const [showName, setShowName] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [result, setResult] = useState<SubmissionResult | null>(null);
+  const [sessionCount, setSessionCount] = useState(0);
+
+  // Load session count on mount
+  useState(() => {
+    if (typeof window !== 'undefined') {
+      setSessionCount(getSessionCount());
+    }
+  });
 
   const charCount = text.length;
-  const canSubmit = selectedCandidate && text.trim().length >= 10 && !isSubmitting;
+  const isSessionLimited = sessionCount >= MAX_PETITIONS_PER_SESSION;
+  const canSubmit = selectedCandidate && text.trim().length >= 10 && !isSubmitting && !isSessionLimited;
 
   async function handleSubmit() {
     if (!canSubmit) return;
@@ -69,6 +95,9 @@ export function PetitionForm() {
           dimension: data.dimension,
           message: data.message,
         });
+        // Increment session count
+        incrementSessionCount();
+        setSessionCount((prev) => prev + 1);
         // Reset form after success
         setText('');
         setName('');
@@ -186,6 +215,19 @@ export function PetitionForm() {
           </div>
         )}
       </div>
+
+      {/* Anti-spam notice */}
+      {isSessionLimited && (
+        <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-center text-xs text-amber-700">
+          Has alcanzado el máximo de {MAX_PETITIONS_PER_SESSION} mensajes por sesión.
+          Gracias por participar.
+        </div>
+      )}
+      {!isSessionLimited && sessionCount > 0 && (
+        <p className="text-center text-[10px] text-gray-400">
+          {MAX_PETITIONS_PER_SESSION - sessionCount} mensaje{MAX_PETITIONS_PER_SESSION - sessionCount !== 1 ? 's' : ''} restante{MAX_PETITIONS_PER_SESSION - sessionCount !== 1 ? 's' : ''} en esta sesión
+        </p>
+      )}
 
       {/* Submit */}
       <Button

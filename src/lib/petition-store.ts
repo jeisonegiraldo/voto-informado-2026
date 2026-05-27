@@ -97,6 +97,30 @@ export async function getRecentPetitions(limit = 20): Promise<CitizenPetition[]>
   }
 }
 
+export async function likePetition(petitionId: string): Promise<boolean> {
+  const redis = getRedis();
+  if (!redis) return false;
+
+  try {
+    const raw = await redis.lrange(PETITIONS_KEY, 0, -1);
+    const petitions = raw.map((item) =>
+      typeof item === 'string' ? JSON.parse(item) : item
+    ) as CitizenPetition[];
+
+    const index = petitions.findIndex((p) => p.id === petitionId);
+    if (index === -1) return false;
+
+    petitions[index].likes = (petitions[index].likes || 0) + 1;
+
+    // Replace the item at the index
+    await redis.lset(PETITIONS_KEY, index, JSON.stringify(petitions[index]));
+    return true;
+  } catch (error) {
+    console.error('[petition-store] Like failed:', error);
+    return false;
+  }
+}
+
 export async function getAllPetitions(): Promise<CitizenPetition[]> {
   const redis = getRedis();
   if (!redis) return [];

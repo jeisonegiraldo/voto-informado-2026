@@ -1,14 +1,25 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { Send, Bot, User, Loader2, AlertCircle, MessageSquare, Sparkles } from 'lucide-react';
+import { Send, Bot, User, Loader2, AlertCircle, MessageSquare, Sparkles, ThumbsUp, ThumbsDown, X, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Markdown from 'react-markdown';
 
 interface Message {
   role: 'user' | 'assistant';
   content: string;
+  feedback?: 'up' | 'down';
+  feedbackCategory?: string;
+  feedbackComment?: string;
 }
+
+const FEEDBACK_CATEGORIES = [
+  'Falta de contexto',
+  'Información incorrecta',
+  'Sesgo político',
+  'Respuesta incompleta',
+  'Otra',
+];
 
 const GENERAL_QUESTIONS = [
   '¿Qué propone cada candidato sobre seguridad?',
@@ -71,6 +82,56 @@ export function ChatEngine({ candidateFilter, candidateName }: ChatEngineProps) 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
+  // Feedback state
+  const [feedbackModalIndex, setFeedbackModalIndex] = useState<number | null>(null);
+  const [feedbackCategory, setFeedbackCategory] = useState('');
+  const [feedbackComment, setFeedbackComment] = useState('');
+
+  // TTS state
+  const [speakingIndex, setSpeakingIndex] = useState<number | null>(null);
+
+  function handleSpeak(index: number, text: string) {
+    if (typeof window === 'undefined' || !window.speechSynthesis) return;
+
+    // If already speaking this message, stop
+    if (speakingIndex === index) {
+      window.speechSynthesis.cancel();
+      setSpeakingIndex(null);
+      return;
+    }
+
+    // Stop any current speech
+    window.speechSynthesis.cancel();
+
+    // Strip markdown for cleaner speech
+    const cleanText = text
+      .replace(/#{1,6}\s/g, '')
+      .replace(/\*\*([^*]+)\*\*/g, '$1')
+      .replace(/\*([^*]+)\*/g, '$1')
+      .replace(/`([^`]+)`/g, '$1')
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+      .replace(/[-•]\s/g, '')
+      .trim();
+
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.lang = 'es-CO';
+    utterance.rate = 1;
+    utterance.pitch = 1;
+
+    // Try to find a Spanish voice
+    const voices = window.speechSynthesis.getVoices();
+    const esVoice = voices.find(
+      (v) => v.lang.startsWith('es-CO') || v.lang.startsWith('es-')
+    );
+    if (esVoice) utterance.voice = esVoice;
+
+    utterance.onend = () => setSpeakingIndex(null);
+    utterance.onerror = () => setSpeakingIndex(null);
+
+    setSpeakingIndex(index);
+    window.speechSynthesis.speak(utterance);
+  }
+
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, []);
@@ -78,6 +139,45 @@ export function ChatEngine({ candidateFilter, candidateName }: ChatEngineProps) 
   useEffect(() => {
     scrollToBottom();
   }, [messages, scrollToBottom]);
+
+  function handleFeedback(index: number, type: 'up' | 'down') {
+    const updated = [...messages];
+    if (updated[index].feedback === type) {
+      // Toggle off if same
+      updated[index].feedback = undefined;
+      updated[index].feedbackCategory = undefined;
+      updated[index].feedbackComment = undefined;
+      setMessages(updated);
+      return;
+    }
+    updated[index].feedback = type;
+    setMessages(updated);
+
+    if (type === 'down') {
+      setFeedbackModalIndex(index);
+      setFeedbackCategory('');
+      setFeedbackComment('');
+    }
+  }
+
+  function submitNegativeFeedback() {
+    if (feedbackModalIndex === null) return;
+    const updated = [...messages];
+    updated[feedbackModalIndex].feedbackCategory = feedbackCategory || 'Otra';
+    updated[feedbackModalIndex].feedbackComment = feedbackComment;
+    setMessages(updated);
+    setFeedbackModalIndex(null);
+
+    // Log to console for now (could send to API later)
+    console.log('[Feedback]', {
+      sessionId,
+      messageIndex: feedbackModalIndex,
+      type: 'negative',
+      category: feedbackCategory || 'Otra',
+      comment: feedbackComment,
+      messageContent: updated[feedbackModalIndex].content.slice(0, 200),
+    });
+  }
 
   async function handleSend(text?: string) {
     const messageText = text || input.trim();
@@ -163,7 +263,7 @@ export function ChatEngine({ candidateFilter, candidateName }: ChatEngineProps) 
   }
 
   return (
-    <div className="flex h-[calc(100dvh-8rem)] flex-col rounded-xl border bg-white shadow-sm sm:h-[calc(100vh-10rem)]">
+    <div className="relative flex h-[calc(100dvh-8rem)] flex-col rounded-xl border bg-white shadow-sm sm:h-[calc(100vh-10rem)]">
       {/* Messages area */}
       <div className="flex-1 overflow-y-auto p-4">
         {messages.length === 0 ? (
@@ -200,70 +300,121 @@ export function ChatEngine({ candidateFilter, candidateName }: ChatEngineProps) 
         ) : (
           <div className="space-y-4">
             {messages.map((msg, i) => (
-              <div
-                key={i}
-                className={`flex gap-3 ${
-                  msg.role === 'user' ? 'justify-end' : 'justify-start'
-                }`}
-              >
-                {msg.role === 'assistant' && (
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-teal-100">
-                    <Bot className="h-4 w-4 text-teal-600" />
-                  </div>
-                )}
+              <div key={i}>
                 <div
-                  className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
-                    msg.role === 'user'
-                      ? 'bg-teal-600 text-white'
-                      : 'bg-gray-100 text-gray-800'
+                  className={`flex gap-3 ${
+                    msg.role === 'user' ? 'justify-end' : 'justify-start'
                   }`}
                 >
-                  {msg.role === 'assistant' ? (
-                    msg.content ? (
-                      <Markdown
-                        components={{
-                          h2: ({ children }) => (
-                            <h2 className="mb-2 mt-3 text-base font-bold text-gray-900 first:mt-0">{children}</h2>
-                          ),
-                          h3: ({ children }) => (
-                            <h3 className="mb-1.5 mt-3 text-sm font-bold text-gray-800 first:mt-0">{children}</h3>
-                          ),
-                          p: ({ children }) => (
-                            <p className="mb-2 last:mb-0">{children}</p>
-                          ),
-                          ul: ({ children }) => (
-                            <ul className="mb-2 ml-1 space-y-1 last:mb-0">{children}</ul>
-                          ),
-                          ol: ({ children }) => (
-                            <ol className="mb-2 ml-4 list-decimal space-y-1 last:mb-0">{children}</ol>
-                          ),
-                          li: ({ children }) => (
-                            <li className="flex items-start gap-1.5">
-                              <span className="mt-1.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-teal-400" />
-                              <span>{children}</span>
-                            </li>
-                          ),
-                          strong: ({ children }) => (
-                            <strong className="font-semibold text-gray-900">{children}</strong>
-                          ),
-                          em: ({ children }) => (
-                            <em className="text-gray-600 italic">{children}</em>
-                          ),
-                          hr: () => <hr className="my-3 border-gray-200" />,
-                        }}
-                      >
-                        {msg.content}
-                      </Markdown>
+                  {msg.role === 'assistant' && (
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-teal-100">
+                      <Bot className="h-4 w-4 text-teal-600" />
+                    </div>
+                  )}
+                  <div
+                    className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
+                      msg.role === 'user'
+                        ? 'bg-teal-600 text-white'
+                        : 'bg-gray-100 text-gray-800'
+                    }`}
+                  >
+                    {msg.role === 'assistant' ? (
+                      msg.content ? (
+                        <Markdown
+                          components={{
+                            h2: ({ children }) => (
+                              <h2 className="mb-2 mt-3 text-base font-bold text-gray-900 first:mt-0">{children}</h2>
+                            ),
+                            h3: ({ children }) => (
+                              <h3 className="mb-1.5 mt-3 text-sm font-bold text-gray-800 first:mt-0">{children}</h3>
+                            ),
+                            p: ({ children }) => (
+                              <p className="mb-2 last:mb-0">{children}</p>
+                            ),
+                            ul: ({ children }) => (
+                              <ul className="mb-2 ml-1 space-y-1 last:mb-0">{children}</ul>
+                            ),
+                            ol: ({ children }) => (
+                              <ol className="mb-2 ml-4 list-decimal space-y-1 last:mb-0">{children}</ol>
+                            ),
+                            li: ({ children }) => (
+                              <li className="flex items-start gap-1.5">
+                                <span className="mt-1.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-teal-400" />
+                                <span>{children}</span>
+                              </li>
+                            ),
+                            strong: ({ children }) => (
+                              <strong className="font-semibold text-gray-900">{children}</strong>
+                            ),
+                            em: ({ children }) => (
+                              <em className="text-gray-600 italic">{children}</em>
+                            ),
+                            hr: () => <hr className="my-3 border-gray-200" />,
+                          }}
+                        >
+                          {msg.content}
+                        </Markdown>
+                      ) : (
+                        <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+                      )
                     ) : (
-                      <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
-                    )
-                  ) : (
-                    msg.content
+                      msg.content
+                    )}
+                  </div>
+                  {msg.role === 'user' && (
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-200">
+                      <User className="h-4 w-4 text-gray-600" />
+                    </div>
                   )}
                 </div>
-                {msg.role === 'user' && (
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-200">
-                    <User className="h-4 w-4 text-gray-600" />
+                {/* Feedback + TTS buttons for assistant messages */}
+                {msg.role === 'assistant' && msg.content && !isStreaming && (
+                  <div className="ml-11 mt-1 flex items-center gap-1">
+                    <button
+                      type="button"
+                      onClick={() => handleFeedback(i, 'up')}
+                      className={`rounded-md p-1 transition-colors ${
+                        msg.feedback === 'up'
+                          ? 'bg-emerald-100 text-emerald-600'
+                          : 'text-gray-300 hover:bg-gray-100 hover:text-gray-500'
+                      }`}
+                      title="Buena respuesta"
+                    >
+                      <ThumbsUp className="h-3.5 w-3.5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleFeedback(i, 'down')}
+                      className={`rounded-md p-1 transition-colors ${
+                        msg.feedback === 'down'
+                          ? 'bg-rose-100 text-rose-600'
+                          : 'text-gray-300 hover:bg-gray-100 hover:text-gray-500'
+                      }`}
+                      title="Mala respuesta"
+                    >
+                      <ThumbsDown className="h-3.5 w-3.5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleSpeak(i, msg.content)}
+                      className={`rounded-md p-1 transition-colors ${
+                        speakingIndex === i
+                          ? 'bg-teal-100 text-teal-600'
+                          : 'text-gray-300 hover:bg-gray-100 hover:text-gray-500'
+                      }`}
+                      title={speakingIndex === i ? 'Detener audio' : 'Escuchar respuesta'}
+                    >
+                      {speakingIndex === i ? (
+                        <VolumeX className="h-3.5 w-3.5" />
+                      ) : (
+                        <Volume2 className="h-3.5 w-3.5" />
+                      )}
+                    </button>
+                    {msg.feedback === 'down' && msg.feedbackCategory && (
+                      <span className="ml-1 rounded bg-rose-50 px-1.5 py-0.5 text-[10px] text-rose-500">
+                        {msg.feedbackCategory}
+                      </span>
+                    )}
                   </div>
                 )}
               </div>
@@ -313,6 +464,66 @@ export function ChatEngine({ candidateFilter, candidateName }: ChatEngineProps) 
           </Button>
         </div>
       </div>
+
+      {/* Negative feedback modal */}
+      {feedbackModalIndex !== null && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+          <div className="mx-4 w-full max-w-sm rounded-2xl border bg-white p-5 shadow-xl">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-semibold text-gray-900">
+                ¿Qué estuvo mal?
+              </h3>
+              <button
+                type="button"
+                onClick={() => setFeedbackModalIndex(null)}
+                className="rounded-md p-1 text-gray-400 hover:bg-gray-100"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {FEEDBACK_CATEGORIES.map((cat) => (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => setFeedbackCategory(cat)}
+                  className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+                    feedbackCategory === cat
+                      ? 'border-rose-300 bg-rose-50 text-rose-700'
+                      : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+            <textarea
+              value={feedbackComment}
+              onChange={(e) => setFeedbackComment(e.target.value)}
+              placeholder="Cuéntanos más (opcional)..."
+              rows={2}
+              className="mt-3 w-full resize-none rounded-lg border bg-gray-50 px-3 py-2 text-xs outline-none focus:border-teal-300 focus:bg-white"
+            />
+            <div className="mt-3 flex justify-end gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setFeedbackModalIndex(null)}
+              >
+                Cancelar
+              </Button>
+              <Button
+                size="sm"
+                onClick={submitNegativeFeedback}
+                disabled={!feedbackCategory}
+                className="bg-rose-500 text-white hover:bg-rose-600"
+              >
+                Enviar
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

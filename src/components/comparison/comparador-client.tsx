@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { RadarOverview } from './radar-overview';
 import { ComparisonMatrix } from './comparison-matrix';
 import { candidates } from '@/data/candidates';
 import { CandidateAvatar } from '@/components/shared/candidate-avatar';
@@ -87,23 +86,6 @@ export function ComparadorClient() {
             </div>
           </div>
         )}
-      </div>
-
-      {/* Radar chart overview */}
-      <div className="rounded-xl border bg-white p-4 shadow-sm">
-        <h2 className="mb-2 text-center text-sm font-semibold text-gray-700">
-          Vista general — Radar de posiciones
-        </h2>
-        <p className="mb-4 text-center text-xs text-gray-400">
-          Cada eje representa una dimensión política. Más lejos del centro = posición más definida.
-        </p>
-        <RadarOverview
-          selectedCandidates={
-            viewMode === 'compare2' && selectedCandidates.length === 2
-              ? selectedCandidates
-              : undefined
-          }
-        />
       </div>
 
       {/* Comparison matrix */}

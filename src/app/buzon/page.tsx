@@ -12,25 +12,25 @@ export const metadata: Metadata = {
 export default function BuzonPage() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-8">
-      <div className="mb-8 text-center">
-        <h1 className="text-3xl font-bold text-gray-900">Buzón Ciudadano</h1>
-        <p className="mt-2 text-gray-500">
+      <div className="mb-6 text-center sm:mb-8">
+        <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">Buzón Ciudadano</h1>
+        <p className="mt-2 text-sm text-gray-500 sm:text-base">
           Envía un comentario, petición o pregunta a un candidato.
           Tu mensaje será clasificado automáticamente por tema y compilado para los equipos de campaña.
         </p>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-5">
+      <div className="grid gap-6 lg:grid-cols-5 lg:gap-8">
         {/* Form - wider column */}
         <div className="lg:col-span-3">
-          <div className="rounded-xl border bg-white p-6 shadow-sm">
+          <div className="rounded-xl border bg-white p-4 shadow-sm sm:p-6">
             <PetitionForm />
           </div>
         </div>
 
         {/* Stats & Trending sidebar */}
         <div className="lg:col-span-2">
-          <div className="sticky top-20 space-y-6">
+          <div className="sticky top-16 space-y-6 sm:top-20">
             <div>
               <h2 className="mb-4 text-sm font-semibold text-gray-500">
                 📊 Participación ciudadana

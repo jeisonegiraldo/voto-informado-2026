@@ -163,7 +163,7 @@ export function ChatEngine({ candidateFilter, candidateName }: ChatEngineProps) 
   }
 
   return (
-    <div className="flex h-[calc(100vh-10rem)] flex-col rounded-xl border bg-white shadow-sm">
+    <div className="flex h-[calc(100dvh-8rem)] flex-col rounded-xl border bg-white shadow-sm sm:h-[calc(100vh-10rem)]">
       {/* Messages area */}
       <div className="flex-1 overflow-y-auto p-4">
         {messages.length === 0 ? (

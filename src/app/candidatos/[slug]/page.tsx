@@ -50,16 +50,16 @@ export default async function CandidateProfilePage({ params }: { params: Params 
   const positions = getCandidatePositions(candidate.id);
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8">
+    <div className="mx-auto max-w-4xl px-4 py-6 sm:py-8">
       {/* Hero */}
       <div
-        className="rounded-2xl p-6 sm:p-8"
+        className="rounded-2xl p-4 sm:p-6 lg:p-8"
         style={{ background: `linear-gradient(135deg, ${candidate.color}22, ${candidate.color}08)` }}
       >
-        <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+        <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-4">
           <CandidateAvatar candidate={candidate} size="lg" />
           <div className="flex-1">
-            <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">{candidate.fullName}</h1>
+            <h1 className="text-xl font-bold text-gray-900 sm:text-2xl lg:text-3xl">{candidate.fullName}</h1>
             <div className="mt-1 flex flex-wrap items-center gap-2">
               <PartyBadge party={candidate.party} color={candidate.color} />
               <span className="text-sm text-gray-500">{candidate.coalition}</span>
@@ -101,18 +101,18 @@ export default async function CandidateProfilePage({ params }: { params: Params 
         <p className="mt-4 text-sm leading-relaxed text-gray-700">{candidate.shortBio}</p>
 
         {/* CTA buttons */}
-        <div className="mt-4 flex flex-wrap gap-2">
-          <Link href={`/chat?candidato=${candidate.slug}`}>
+        <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+          <Link href={`/chat?candidato=${candidate.slug}`} className="w-full sm:w-auto">
             <Button
               size="sm"
-              className="gap-1.5 bg-teal-500 text-white hover:bg-teal-400"
+              className="w-full gap-1.5 bg-teal-500 text-white hover:bg-teal-400 sm:w-auto"
             >
               <MessageSquare className="h-3.5 w-3.5" />
               Pregúntale al plan de gobierno
             </Button>
           </Link>
-          <Link href={`/buzon?candidato=${candidate.slug}`}>
-            <Button size="sm" variant="outline" className="gap-1.5">
+          <Link href={`/buzon?candidato=${candidate.slug}`} className="w-full sm:w-auto">
+            <Button size="sm" variant="outline" className="w-full gap-1.5 sm:w-auto">
               <Send className="h-3.5 w-3.5" />
               Enviar mensaje al candidato
             </Button>

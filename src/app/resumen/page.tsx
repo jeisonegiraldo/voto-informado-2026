@@ -119,12 +119,56 @@ export default function ResumenPage() {
         })}
       </div>
 
-      {/* Comparison table — top 5 dimensions */}
+      {/* Comparison — top 5 dimensions */}
       <div className="mt-12">
         <h2 className="mb-4 text-center text-xl font-bold text-gray-900">
           Comparación rápida — 5 temas clave
         </h2>
-        <div className="overflow-x-auto rounded-xl border bg-white shadow-sm">
+
+        {/* Mobile: stacked cards per dimension */}
+        <div className="space-y-4 sm:hidden">
+          {KEY_DIMENSIONS.map((dimId) => {
+            const dim = dimensionMap[dimId];
+            if (!dim) return null;
+            return (
+              <div key={dimId} className="rounded-xl border bg-white shadow-sm overflow-hidden">
+                <div className="bg-gray-50 px-4 py-2.5">
+                  <p className="font-semibold text-gray-800">{dim.name}</p>
+                  <p className="text-[11px] text-gray-400">
+                    {dim.spectrumLabels[0]} ← → {dim.spectrumLabels[1]}
+                  </p>
+                </div>
+                <div className="divide-y">
+                  {candidates.map((c) => {
+                    const pos = positions.find(
+                      (p) => p.candidateId === c.id && p.dimensionId === dimId
+                    );
+                    return (
+                      <div key={c.id} className="flex items-start gap-2.5 px-4 py-3">
+                        <CandidateAvatar candidate={c} size="sm" />
+                        <div className="min-w-0 flex-1">
+                          <span className="text-xs font-bold" style={{ color: c.color }}>
+                            {c.name.split(' ').slice(-1)[0]}
+                          </span>
+                          <p className="mt-0.5 text-xs leading-relaxed text-gray-600">
+                            {pos
+                              ? pos.summary.length > 140
+                                ? pos.summary.slice(0, 140) + '…'
+                                : pos.summary
+                              : '—'}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Desktop: table */}
+        <div className="hidden overflow-x-auto rounded-xl border bg-white shadow-sm sm:block">
           <table className="w-full min-w-[640px] text-sm">
             <thead>
               <tr className="border-b bg-gray-50">

@@ -49,9 +49,9 @@ export function ComparadorClient() {
 
         {/* Candidate selector in compare2 mode */}
         {viewMode === 'compare2' && (
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-gray-500">Selecciona 2:</span>
-            <div className="flex gap-2">
+          <div className="flex items-center gap-2 overflow-x-auto">
+            <span className="shrink-0 text-xs text-gray-500">Selecciona 2:</span>
+            <div className="flex gap-1.5 sm:gap-2">
               {candidates.map((c) => {
                 const isSelected = selectedCandidates.includes(c.id);
                 return (

@@ -73,7 +73,7 @@ export function ComparisonMatrix({
   return (
     <div className="space-y-4">
       {/* Candidate header — sticky */}
-      <div className="sticky top-16 z-30 rounded-xl border bg-white/95 p-3 shadow-sm backdrop-blur-sm">
+      <div className="sticky top-14 z-30 rounded-xl border bg-white/95 p-3 shadow-sm backdrop-blur-sm sm:top-16">
         <div className="flex items-center justify-center gap-4 sm:gap-6">
           {candidates.map((c) => {
             const isActive = activeCandidates.some((ac) => ac.id === c.id);
@@ -155,13 +155,8 @@ export function ComparisonMatrix({
                 isExpanded ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'
               }`}
             >
-              <div className="border-t bg-gray-50/50 px-4 py-3">
-                <div
-                  className="grid gap-3"
-                  style={{
-                    gridTemplateColumns: `repeat(${activeCandidates.length}, minmax(0, 1fr))`,
-                  }}
-                >
+              <div className="border-t bg-gray-50/50 px-3 py-3 sm:px-4">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
                   {positionsData.map((pos) => {
                     const fullPos = getPosition(pos.candidate.id, dim.id);
                     return (

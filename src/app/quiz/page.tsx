@@ -125,28 +125,30 @@ export default function QuizPage() {
       </div>
 
       {/* Navigation */}
-      <div className="mt-8 flex items-center justify-between">
+      <div className="mt-6 flex items-center justify-between gap-2 sm:mt-8">
         <Button
           variant="ghost"
           onClick={handleBack}
           disabled={currentIndex === 0}
-          className="gap-1"
+          size="sm"
+          className="gap-1 px-2 sm:px-4 sm:text-sm"
         >
           <ArrowLeft className="h-4 w-4" />
-          Anterior
+          <span className="hidden sm:inline">Anterior</span>
         </Button>
 
         <Button
           variant="ghost"
           onClick={handleSkip}
           disabled={currentIndex === totalQuestions - 1}
-          className="gap-1 text-gray-400"
+          size="sm"
+          className="gap-1 px-2 text-gray-400 sm:px-4 sm:text-sm"
         >
           Omitir
           <SkipForward className="h-4 w-4" />
         </Button>
 
-        <Button onClick={handleNext} disabled={!selectedOption} className="gap-1">
+        <Button onClick={handleNext} disabled={!selectedOption} size="sm" className="gap-1 px-3 sm:px-4 sm:text-sm">
           {currentIndex === totalQuestions - 1 ? 'Ver resultados' : 'Siguiente'}
           <ArrowRight className="h-4 w-4" />
         </Button>

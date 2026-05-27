@@ -24,47 +24,47 @@ export default function HomePage() {
         {/* Radial glow */}
         <div className="absolute left-1/2 top-0 -translate-x-1/2 h-[500px] w-[800px] rounded-full bg-teal-500/10 blur-3xl" />
 
-        <div className="relative mx-auto max-w-7xl px-4 py-20 sm:py-28 lg:py-32">
+        <div className="relative mx-auto max-w-7xl px-4 py-14 sm:py-28 lg:py-32">
           <div className="text-center">
             <span className="animate-fade-up inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-sm font-medium text-teal-300 backdrop-blur-sm">
               <span className="h-1.5 w-1.5 rounded-full bg-teal-400 animate-pulse" />
               Elecciones Presidenciales Colombia 2026
             </span>
 
-            <h1 className="animate-fade-up-delay-1 mt-8 text-5xl font-extrabold tracking-tight text-white sm:text-6xl lg:text-7xl">
+            <h1 className="animate-fade-up-delay-1 mt-6 text-4xl font-extrabold tracking-tight text-white sm:mt-8 sm:text-6xl lg:text-7xl">
               Vota{' '}
               <span className="text-gradient-teal">
                 Informado
               </span>
             </h1>
 
-            <p className="animate-fade-up-delay-2 mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-300 sm:text-xl">
+            <p className="animate-fade-up-delay-2 mx-auto mt-4 max-w-2xl text-base leading-relaxed text-slate-300 sm:mt-6 sm:text-xl">
               Compara propuestas, descubre tu afinidad y decide con claridad.
               Herramienta ciudadana 100% no-partidista.
             </p>
 
-            <div className="animate-fade-up-delay-3 mt-10 flex justify-center">
+            <div className="animate-fade-up-delay-3 mt-8 flex justify-center sm:mt-10">
               <ElectionCountdown />
             </div>
             <p className="mt-3 text-sm font-medium text-slate-500">
               Primera vuelta: 31 de mayo de 2026
             </p>
 
-            <div className="animate-fade-up-delay-4 mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-              <Link href="/quiz">
+            <div className="animate-fade-up-delay-4 mt-8 flex flex-col items-center gap-3 sm:mt-10 sm:flex-row sm:justify-center sm:gap-4">
+              <Link href="/quiz" className="w-full sm:w-auto">
                 <Button
                   size="lg"
-                  className="group relative overflow-hidden bg-gradient-to-r from-teal-500 to-emerald-500 px-8 text-white shadow-lg shadow-teal-500/25 transition-all hover:shadow-xl hover:shadow-teal-500/30 hover:brightness-110"
+                  className="group relative w-full overflow-hidden bg-gradient-to-r from-teal-500 to-emerald-500 px-8 text-white shadow-lg shadow-teal-500/25 transition-all hover:shadow-xl hover:shadow-teal-500/30 hover:brightness-110 sm:w-auto"
                 >
                   Hacer el Quiz de Afinidad
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Button>
               </Link>
-              <Link href="/comparar">
+              <Link href="/comparar" className="w-full sm:w-auto">
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-white/20 bg-white/5 text-white backdrop-blur-sm transition-all hover:bg-white/10 hover:border-white/30"
+                  className="w-full border-white/20 bg-white/5 text-white backdrop-blur-sm transition-all hover:bg-white/10 hover:border-white/30 sm:w-auto"
                 >
                   Comparar Candidatos
                 </Button>

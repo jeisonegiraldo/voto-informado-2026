@@ -9,7 +9,7 @@ const navItems = [
   { href: '/resumen', label: 'Resumen' },
   { href: '/comparar', label: 'Comparar' },
   { href: '/brujula', label: 'Brújula' },
-  { href: '/quiz', label: 'Quiz' },
+  { href: '/quiz', label: 'Afinidad' },
   { href: '/verificador', label: 'Verificador' },
   { href: '/buscar', label: 'Buscar' },
   { href: '/chat', label: 'Chat IA' },

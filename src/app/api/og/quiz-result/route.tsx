@@ -41,10 +41,10 @@ export async function GET(req: NextRequest) {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <span style={{ color: '#ffffff', fontSize: '32px', fontWeight: 800 }}>
-              Voto<span style={{ color: '#14b8a6' }}>Informado</span>
+              Vota<span style={{ color: '#14b8a6' }}>Informado</span>
             </span>
             <span style={{ color: '#94a3b8', fontSize: '16px', marginTop: '4px' }}>
-              Quiz de Afinidad — Elecciones 2026
+              Descubre tu Afinidad — Elecciones 2026
             </span>
           </div>
           <span

@@ -232,7 +232,7 @@ export default function ResumenPage() {
       <div className="mt-10 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
         <Link href="/quiz">
           <Button size="lg" className="bg-teal-500 text-white hover:bg-teal-400">
-            Hacer el Quiz de Afinidad
+            Descubre tu Afinidad
           </Button>
         </Link>
         <Link href="/comparar">

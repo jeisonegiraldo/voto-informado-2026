@@ -320,7 +320,7 @@ function RevealContent() {
               />
             </div>
 
-            {/* Profundizar con Quiz */}
+            {/* Profundizar con Descubre tu Afinidad */}
             <div className="mb-6 rounded-xl border border-violet-200 bg-gradient-to-r from-violet-50 to-purple-50 p-4 text-center">
               <div className="flex items-center justify-center gap-2">
                 <Sparkles className="h-5 w-5 text-violet-500" />
@@ -329,7 +329,7 @@ function RevealContent() {
                 </h3>
               </div>
               <p className="mt-1 text-xs text-gray-500">
-                El Quiz de Afinidad evalúa 12 dimensiones ideológicas para un análisis más detallado.
+                Descubre tu Afinidad evalúa 12 dimensiones ideológicas para un análisis más detallado.
               </p>
               <Link href="/quiz">
                 <Button
@@ -337,7 +337,7 @@ function RevealContent() {
                   className="mt-3 gap-2 bg-gradient-to-r from-violet-500 to-purple-600 text-white hover:from-violet-600 hover:to-purple-700"
                 >
                   <BarChart3 className="h-4 w-4" />
-                  Hacer el Quiz de Afinidad
+                  Descubre tu Afinidad
                 </Button>
               </Link>
             </div>

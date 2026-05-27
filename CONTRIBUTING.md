@@ -17,7 +17,7 @@ Si encuentras un error en las posiciones de un candidato, una propuesta mal cita
 - Los datos sin fuente no seran aceptados
 
 ### Reporte de Sesgo (tag: `sesgo`)
-Si percibes que el quiz, la brujula, o cualquier componente favorece a un candidato:
+Si percibes que el test de afinidad, la brujula, o cualquier componente favorece a un candidato:
 - Abre un Issue con el tag `sesgo`
 - Explica especificamente donde percibes el sesgo
 - Sugiere como corregirlo de forma neutral
@@ -92,7 +92,7 @@ Tipos validos: `feat`, `fix`, `data`, `docs`, `refactor`, `test`, `chore`
 - Titulo claro y descriptivo
 - Describe que cambia y por que
 - Si modifica datos de candidatos, incluye las fuentes
-- Si modifica el quiz o la brujula, explica por que es mas neutral
+- Si modifica el test de afinidad o la brujula, explica por que es mas neutral
 
 ## Reglas de Neutralidad para Contribuciones
 

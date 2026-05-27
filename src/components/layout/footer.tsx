@@ -34,7 +34,7 @@ export function Footer() {
               {[
                 { href: '/resumen', label: 'Resumen ejecutivo' },
                 { href: '/comparar', label: 'Comparador' },
-                { href: '/quiz', label: 'Quiz de afinidad' },
+                { href: '/quiz', label: 'Descubre tu Afinidad' },
                 { href: '/verificador', label: 'Verificador' },
                 { href: '/buscar', label: 'Buscar por tema' },
                 { href: '/guia-votante', label: 'Guía del votante' },

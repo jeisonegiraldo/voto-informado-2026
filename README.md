@@ -16,7 +16,7 @@ Ayudar a los ciudadanos colombianos a tomar decisiones electorales informadas, c
 |---------|-------------|
 | **Brujula Electoral "A Ciegas"** | 20 propuestas reales sin nombres ni colores. Descubre tu candidato basandote solo en ideas. |
 | **Comparador Visual** | 12 dimensiones de comparacion con espectros interactivos y propuestas detalladas. |
-| **Quiz de Afinidad** | 12 preguntas para medir tu afinidad ideologica con cada candidato. |
+| **Descubre tu Afinidad** | 12 preguntas para descubrir con cual candidato coincides mas. |
 | **Chat IA** | Asistente electoral basado en planes de gobierno oficiales. |
 | **Verificador** | Comprueba si afirmaciones de candidatos coinciden con sus planes. |
 | **Buscador por Tema** | Busca un tema y compara la postura de cada candidato al instante. |
@@ -55,7 +55,7 @@ Los datos de posiciones (`src/data/positions.ts`) son el nucleo de la app y fuer
 1. **Orden alfabetico o aleatorio** — ningun candidato aparece primero sistematicamente
 2. **Colores institucionales** — cada candidato usa el color de su partido, no colores valorativos
 3. **Misma estructura** — todos los perfiles tienen el mismo layout y profundidad
-4. **Quiz transparente** — la metodologia y formula estan en `/metodologia`
+4. **Test transparente** — la metodologia y formula estan en `/metodologia`
 5. **Brujula sin sesgo** — propuestas anonimas con shuffle aleatorio
 6. **Codigo abierto** — cualquiera puede auditar la logica, los datos y el algoritmo
 7. **Transparencia algoritmica** — todos los prompts de IA son publicos. Ver [TRANSPARENCY.md](TRANSPARENCY.md)
@@ -96,7 +96,7 @@ Abrir [http://localhost:3000](http://localhost:3000).
 src/
   app/           # Paginas (App Router)
   components/    # Componentes React
-  data/          # Datos estaticos (candidatos, posiciones, quiz)
+  data/          # Datos estaticos (candidatos, posiciones, afinidad)
   lib/           # Utilidades (scoring, scraper, cache)
   types/         # Tipos TypeScript
 public/

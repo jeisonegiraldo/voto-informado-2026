@@ -261,7 +261,7 @@ export default function GuiaVotantePage() {
             size="lg"
             className="bg-teal-500 text-white hover:bg-teal-400"
           >
-            ¿No sabes por quién votar? Haz el Quiz
+            ¿No sabes por quién votar? Descubre tu Afinidad
           </Button>
         </Link>
         <Link href="/resumen">

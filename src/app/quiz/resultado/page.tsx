@@ -184,9 +184,9 @@ function ResultsContent() {
     return (
       <div className="mx-auto max-w-2xl px-4 py-16 text-center">
         <h1 className="text-2xl font-bold text-gray-900">No hay resultados</h1>
-        <p className="mt-2 text-gray-500">Primero debes completar el quiz de afinidad.</p>
+        <p className="mt-2 text-gray-500">Primero debes completar el test de afinidad.</p>
         <Link href="/quiz" className="mt-4 inline-block">
-          <Button>Hacer el Quiz</Button>
+          <Button>Descubre tu Afinidad</Button>
         </Link>
       </div>
     );
@@ -198,7 +198,7 @@ function ResultsContent() {
       <div className="mx-auto max-w-2xl px-4 py-16 text-center">
         <h1 className="text-2xl font-bold text-gray-900">Resultados inválidos</h1>
         <Link href="/quiz" className="mt-4 inline-block">
-          <Button>Repetir el Quiz</Button>
+          <Button>Repetir test</Button>
         </Link>
       </div>
     );
@@ -328,7 +328,7 @@ function ResultsContent() {
         <Link href="/quiz">
           <Button variant="outline" className="w-full gap-2 sm:w-auto">
             <RefreshCw className="h-4 w-4" />
-            Repetir quiz
+            Repetir test
           </Button>
         </Link>
         <Link href="/comparar">

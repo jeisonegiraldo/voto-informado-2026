@@ -24,12 +24,12 @@ export const metadata: Metadata = {
     template: '%s | VotaInformado 2026',
   },
   description:
-    'Herramienta ciudadana no-partidista para comparar candidatos presidenciales de Colombia 2026. Compara propuestas, haz el quiz de afinidad y vota informado.',
+    'Herramienta ciudadana no-partidista para comparar candidatos presidenciales de Colombia 2026. Compara propuestas, descubre tu afinidad y vota informado.',
   keywords: [
     'elecciones colombia 2026',
     'candidatos presidenciales',
     'comparar candidatos',
-    'quiz electoral',
+    'test afinidad electoral',
     'vota informado',
     'cepeda',
     'espriella',
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'VotaInformado 2026 — Compara candidatos y vota informado',
     description:
-      'Compara propuestas de los 4 candidatos presidenciales de Colombia. Quiz de afinidad y noticias actualizadas.',
+      'Compara propuestas de los 4 candidatos presidenciales de Colombia. Descubre tu afinidad y noticias actualizadas.',
     type: 'website',
     locale: 'es_CO',
     url: 'https://votainformadoco.org',

@@ -112,8 +112,8 @@ export default function HomePage() {
               },
               {
                 icon: CheckCircle,
-                title: 'Quiz de Afinidad',
-                desc: '12 preguntas para descubrir tu afinidad ideológica con cada candidato.',
+                title: 'Descubre tu Afinidad',
+                desc: '12 preguntas para descubrir con cuál candidato coincides más.',
                 href: '/quiz',
                 gradient: 'from-violet-500 to-purple-600',
               },
@@ -238,7 +238,7 @@ export default function HomePage() {
                 variant="outline"
                 className="w-full border-white/20 bg-white/5 text-white backdrop-blur-sm transition-all hover:bg-white/10 hover:border-white/30 sm:w-auto"
               >
-                Quiz de Afinidad
+                Descubre tu Afinidad
               </Button>
             </Link>
           </div>

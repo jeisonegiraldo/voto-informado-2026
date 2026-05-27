@@ -6,7 +6,7 @@ import Link from 'next/link';
 export const metadata: Metadata = {
   title: 'Metodología',
   description:
-    'Cómo funciona VotaInformado 2026: fuentes, algoritmo del quiz, dimensiones de comparación y principios de neutralidad.',
+    'Cómo funciona VotaInformado 2026: fuentes, algoritmo de afinidad, dimensiones de comparación y principios de neutralidad.',
 };
 
 export default function MetodologiaPage() {
@@ -34,7 +34,7 @@ export default function MetodologiaPage() {
               comunicación verificados.
             </p>
             <p>
-              <strong>Código abierto:</strong> La metodología del quiz, las fuentes de datos y el
+              <strong>Código abierto:</strong> La metodología del test de afinidad, las fuentes de datos y el
               algoritmo de puntuación son completamente transparentes y están documentados aquí.
             </p>
           </CardContent>
@@ -84,10 +84,10 @@ export default function MetodologiaPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Algoritmo del Quiz de Afinidad</CardTitle>
+            <CardTitle>Algoritmo de Descubre tu Afinidad</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3 text-sm text-gray-700">
-            <p>El quiz tiene 12 preguntas, una por cada dimensión de comparación.</p>
+            <p>El test tiene 12 preguntas, una por cada dimensión de comparación.</p>
             <p>
               <strong>Cada pregunta tiene 4 opciones</strong> que reflejan posiciones reales de los
               candidatos, sin nombrarlos. El lenguaje es neutro y accesible.
@@ -255,7 +255,7 @@ export default function MetodologiaPage() {
             </Link>{' '}
             &middot;{' '}
             <Link href="/quiz" className="text-teal-600 underline">
-              Hacer el quiz
+              Descubre tu Afinidad
             </Link>{' '}
             &middot;{' '}
             <Link href="/brujula" className="text-teal-600 underline">

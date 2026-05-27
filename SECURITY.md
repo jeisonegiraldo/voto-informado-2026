@@ -19,7 +19,7 @@ Si encuentras una vulnerabilidad de seguridad, **no abras un Issue publico**. En
 ## Que NO Reportar Como Vulnerabilidad
 
 - Errores en datos de candidatos (usar Issues con tag `datos`)
-- Sesgo percibido en el quiz (usar Issues con tag `sesgo`)
+- Sesgo percibido en el test de afinidad (usar Issues con tag `sesgo`)
 - Bugs de UI/UX (usar Issues normales)
 
 ## Arquitectura de Seguridad

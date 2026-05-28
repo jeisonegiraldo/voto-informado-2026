@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { Send, Bot, User, Loader2, AlertCircle, MessageSquare, Sparkles, ThumbsUp, ThumbsDown, X, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { candidates } from '@/data/candidates';
+import { saveEngagement } from '@/lib/engagement-client';
 import Markdown from 'react-markdown';
 
 interface Message {
@@ -164,7 +165,24 @@ export function ChatEngine() {
       setFeedbackModalIndex(index);
       setFeedbackCategory('');
       setFeedbackComment('');
+    } else {
+      // Positive feedback — find the user question that preceded this assistant message
+      const userQuestion = findPrecedingQuestion(updated, index);
+      saveEngagement('chat_feedback', {
+        question: userQuestion,
+        response: updated[index].content.slice(0, 500),
+        candidateId: candidateFilter || undefined,
+        feedback: 'up',
+      });
     }
+  }
+
+  /** Find the user message preceding an assistant message at the given index */
+  function findPrecedingQuestion(msgs: Message[], assistantIndex: number): string {
+    for (let i = assistantIndex - 1; i >= 0; i--) {
+      if (msgs[i].role === 'user') return msgs[i].content;
+    }
+    return '';
   }
 
   function submitNegativeFeedback() {
@@ -173,17 +191,18 @@ export function ChatEngine() {
     updated[feedbackModalIndex].feedbackCategory = feedbackCategory || 'Otra';
     updated[feedbackModalIndex].feedbackComment = feedbackComment;
     setMessages(updated);
-    setFeedbackModalIndex(null);
 
-    // Log to console for now (could send to API later)
-    console.log('[Feedback]', {
-      sessionId,
-      messageIndex: feedbackModalIndex,
-      type: 'negative',
+    const userQuestion = findPrecedingQuestion(updated, feedbackModalIndex);
+    saveEngagement('chat_feedback', {
+      question: userQuestion,
+      response: updated[feedbackModalIndex].content.slice(0, 500),
+      candidateId: candidateFilter || undefined,
+      feedback: 'down',
       category: feedbackCategory || 'Otra',
-      comment: feedbackComment,
-      messageContent: updated[feedbackModalIndex].content.slice(0, 200),
+      comment: feedbackComment || undefined,
     });
+
+    setFeedbackModalIndex(null);
   }
 
   async function handleSend(text?: string) {
@@ -251,6 +270,14 @@ export function ChatEngine() {
             }
           }
         }
+      }
+      // Save the complete Q&A interaction to Redis
+      if (fullText) {
+        saveEngagement('chat_interaction', {
+          question: messageText,
+          response: fullText,
+          candidateId: candidateFilter || undefined,
+        });
       }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Error desconocido';

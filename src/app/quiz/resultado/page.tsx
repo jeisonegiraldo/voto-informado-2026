@@ -1,13 +1,14 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { Suspense, useState } from 'react';
+import { Suspense, useState, useRef, useEffect } from 'react';
 import { decodeResults, calculateQuizResults } from '@/lib/quiz-scoring';
 import { quizQuestions } from '@/data/quiz-questions';
 import { positions } from '@/data/positions';
 import { candidateMap, candidates } from '@/data/candidates';
 import { dimensionMap } from '@/data/dimensions';
 import { CandidateAvatar } from '@/components/shared/candidate-avatar';
+import { saveEngagement } from '@/lib/engagement-client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -179,6 +180,7 @@ function DimensionBreakdownCard({
 function ResultsContent() {
   const searchParams = useSearchParams();
   const encoded = searchParams.get('r');
+  const resultSaved = useRef(false);
 
   if (!encoded) {
     return (
@@ -207,6 +209,23 @@ function ResultsContent() {
   const result = calculateQuizResults(answers);
   const topCandidate = candidateMap[result.topCandidate];
 
+  // Save quiz result to Redis (once per page load)
+  useEffect(() => {
+    if (resultSaved.current) return;
+    resultSaved.current = true;
+
+    const pct: Record<string, number> = {};
+    for (const c of candidates) {
+      pct[c.id] = result.candidatePercentages[c.id as CandidateId];
+    }
+    saveEngagement('quiz_result', {
+      topCandidate: result.topCandidate,
+      percentages: pct,
+      answeredCount: answers.length,
+      skippedCount: quizQuestions.length - answers.length,
+    });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   // Sort candidates by percentage descending
   const sorted = [...candidates].sort(
     (a, b) => result.candidatePercentages[b.id as CandidateId] - result.candidatePercentages[a.id as CandidateId]
@@ -215,6 +234,7 @@ function ResultsContent() {
   const shareText = `🗳️ Mi afinidad política en VotaInformado 2026:\n\n${sorted.map((c) => `${c.name}: ${result.candidatePercentages[c.id as CandidateId]}%`).join('\n')}\n\nMi mayor afinidad: ${topCandidate?.name} (${result.candidatePercentages[result.topCandidate]}%)\n\n¿Y tú con quién tienes más afinidad? Descúbrelo:`;
 
   const handleShare = async () => {
+    saveEngagement('share_event', { platform: 'native', sourcePage: '/quiz/resultado' });
     const url = window.location.href;
     if (navigator.share) {
       await navigator.share({ title: 'Mi resultado - VotaInformado 2026', text: shareText, url });
@@ -225,12 +245,14 @@ function ResultsContent() {
   };
 
   const handleWhatsApp = () => {
+    saveEngagement('share_event', { platform: 'whatsapp', sourcePage: '/quiz/resultado' });
     const url = window.location.href;
     const waUrl = `https://wa.me/?text=${encodeURIComponent(`${shareText}\n${url}`)}`;
     window.open(waUrl, '_blank');
   };
 
   const handleCopy = async () => {
+    saveEngagement('share_event', { platform: 'copy', sourcePage: '/quiz/resultado' });
     const url = window.location.href;
     await navigator.clipboard.writeText(`${shareText}\n${url}`);
   };

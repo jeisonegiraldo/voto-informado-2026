@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { trackClient } from '@/lib/analytics-client';
+import { saveEngagement } from '@/lib/engagement-client';
 import { Button } from '@/components/ui/button';
 import {
   Share2,
@@ -38,20 +39,25 @@ export function ShareInvite({
   const getUrl = () => url || (typeof window !== 'undefined' ? window.location.href : '');
   const getFullText = () => `${shareText}\n${getUrl()}`;
 
+  const currentPage = () => typeof window !== 'undefined' ? window.location.pathname : '/';
+
   const handleWhatsApp = () => {
     trackClient('share_click', { platform: 'whatsapp' });
+    saveEngagement('share_event', { platform: 'whatsapp', sourcePage: currentPage() });
     const waUrl = `https://wa.me/?text=${encodeURIComponent(getFullText())}`;
     window.open(waUrl, '_blank');
   };
 
   const handleX = () => {
     trackClient('share_click', { platform: 'x' });
+    saveEngagement('share_event', { platform: 'x', sourcePage: currentPage() });
     const xUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(getFullText())}`;
     window.open(xUrl, '_blank');
   };
 
   const handleInstagram = () => {
     trackClient('share_click', { platform: 'instagram' });
+    saveEngagement('share_event', { platform: 'instagram', sourcePage: currentPage() });
     // Instagram doesn't have a direct share URL, so we copy to clipboard and open Instagram
     navigator.clipboard.writeText(getFullText());
     // Try opening Instagram DM (deep link on mobile)
@@ -69,6 +75,7 @@ export function ShareInvite({
 
   const handleCopy = async () => {
     trackClient('share_click', { platform: 'copy' });
+    saveEngagement('share_event', { platform: 'copy', sourcePage: currentPage() });
     await navigator.clipboard.writeText(getFullText());
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -76,6 +83,7 @@ export function ShareInvite({
 
   const handleNativeShare = async () => {
     trackClient('share_click', { platform: 'native' });
+    saveEngagement('share_event', { platform: 'native', sourcePage: currentPage() });
     if (navigator.share) {
       await navigator.share({
         title: shareTitle,

@@ -1,7 +1,7 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { Suspense, useState } from 'react';
+import { Suspense, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   decodeBrujulaResults,
@@ -11,6 +11,7 @@ import { brujulaCardPool } from '@/data/brujula-cards';
 import { candidateMap, candidates } from '@/data/candidates';
 import { dimensionMap } from '@/data/dimensions';
 import { CandidateAvatar } from '@/components/shared/candidate-avatar';
+import { saveEngagement } from '@/lib/engagement-client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
@@ -32,6 +33,7 @@ function RevealContent() {
   const encoded = searchParams.get('r');
   const [showReveal, setShowReveal] = useState(false);
   const [revealStep, setRevealStep] = useState(0); // 0: hidden, 1: revealing, 2: revealed
+  const resultSaved = useRef(false);
 
   if (!encoded) {
     return (
@@ -77,6 +79,23 @@ function RevealContent() {
     setRevealStep(1);
     // After animation, mark as fully revealed
     setTimeout(() => setRevealStep(2), 1500);
+
+    // Save result to Redis (once per page load)
+    if (!resultSaved.current) {
+      resultSaved.current = true;
+      const pct: Record<string, number> = {};
+      for (const c of candidates) {
+        pct[c.id] = result.candidatePercentages[c.id as CandidateId];
+      }
+      saveEngagement('brujula_result', {
+        topCandidate: result.topCandidate,
+        percentages: pct,
+        totalAgreed: result.totalAgreed,
+        totalDisagreed: result.totalDisagreed,
+        totalSkipped: result.totalSkipped,
+        hadTiebreaker: swipes.length > 20,
+      });
+    }
   };
 
   return (

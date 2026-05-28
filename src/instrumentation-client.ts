@@ -23,3 +23,6 @@ Sentry.init({
 
   environment: process.env.NODE_ENV,
 });
+
+// Capture navigation transitions
+export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;

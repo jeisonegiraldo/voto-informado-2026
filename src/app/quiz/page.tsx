@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { quizQuestions } from '@/data/quiz-questions';
 import { calculateQuizResults, encodeResults } from '@/lib/quiz-scoring';
+import { trackClient } from '@/lib/analytics-client';
 import type { QuizAnswer } from '@/types/quiz';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -15,12 +16,17 @@ export default function QuizPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Map<string, string>>(new Map());
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const startTracked = useRef(false);
 
   const question = quizQuestions[currentIndex];
   const totalQuestions = quizQuestions.length;
   const progress = ((currentIndex) / totalQuestions) * 100;
 
   const handleSelect = useCallback((optionId: string) => {
+    if (!startTracked.current) {
+      startTracked.current = true;
+      trackClient('quiz_start');
+    }
     setSelectedOption(optionId);
   }, []);
 
@@ -48,6 +54,13 @@ export default function QuizPage() {
       }
       const result = calculateQuizResults(allAnswers);
       const encoded = encodeResults(result);
+
+      trackClient('quiz_complete', {
+        topCandidate: result.topCandidate,
+        answeredCount: allAnswers.length,
+        skippedCount: totalQuestions - allAnswers.length,
+      });
+
       router.push(`/quiz/resultado?r=${encoded}`);
     }
   }, [selectedOption, answers, currentIndex, totalQuestions, question.id, router]);

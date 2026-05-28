@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 import { classifyPetition } from '@/lib/petition-classifier';
 import { savePetition, getPetitionStats, getRecentPetitions, likePetition } from '@/lib/petition-store';
+import { track } from '@/lib/track';
 import type { CitizenPetition } from '@/types/petition';
 import type { CandidateId } from '@/types/candidate';
 
@@ -53,6 +54,9 @@ export async function POST(req: NextRequest) {
         { status: 429 }
       );
     }
+
+    // Track petition submission
+    track(req, 'petition_submit', { candidateId });
 
     // Capture geo from Vercel headers (automatically set on Vercel)
     const city = req.headers.get('x-vercel-ip-city') || undefined;

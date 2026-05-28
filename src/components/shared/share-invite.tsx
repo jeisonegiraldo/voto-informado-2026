@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { trackClient } from '@/lib/analytics-client';
 import { Button } from '@/components/ui/button';
 import {
   Share2,
@@ -38,16 +39,19 @@ export function ShareInvite({
   const getFullText = () => `${shareText}\n${getUrl()}`;
 
   const handleWhatsApp = () => {
+    trackClient('share_click', { platform: 'whatsapp' });
     const waUrl = `https://wa.me/?text=${encodeURIComponent(getFullText())}`;
     window.open(waUrl, '_blank');
   };
 
   const handleX = () => {
+    trackClient('share_click', { platform: 'x' });
     const xUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(getFullText())}`;
     window.open(xUrl, '_blank');
   };
 
   const handleInstagram = () => {
+    trackClient('share_click', { platform: 'instagram' });
     // Instagram doesn't have a direct share URL, so we copy to clipboard and open Instagram
     navigator.clipboard.writeText(getFullText());
     // Try opening Instagram DM (deep link on mobile)
@@ -64,12 +68,14 @@ export function ShareInvite({
   };
 
   const handleCopy = async () => {
+    trackClient('share_click', { platform: 'copy' });
     await navigator.clipboard.writeText(getFullText());
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   const handleNativeShare = async () => {
+    trackClient('share_click', { platform: 'native' });
     if (navigator.share) {
       await navigator.share({
         title: shareTitle,

@@ -13,6 +13,7 @@ import {
   selectTiebreakerCards,
   type BrujulaSwipe,
 } from '@/lib/brujula-scoring';
+import { trackClient } from '@/lib/analytics-client';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { ThumbsUp, ThumbsDown, SkipForward, Swords } from 'lucide-react';
@@ -27,6 +28,7 @@ export function BrujulaEngine() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [swipes, setSwipes] = useState<BrujulaSwipe[]>([]);
   const [isAnimating, setIsAnimating] = useState(false);
+  const startTracked = useRef(false);
 
   // Tiebreaker state
   const [tiebreakerCards, setTiebreakerCards] = useState<BrujulaCard[]>([]);
@@ -53,6 +55,17 @@ export function BrujulaEngine() {
     (allSwipes: BrujulaSwipe[]) => {
       const result = calculateBrujulaResults(allSwipes, brujulaCardPool);
       const encoded = encodeBrujulaResults(result.swipes);
+
+      // Track completion
+      trackClient('brujula_complete', {
+        topCandidate: result.topCandidate,
+        totalAgreed: result.totalAgreed,
+        totalDisagreed: result.totalDisagreed,
+        totalSkipped: result.totalSkipped,
+        totalCards: allSwipes.length,
+        hadTiebreaker: tiebreakerAttempted.current,
+      });
+
       router.push(`/brujula/resultado?r=${encoded}`);
     },
     [router]
@@ -76,6 +89,10 @@ export function BrujulaEngine() {
         const extras = selectTiebreakerCards(tied, usedIds, brujulaCardPool, 5);
 
         if (extras.length > 0) {
+          trackClient('brujula_tiebreaker', {
+            tiedCandidates: tied.join(','),
+            extraCards: extras.length,
+          });
           setTiebreakerCards(extras);
           setTiebreakerIndex(0);
           setPhase('tiebreaker-intro');
@@ -92,6 +109,12 @@ export function BrujulaEngine() {
     (direction: 'right' | 'left') => {
       if (isAnimating || isFinished) return;
       setIsAnimating(true);
+
+      // Track start on first interaction
+      if (!startTracked.current) {
+        startTracked.current = true;
+        trackClient('brujula_start');
+      }
 
       const card = activeCards[activeIndex];
       const newSwipes = [...swipes, { cardId: card.id, direction }];

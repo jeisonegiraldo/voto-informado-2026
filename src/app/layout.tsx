@@ -5,6 +5,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { FloatingChat } from '@/components/chat/floating-chat';
+import { PageTracker } from '@/components/shared/page-tracker';
 import './globals.css';
 
 const inter = Inter({
@@ -88,6 +89,7 @@ export default function RootLayout({
         <main className="flex-1">{children}</main>
         <Footer />
         <FloatingChat />
+        <PageTracker />
         <Analytics />
         <SpeedInsights />
       </body>

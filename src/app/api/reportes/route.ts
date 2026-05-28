@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server';
 import { saveReport, getReportStats } from '@/lib/report-store';
+import { track } from '@/lib/track';
 import type { CitizenReport } from '@/types/report';
 import type { CandidateId } from '@/types/candidate';
 
@@ -68,6 +69,9 @@ export async function POST(req: NextRequest) {
         { status: 429 }
       );
     }
+
+    // Track report submission
+    track(req, 'report_submit', { type, candidateId: candidateId || 'none' });
 
     // Geo
     const city = req.headers.get('x-vercel-ip-city') || undefined;

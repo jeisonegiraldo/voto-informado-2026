@@ -1,5 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { buildVerificadorPrompt } from '@/lib/verificador-context';
+import { track } from '@/lib/track';
 import { NextRequest } from 'next/server';
 
 const anthropic = new Anthropic();
@@ -45,6 +46,9 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
+
+    // Track verificador usage
+    track(req, 'verificador_query', { query: claim.trim().slice(0, 200) });
 
     const rateLimitKey =
       sessionId || req.headers.get('x-forwarded-for') || 'anonymous';

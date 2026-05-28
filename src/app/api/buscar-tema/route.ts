@@ -1,5 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { buildChatSystemPrompt } from '@/lib/chat-context';
+import { track } from '@/lib/track';
 import { NextRequest } from 'next/server';
 
 const anthropic = new Anthropic();
@@ -67,6 +68,9 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
+
+    // Track search usage
+    track(req, 'buscar_tema', { topic: topic.trim().slice(0, 200) });
 
     const rateLimitKey =
       sessionId || req.headers.get('x-forwarded-for') || 'anonymous';

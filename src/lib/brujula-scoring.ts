@@ -95,6 +95,109 @@ export function calculateBrujulaResults(
   };
 }
 
+/**
+ * Detects if there's a meaningful tie at the top of the results.
+ * A tie occurs when two or more candidates have the same displayed
+ * percentage (what the user actually sees on screen).
+ *
+ * Uses a small tolerance: candidates within 2 percentage points of the
+ * top scorer are considered tied, because visually they appear nearly
+ * identical.
+ *
+ * Returns the tied candidate IDs, or empty array if no tie.
+ */
+export function detectTie(result: BrujulaResult): CandidateId[] {
+  const PERCENTAGE_TOLERANCE = 2; // percentage points
+
+  const topPct = result.candidatePercentages[result.topCandidate];
+  if (topPct === 0) return [];
+
+  const tied = CANDIDATE_IDS.filter(
+    (cid) => topPct - result.candidatePercentages[cid] <= PERCENTAGE_TOLERANCE
+  );
+
+  return tied.length >= 2 ? tied : [];
+}
+
+/**
+ * Select tiebreaker cards from the unused pool that maximize
+ * differentiation between tied candidates.
+ *
+ * Strategy: pick cards whose primary candidate is one of the tied
+ * candidates but whose secondaryScores do NOT benefit the other tied
+ * candidate(s). This ensures each swipe drives a wedge between them.
+ *
+ * Falls back to any unused cards from tied candidates if not enough
+ * "pure differentiators" exist.
+ */
+export function selectTiebreakerCards(
+  tiedCandidates: CandidateId[],
+  usedCardIds: Set<string>,
+  pool: BrujulaCard[],
+  count: number = 5,
+): BrujulaCard[] {
+  const tiedSet = new Set(tiedCandidates);
+
+  // All unused cards belonging to tied candidates
+  const unused = pool.filter(
+    (c) => !usedCardIds.has(c.id) && tiedSet.has(c.candidateId)
+  );
+
+  // Score each card by how "differentiating" it is
+  // A card is a good differentiator if it gives points to its primary
+  // candidate but NOT to the other tied candidates via secondaryScores
+  const scored = unused.map((card) => {
+    let secondaryLeakToTied = 0;
+    if (card.secondaryScores) {
+      for (const cid of tiedCandidates) {
+        if (cid !== card.candidateId) {
+          secondaryLeakToTied += card.secondaryScores[cid] ?? 0;
+        }
+      }
+    }
+    // Lower leak = better differentiator
+    return { card, leak: secondaryLeakToTied };
+  });
+
+  // Sort: best differentiators first (least leak)
+  scored.sort((a, b) => a.leak - b.leak);
+
+  // Try to balance across tied candidates
+  const perCandidate = Math.ceil(count / tiedCandidates.length);
+  const selected: BrujulaCard[] = [];
+  const selectedIds = new Set<string>();
+
+  for (const cid of tiedCandidates) {
+    const forThis = scored
+      .filter((s) => s.card.candidateId === cid && !selectedIds.has(s.card.id))
+      .slice(0, perCandidate);
+    for (const s of forThis) {
+      selected.push(s.card);
+      selectedIds.add(s.card.id);
+    }
+  }
+
+  // If we don't have enough, fill with remaining unused from tied candidates
+  if (selected.length < count) {
+    for (const s of scored) {
+      if (selected.length >= count) break;
+      if (!selectedIds.has(s.card.id)) {
+        selected.push(s.card);
+        selectedIds.add(s.card.id);
+      }
+    }
+  }
+
+  // Shuffle the tiebreaker cards
+  const result = selected.slice(0, count);
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+
+  return result;
+}
+
 export function encodeBrujulaResults(swipes: BrujulaSwipe[]): string {
   // Compact: cardId:direction(r/l/s) joined by comma
   const str = swipes

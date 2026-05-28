@@ -1,77 +1,178 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { SwipeCard } from './swipe-card';
 import { brujulaCardPool, selectAndShuffleBrujulaCards } from '@/data/brujula-cards';
+import type { BrujulaCard } from '@/data/brujula-cards';
 import {
   calculateBrujulaResults,
   encodeBrujulaResults,
+  detectTie,
+  selectTiebreakerCards,
   type BrujulaSwipe,
 } from '@/lib/brujula-scoring';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
-import { ThumbsUp, ThumbsDown, SkipForward } from 'lucide-react';
+import { ThumbsUp, ThumbsDown, SkipForward, Swords } from 'lucide-react';
+
+type Phase = 'main' | 'tiebreaker-intro' | 'tiebreaker' | 'done';
 
 export function BrujulaEngine() {
   const router = useRouter();
   const shuffled = useMemo(() => selectAndShuffleBrujulaCards(brujulaCardPool), []);
 
+  const [phase, setPhase] = useState<Phase>('main');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [swipes, setSwipes] = useState<BrujulaSwipe[]>([]);
   const [isAnimating, setIsAnimating] = useState(false);
 
-  const totalCards = shuffled.length;
-  const progress = (currentIndex / totalCards) * 100;
-  const isFinished = currentIndex >= totalCards;
+  // Tiebreaker state
+  const [tiebreakerCards, setTiebreakerCards] = useState<BrujulaCard[]>([]);
+  const [tiebreakerIndex, setTiebreakerIndex] = useState(0);
+  // Track whether we already attempted a tiebreaker (only once)
+  const tiebreakerAttempted = useRef(false);
+
+  const activeCards = phase === 'tiebreaker' ? tiebreakerCards : shuffled;
+  const activeIndex = phase === 'tiebreaker' ? tiebreakerIndex : currentIndex;
+  const totalMain = shuffled.length;
+  const totalActive = activeCards.length;
+  const isFinished = activeIndex >= totalActive;
+
+  // Progress: in tiebreaker phase, show combined progress
+  const mainProgress = phase === 'main'
+    ? (currentIndex / totalMain) * 100
+    : 100;
+  const tiebreakerProgress = phase === 'tiebreaker'
+    ? (tiebreakerIndex / tiebreakerCards.length) * 100
+    : 0;
+
+  /** Navigate to results page */
+  const goToResults = useCallback(
+    (allSwipes: BrujulaSwipe[]) => {
+      const result = calculateBrujulaResults(allSwipes, brujulaCardPool);
+      const encoded = encodeBrujulaResults(result.swipes);
+      router.push(`/brujula/resultado?r=${encoded}`);
+    },
+    [router]
+  );
+
+  /** Check for ties and either start tiebreaker or go to results */
+  const handleRoundComplete = useCallback(
+    (allSwipes: BrujulaSwipe[]) => {
+      // Only attempt tiebreaker once
+      if (tiebreakerAttempted.current) {
+        goToResults(allSwipes);
+        return;
+      }
+
+      const result = calculateBrujulaResults(allSwipes, brujulaCardPool);
+      const tied = detectTie(result);
+
+      if (tied.length >= 2) {
+        tiebreakerAttempted.current = true;
+        const usedIds = new Set(allSwipes.map((s) => s.cardId));
+        const extras = selectTiebreakerCards(tied, usedIds, brujulaCardPool, 5);
+
+        if (extras.length > 0) {
+          setTiebreakerCards(extras);
+          setTiebreakerIndex(0);
+          setPhase('tiebreaker-intro');
+          return;
+        }
+      }
+
+      goToResults(allSwipes);
+    },
+    [goToResults]
+  );
 
   const handleSwipe = useCallback(
     (direction: 'right' | 'left') => {
       if (isAnimating || isFinished) return;
       setIsAnimating(true);
 
-      const card = shuffled[currentIndex];
+      const card = activeCards[activeIndex];
       const newSwipes = [...swipes, { cardId: card.id, direction }];
       setSwipes(newSwipes);
 
-      // Small delay for exit animation
       setTimeout(() => {
-        setCurrentIndex((prev) => prev + 1);
+        if (phase === 'tiebreaker') {
+          setTiebreakerIndex((prev) => prev + 1);
+        } else {
+          setCurrentIndex((prev) => prev + 1);
+        }
         setIsAnimating(false);
 
-        // Check if finished
-        if (currentIndex + 1 >= totalCards) {
-          const result = calculateBrujulaResults(newSwipes, brujulaCardPool);
-          const encoded = encodeBrujulaResults(result.swipes);
-          router.push(`/brujula/resultado?r=${encoded}`);
+        const nextIdx = activeIndex + 1;
+        if (nextIdx >= totalActive) {
+          handleRoundComplete(newSwipes);
         }
       }, 300);
     },
-    [isAnimating, isFinished, shuffled, currentIndex, swipes, totalCards, router]
+    [isAnimating, isFinished, activeCards, activeIndex, swipes, totalActive, phase, handleRoundComplete]
   );
 
   const handleSkip = useCallback(() => {
     if (isAnimating || isFinished) return;
     setIsAnimating(true);
 
-    const card = shuffled[currentIndex];
+    const card = activeCards[activeIndex];
     const newSwipes = [...swipes, { cardId: card.id, direction: 'skip' as const }];
     setSwipes(newSwipes);
 
     setTimeout(() => {
-      setCurrentIndex((prev) => prev + 1);
+      if (phase === 'tiebreaker') {
+        setTiebreakerIndex((prev) => prev + 1);
+      } else {
+        setCurrentIndex((prev) => prev + 1);
+      }
       setIsAnimating(false);
 
-      if (currentIndex + 1 >= totalCards) {
-        const result = calculateBrujulaResults(newSwipes, brujulaCardPool);
-        const encoded = encodeBrujulaResults(result.swipes);
-        router.push(`/brujula/resultado?r=${encoded}`);
+      const nextIdx = activeIndex + 1;
+      if (nextIdx >= totalActive) {
+        handleRoundComplete(newSwipes);
       }
     }, 200);
-  }, [isAnimating, isFinished, shuffled, currentIndex, swipes, totalCards, router]);
+  }, [isAnimating, isFinished, activeCards, activeIndex, swipes, totalActive, phase, handleRoundComplete]);
 
-  if (isFinished) {
+  // ── Tiebreaker intro screen ──
+  if (phase === 'tiebreaker-intro') {
+    return (
+      <div className="mx-auto max-w-lg px-4 py-12">
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+          className="text-center"
+        >
+          <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-lg">
+            <Swords className="h-8 w-8" />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900">
+            Ronda de desempate
+          </h2>
+          <p className="mx-auto mt-3 max-w-sm text-sm text-gray-500">
+            Tus respuestas muestran afinidad similar con varios candidatos.
+            Responde {tiebreakerCards.length} propuestas adicionales para
+            definir con cual te identificas mas.
+          </p>
+          <Button
+            size="lg"
+            className="mt-8 gap-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg hover:from-amber-400 hover:to-orange-400"
+            onClick={() => setPhase('tiebreaker')}
+          >
+            <Swords className="h-5 w-5" />
+            Continuar ({tiebreakerCards.length} propuestas)
+          </Button>
+        </motion.div>
+      </div>
+    );
+  }
+
+  // ── Loading / calculating screen ──
+  if (isFinished || phase === 'done') {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
         <motion.div
@@ -86,20 +187,45 @@ export function BrujulaEngine() {
     );
   }
 
-  const currentCard = shuffled[currentIndex];
-  const nextCard = currentIndex + 1 < totalCards ? shuffled[currentIndex + 1] : null;
+  const currentCard = activeCards[activeIndex];
+  const nextCard = activeIndex + 1 < totalActive ? activeCards[activeIndex + 1] : null;
+
+  const displayIndex = phase === 'tiebreaker'
+    ? tiebreakerIndex + 1
+    : currentIndex + 1;
+  const displayTotal = phase === 'tiebreaker'
+    ? tiebreakerCards.length
+    : totalMain;
+  const displayProgress = phase === 'tiebreaker'
+    ? tiebreakerProgress
+    : mainProgress;
 
   return (
     <div className="mx-auto max-w-lg px-4">
+      {/* Tiebreaker badge */}
+      {phase === 'tiebreaker' && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-3 flex items-center justify-center gap-2 rounded-full bg-amber-50 px-4 py-1.5 text-xs font-semibold text-amber-700"
+        >
+          <Swords className="h-3.5 w-3.5" />
+          Ronda de desempate
+        </motion.div>
+      )}
+
       {/* Progress bar */}
       <div className="mb-4">
         <div className="mb-2 flex items-center justify-between text-sm text-gray-500">
           <span>
-            Propuesta {currentIndex + 1} de {totalCards}
+            Propuesta {displayIndex} de {displayTotal}
           </span>
-          <span>{Math.round(progress)}%</span>
+          <span>{Math.round(displayProgress)}%</span>
         </div>
-        <Progress value={progress} className="h-2" />
+        <Progress
+          value={displayProgress}
+          className={`h-2 ${phase === 'tiebreaker' ? '[&>div]:bg-amber-500' : ''}`}
+        />
       </div>
 
       {/* Swipe stats */}
@@ -122,7 +248,7 @@ export function BrujulaEngine() {
       <div className="relative mx-auto aspect-[3/4] w-full max-w-sm">
         {/* Next card (background) */}
         {nextCard && (
-          <div className="absolute inset-0 scale-95 rounded-2xl border-2 border-gray-100 bg-gray-50 opacity-60" />
+          <div className={`absolute inset-0 scale-95 rounded-2xl border-2 bg-gray-50 opacity-60 ${phase === 'tiebreaker' ? 'border-amber-200' : 'border-gray-100'}`} />
         )}
 
         {/* Current card */}

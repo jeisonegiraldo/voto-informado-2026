@@ -4,7 +4,7 @@
  */
 
 import { brujulaCardPool, selectAndShuffleBrujulaCards, type BrujulaCard } from '../src/data/brujula-cards';
-import { calculateBrujulaResults, type BrujulaSwipe } from '../src/lib/brujula-scoring';
+import { calculateBrujulaResults, detectTie, selectTiebreakerCards, type BrujulaSwipe } from '../src/lib/brujula-scoring';
 import type { CandidateId } from '../src/types/candidate';
 
 const CANDIDATE_IDS: CandidateId[] = ['cepeda', 'espriella', 'valencia', 'fajardo'];
@@ -153,6 +153,79 @@ console.log(`  Sesión 1 vs 2: ${overlap12}/20 cartas iguales (${((overlap12/20)
 console.log(`  Sesión 1 vs 3: ${overlap13}/20 cartas iguales (${((overlap13/20)*100).toFixed(0)}%)`);
 console.log(`  Sesión 2 vs 3: ${overlap23}/20 cartas iguales (${((overlap23/20)*100).toFixed(0)}%)`);
 console.log(`  ${overlap12 < 20 && overlap13 < 20 ? '✅' : '⚠️'} Las sesiones muestran propuestas diferentes`);
+
+// ═══════════════════════════════════════════
+// TEST 7: Detección y resolución de empates
+// ═══════════════════════════════════════════
+console.log('\n═══════════════════════════════════════════');
+console.log('TEST 7: Detección de empates y desempate');
+console.log('═══════════════════════════════════════════');
+
+// Force a tie scenario: approve ALL proposals equally
+{
+  let tiesDetected = 0;
+  let tiesResolved = 0;
+  const TIE_RUNS = 1000;
+
+  for (let i = 0; i < TIE_RUNS; i++) {
+    const selected = selectAndShuffleBrujulaCards();
+    // Approve everything → should create ties
+    const swipes: BrujulaSwipe[] = selected.map(card => ({
+      cardId: card.id, direction: 'right' as const,
+    }));
+    const result = calculateBrujulaResults(swipes, brujulaCardPool);
+    const tied = detectTie(result);
+
+    if (tied.length >= 2) {
+      tiesDetected++;
+      const usedIds = new Set(swipes.map(s => s.cardId));
+      const extras = selectTiebreakerCards(tied, usedIds, brujulaCardPool, 5);
+
+      if (extras.length > 0) {
+        // Simulate tiebreaker: randomly swipe extras
+        const allSwipes = [...swipes, ...extras.map(c => ({
+          cardId: c.id,
+          direction: (Math.random() < 0.5 ? 'right' : 'left') as 'right' | 'left',
+        }))];
+        const finalResult = calculateBrujulaResults(allSwipes, brujulaCardPool);
+        const finalTied = detectTie(finalResult);
+        if (finalTied.length < 2) tiesResolved++;
+      }
+    }
+  }
+
+  console.log(`  Escenario "apruebo todo" (${TIE_RUNS} sesiones):`);
+  console.log(`  Empates detectados: ${tiesDetected} (${((tiesDetected/TIE_RUNS)*100).toFixed(1)}%)`);
+  console.log(`  Empates resueltos por desempate: ${tiesResolved}/${tiesDetected} (${tiesDetected > 0 ? ((tiesResolved/tiesDetected)*100).toFixed(1) : 'N/A'}%)`);
+}
+
+// Test tiebreaker card selection quality
+{
+  const selected = selectAndShuffleBrujulaCards();
+  const swipes: BrujulaSwipe[] = selected.map(card => ({
+    cardId: card.id, direction: 'right' as const,
+  }));
+  const result = calculateBrujulaResults(swipes, brujulaCardPool);
+  const tied = detectTie(result);
+
+  if (tied.length >= 2) {
+    const usedIds = new Set(swipes.map(s => s.cardId));
+    const extras = selectTiebreakerCards(tied, usedIds, brujulaCardPool, 5);
+    console.log(`\n  Ejemplo de desempate entre: ${tied.join(', ')}`);
+    console.log(`  Cartas de desempate: ${extras.length}`);
+    for (const c of extras) {
+      const leaksTo = c.secondaryScores
+        ? Object.entries(c.secondaryScores)
+            .filter(([cid]) => tied.includes(cid as CandidateId) && cid !== c.candidateId)
+            .map(([cid, s]) => `${cid}:+${s}`)
+            .join(', ')
+        : 'ninguno';
+      console.log(`    ${c.id} (${c.candidateId}) — leak a empatados: ${leaksTo || 'ninguno'} ✅`);
+    }
+  } else {
+    console.log(`  (No se detectó empate en esta ejecución — es esperado en muchas sesiones)`);
+  }
+}
 
 // ═══════════════════════════════════════════
 console.log('\n═══════════════════════════════════════════');

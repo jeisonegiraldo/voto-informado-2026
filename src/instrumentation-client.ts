@@ -14,11 +14,16 @@ Sentry.init({
   // Only send errors in production
   enabled: process.env.NODE_ENV === 'production',
 
-  // Filter noisy errors
+  // Filter noisy errors — browser extensions and known benign patterns
   ignoreErrors: [
     'ResizeObserver loop',
     'Non-Error promise rejection captured',
     /^Loading chunk \d+ failed/,
+    // Firefox reader mode / Brave browser extension inject __firefox__ into pages
+    "__firefox__",
+    "window.__firefox__",
+    /Can't find variable: __firefox__/,
+    /undefined is not an object.*__firefox__/,
   ],
 
   environment: process.env.NODE_ENV,

@@ -4,9 +4,13 @@ import { useEffect, useState } from 'react';
 import { getTimeUntilElection } from '@/lib/utils';
 
 export function ElectionCountdown() {
-  const [time, setTime] = useState(getTimeUntilElection());
+  // Initialize with zeros so server and client render identical HTML
+  // (avoids hydration mismatch). useEffect sets the real value client-side.
+  const [time, setTime] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
+    // Set immediately on mount so there's no visual flash
+    setTime(getTimeUntilElection());
     const interval = setInterval(() => {
       setTime(getTimeUntilElection());
     }, 1000);

@@ -16,15 +16,182 @@ import {
 import { trackClient } from '@/lib/analytics-client';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
-import { ThumbsUp, ThumbsDown, SkipForward, Swords } from 'lucide-react';
+import {
+  ThumbsUp,
+  ThumbsDown,
+  SkipForward,
+  Swords,
+  EyeOff,
+  ArrowRight,
+  Compass,
+  ChevronRight,
+  Clock,
+} from 'lucide-react';
 
-type Phase = 'main' | 'tiebreaker-intro' | 'tiebreaker' | 'done';
+type Phase = 'onboarding' | 'main' | 'tiebreaker-intro' | 'tiebreaker' | 'done';
+
+// ── Onboarding steps ────────────────────────────────
+
+const ONBOARDING_STEPS = [
+  {
+    icon: EyeOff,
+    title: 'Propuestas reales, candidatos ocultos',
+    description:
+      'Veras 20 propuestas tomadas directamente de los planes de gobierno de los candidatos. No sabras de quien es cada una.',
+    accent: 'from-slate-700 to-slate-900',
+  },
+  {
+    icon: ThumbsUp,
+    title: 'Desliza o toca los botones',
+    description:
+      'Si estas de acuerdo con la propuesta, desliza hacia la derecha o toca el boton verde. Si no, hacia la izquierda o el boton rojo. Si no estas seguro, puedes omitirla.',
+    accent: 'from-emerald-500 to-teal-600',
+    showDemo: true,
+  },
+  {
+    icon: Compass,
+    title: 'Descubre tu candidato',
+    description:
+      'Al final, te revelaremos con cual candidato coincidiste mas, basado unicamente en tus respuestas a las propuestas. Sin sesgo, sin colores, solo ideas.',
+    accent: 'from-teal-500 to-cyan-600',
+  },
+];
+
+function OnboardingScreen({ onStart }: { onStart: () => void }) {
+  const [step, setStep] = useState(0);
+  const current = ONBOARDING_STEPS[step];
+  const isLast = step === ONBOARDING_STEPS.length - 1;
+  const Icon = current.icon;
+
+  return (
+    <div className="mx-auto max-w-md px-4 py-4">
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={step}
+          initial={{ opacity: 0, x: 40 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -40 }}
+          transition={{ duration: 0.3 }}
+          className="text-center"
+        >
+          {/* Icon */}
+          <motion.div
+            className={`mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${current.accent} text-white shadow-lg`}
+            initial={{ scale: 0.5, rotate: -10 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ type: 'spring', stiffness: 200, damping: 15, delay: 0.1 }}
+          >
+            <Icon className="h-8 w-8" />
+          </motion.div>
+
+          {/* Title */}
+          <h2 className="text-xl font-bold text-gray-900 sm:text-2xl">
+            {current.title}
+          </h2>
+
+          {/* Description */}
+          <p className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-gray-500">
+            {current.description}
+          </p>
+
+          {/* Swipe demo */}
+          {current.showDemo && (
+            <motion.div
+              className="mx-auto mt-6 flex max-w-xs items-center justify-center gap-4"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <div className="flex flex-col items-center gap-1.5">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-rose-200 text-rose-400">
+                  <ThumbsDown className="h-5 w-5" />
+                </div>
+                <span className="text-[10px] font-medium text-rose-400">En desacuerdo</span>
+              </div>
+
+              <div className="flex flex-col items-center gap-1.5">
+                <motion.div
+                  className="flex h-20 w-14 items-center justify-center rounded-xl border-2 border-gray-200 bg-white shadow-md"
+                  animate={{ x: [0, 20, -20, 0] }}
+                  transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 1 }}
+                >
+                  <span className="text-[10px] font-medium text-gray-400">Propuesta</span>
+                </motion.div>
+                <span className="text-[10px] text-gray-400">Desliza</span>
+              </div>
+
+              <div className="flex flex-col items-center gap-1.5">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-emerald-200 text-emerald-400">
+                  <ThumbsUp className="h-5 w-5" />
+                </div>
+                <span className="text-[10px] font-medium text-emerald-400">De acuerdo</span>
+              </div>
+            </motion.div>
+          )}
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Step indicators */}
+      <div className="mt-8 flex items-center justify-center gap-2">
+        {ONBOARDING_STEPS.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setStep(i)}
+            className={`h-2 rounded-full transition-all duration-300 ${
+              i === step ? 'w-6 bg-teal-500' : 'w-2 bg-gray-200'
+            }`}
+            aria-label={`Paso ${i + 1}`}
+          />
+        ))}
+      </div>
+
+      {/* Actions */}
+      <div className="mt-6 flex flex-col items-center gap-3">
+        {isLast ? (
+          <Button
+            size="lg"
+            onClick={onStart}
+            className="w-full max-w-xs gap-2 bg-gradient-to-r from-teal-600 to-teal-500 text-white shadow-lg hover:from-teal-500 hover:to-teal-400"
+          >
+            Comenzar
+            <ArrowRight className="h-5 w-5" />
+          </Button>
+        ) : (
+          <Button
+            size="lg"
+            onClick={() => setStep(step + 1)}
+            className="w-full max-w-xs gap-2 bg-gradient-to-r from-teal-600 to-teal-500 text-white shadow-lg hover:from-teal-500 hover:to-teal-400"
+          >
+            Siguiente
+            <ChevronRight className="h-5 w-5" />
+          </Button>
+        )}
+
+        {!isLast && (
+          <button
+            onClick={onStart}
+            className="text-xs text-gray-400 underline-offset-2 hover:text-gray-600 hover:underline"
+          >
+            Saltar tutorial
+          </button>
+        )}
+
+        <div className="flex items-center gap-1.5 text-xs text-gray-400">
+          <Clock className="h-3.5 w-3.5" />
+          <span>Toma menos de 5 minutos</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Main Engine ─────────────────────────────────────
 
 export function BrujulaEngine() {
   const router = useRouter();
   const shuffled = useMemo(() => selectAndShuffleBrujulaCards(brujulaCardPool), []);
 
-  const [phase, setPhase] = useState<Phase>('main');
+  const [phase, setPhase] = useState<Phase>('onboarding');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [swipes, setSwipes] = useState<BrujulaSwipe[]>([]);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -159,6 +326,11 @@ export function BrujulaEngine() {
       }
     }, 200);
   }, [isAnimating, isFinished, activeCards, activeIndex, swipes, totalActive, phase, handleRoundComplete]);
+
+  // ── Onboarding screen ──
+  if (phase === 'onboarding') {
+    return <OnboardingScreen onStart={() => setPhase('main')} />;
+  }
 
   // ── Tiebreaker intro screen ──
   if (phase === 'tiebreaker-intro') {

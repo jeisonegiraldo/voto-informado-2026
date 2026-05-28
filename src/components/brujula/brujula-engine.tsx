@@ -214,6 +214,7 @@ export function BrujulaEngine() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [swipes, setSwipes] = useState<BrujulaSwipe[]>([]);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [forcedDirection, setForcedDirection] = useState<'right' | 'left' | null>(null);
   const startTracked = useRef(false);
 
   // Tiebreaker state
@@ -292,7 +293,7 @@ export function BrujulaEngine() {
   );
 
   const handleSwipe = useCallback(
-    (direction: 'right' | 'left') => {
+    (direction: 'right' | 'left', fromButton = false) => {
       if (isAnimating || isFinished) return;
       setIsAnimating(true);
 
@@ -302,11 +303,18 @@ export function BrujulaEngine() {
         trackClient('brujula_start');
       }
 
+      // When triggered by button click, set forced direction so the
+      // SwipeCard animates x to the correct side before the exit fires
+      if (fromButton) {
+        setForcedDirection(direction);
+      }
+
       const card = activeCards[activeIndex];
       const newSwipes = [...swipes, { cardId: card.id, direction }];
       setSwipes(newSwipes);
 
       setTimeout(() => {
+        setForcedDirection(null);
         if (phase === 'tiebreaker') {
           setTiebreakerIndex((prev) => prev + 1);
         } else {
@@ -472,6 +480,7 @@ export function BrujulaEngine() {
             card={currentCard}
             onSwipe={handleSwipe}
             isTop={true}
+            forcedDirection={forcedDirection}
           />
         </AnimatePresence>
       </div>
@@ -482,7 +491,7 @@ export function BrujulaEngine() {
           variant="outline"
           size="lg"
           className="h-14 w-14 rounded-full border-2 border-rose-200 p-0 text-rose-500 hover:bg-rose-50 hover:text-rose-600 active:scale-95"
-          onClick={() => handleSwipe('left')}
+          onClick={() => handleSwipe('left', true)}
           disabled={isAnimating}
         >
           <ThumbsDown className="h-6 w-6" />
@@ -492,7 +501,7 @@ export function BrujulaEngine() {
           variant="outline"
           size="lg"
           className="h-14 w-14 rounded-full border-2 border-emerald-200 p-0 text-emerald-500 hover:bg-emerald-50 hover:text-emerald-600 active:scale-95"
-          onClick={() => handleSwipe('right')}
+          onClick={() => handleSwipe('right', true)}
           disabled={isAnimating}
         >
           <ThumbsUp className="h-6 w-6" />

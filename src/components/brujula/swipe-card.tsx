@@ -1,6 +1,7 @@
 'use client';
 
-import { motion, useMotionValue, useTransform, type PanInfo } from 'framer-motion';
+import { useEffect } from 'react';
+import { motion, useMotionValue, useTransform, animate, type PanInfo } from 'framer-motion';
 import type { BrujulaCard } from '@/data/brujula-cards';
 import { dimensionMap } from '@/data/dimensions';
 import { ThumbsUp, ThumbsDown } from 'lucide-react';
@@ -9,12 +10,24 @@ interface SwipeCardProps {
   card: BrujulaCard;
   onSwipe: (direction: 'right' | 'left') => void;
   isTop: boolean;
+  forcedDirection?: 'right' | 'left' | null;
 }
 
 const SWIPE_THRESHOLD = 100;
 
-export function SwipeCard({ card, onSwipe, isTop }: SwipeCardProps) {
+export function SwipeCard({ card, onSwipe, isTop, forcedDirection }: SwipeCardProps) {
   const x = useMotionValue(0);
+
+  // When a button click triggers a swipe, animate x to the correct
+  // side so the visual overlay (green/red) shows AND x.get() returns
+  // the right value for the exit animation fallback.
+  useEffect(() => {
+    if (forcedDirection === 'right') {
+      animate(x, 300, { duration: 0.25 });
+    } else if (forcedDirection === 'left') {
+      animate(x, -300, { duration: 0.25 });
+    }
+  }, [forcedDirection, x]);
   const rotate = useTransform(x, [-200, 200], [-15, 15]);
   const opacity = useTransform(x, [-200, -100, 0, 100, 200], [0.5, 1, 1, 1, 0.5]);
 
@@ -46,7 +59,7 @@ export function SwipeCard({ card, onSwipe, isTop }: SwipeCardProps) {
       dragElastic={0.8}
       onDragEnd={handleDragEnd}
       exit={{
-        x: x.get() > 0 ? 300 : -300,
+        x: forcedDirection === 'right' ? 300 : forcedDirection === 'left' ? -300 : (x.get() > 0 ? 300 : -300),
         opacity: 0,
         transition: { duration: 0.3 },
       }}

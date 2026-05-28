@@ -4,7 +4,7 @@ import { useState, useMemo, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { SwipeCard } from './swipe-card';
-import { brujulaCards, shuffleBrujulaCards } from '@/data/brujula-cards';
+import { brujulaCardPool, selectAndShuffleBrujulaCards } from '@/data/brujula-cards';
 import {
   calculateBrujulaResults,
   encodeBrujulaResults,
@@ -16,7 +16,7 @@ import { ThumbsUp, ThumbsDown, SkipForward } from 'lucide-react';
 
 export function BrujulaEngine() {
   const router = useRouter();
-  const shuffled = useMemo(() => shuffleBrujulaCards(brujulaCards), []);
+  const shuffled = useMemo(() => selectAndShuffleBrujulaCards(brujulaCardPool), []);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [swipes, setSwipes] = useState<BrujulaSwipe[]>([]);
@@ -42,7 +42,7 @@ export function BrujulaEngine() {
 
         // Check if finished
         if (currentIndex + 1 >= totalCards) {
-          const result = calculateBrujulaResults(newSwipes, brujulaCards);
+          const result = calculateBrujulaResults(newSwipes, brujulaCardPool);
           const encoded = encodeBrujulaResults(result.swipes);
           router.push(`/brujula/resultado?r=${encoded}`);
         }
@@ -64,7 +64,7 @@ export function BrujulaEngine() {
       setIsAnimating(false);
 
       if (currentIndex + 1 >= totalCards) {
-        const result = calculateBrujulaResults(newSwipes, brujulaCards);
+        const result = calculateBrujulaResults(newSwipes, brujulaCardPool);
         const encoded = encodeBrujulaResults(result.swipes);
         router.push(`/brujula/resultado?r=${encoded}`);
       }

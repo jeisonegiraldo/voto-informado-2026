@@ -7,7 +7,7 @@ import {
   decodeBrujulaResults,
   calculateBrujulaResults,
 } from '@/lib/brujula-scoring';
-import { brujulaCards } from '@/data/brujula-cards';
+import { brujulaCardPool } from '@/data/brujula-cards';
 import { candidateMap, candidates } from '@/data/candidates';
 import { dimensionMap } from '@/data/dimensions';
 import { CandidateAvatar } from '@/components/shared/candidate-avatar';
@@ -59,7 +59,7 @@ function RevealContent() {
     );
   }
 
-  const result = calculateBrujulaResults(swipes, brujulaCards);
+  const result = calculateBrujulaResults(swipes, brujulaCardPool);
   const topCandidate = candidateMap[result.topCandidate];
 
   const sorted = [...candidates].sort(

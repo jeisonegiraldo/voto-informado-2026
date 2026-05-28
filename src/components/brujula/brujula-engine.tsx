@@ -44,7 +44,7 @@ const ONBOARDING_STEPS = [
     icon: ThumbsUp,
     title: 'Desliza o toca los botones',
     description:
-      'Si estas de acuerdo con la propuesta, desliza hacia la derecha o toca el boton verde. Si no, hacia la izquierda o el boton rojo. Si no estas seguro, puedes omitirla.',
+      'Desliza la tarjeta o usa los botones para responder:',
     accent: 'from-emerald-500 to-teal-600',
     showDemo: true,
   },
@@ -97,35 +97,54 @@ function OnboardingScreen({ onStart }: { onStart: () => void }) {
           {/* Swipe demo */}
           {current.showDemo && (
             <motion.div
-              className="mx-auto mt-6 flex max-w-xs items-center justify-center gap-4"
+              className="mx-auto mt-5 max-w-xs"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
             >
-              <div className="flex flex-col items-center gap-1.5">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-rose-200 text-rose-400">
-                  <ThumbsDown className="h-5 w-5" />
+              {/* Main buttons row */}
+              <div className="flex items-center justify-center gap-4">
+                <div className="flex flex-col items-center gap-1.5">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-rose-200 text-rose-400">
+                    <ThumbsDown className="h-5 w-5" />
+                  </div>
+                  <span className="text-[10px] font-medium text-rose-400">En desacuerdo</span>
                 </div>
-                <span className="text-[10px] font-medium text-rose-400">En desacuerdo</span>
+
+                <div className="flex flex-col items-center gap-1.5">
+                  <motion.div
+                    className="flex h-20 w-14 items-center justify-center rounded-xl border-2 border-gray-200 bg-white shadow-md"
+                    animate={{ x: [0, 20, -20, 0] }}
+                    transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 1 }}
+                  >
+                    <span className="text-[10px] font-medium text-gray-400">Propuesta</span>
+                  </motion.div>
+                  <span className="text-[10px] text-gray-400">Desliza</span>
+                </div>
+
+                <div className="flex flex-col items-center gap-1.5">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-emerald-200 text-emerald-400">
+                    <ThumbsUp className="h-5 w-5" />
+                  </div>
+                  <span className="text-[10px] font-medium text-emerald-400">De acuerdo</span>
+                </div>
               </div>
 
-              <div className="flex flex-col items-center gap-1.5">
-                <motion.div
-                  className="flex h-20 w-14 items-center justify-center rounded-xl border-2 border-gray-200 bg-white shadow-md"
-                  animate={{ x: [0, 20, -20, 0] }}
-                  transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 1 }}
-                >
-                  <span className="text-[10px] font-medium text-gray-400">Propuesta</span>
-                </motion.div>
-                <span className="text-[10px] text-gray-400">Desliza</span>
-              </div>
-
-              <div className="flex flex-col items-center gap-1.5">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-emerald-200 text-emerald-400">
-                  <ThumbsUp className="h-5 w-5" />
+              {/* Skip option — visually distinct */}
+              <motion.div
+                className="mt-4 flex flex-col items-center gap-1"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6 }}
+              >
+                <div className="flex items-center gap-2 rounded-full border-2 border-dashed border-gray-300 px-4 py-1.5 text-gray-400">
+                  <SkipForward className="h-4 w-4" />
+                  <span className="text-xs font-medium">Omitir</span>
                 </div>
-                <span className="text-[10px] font-medium text-emerald-400">De acuerdo</span>
-              </div>
+                <span className="text-[10px] text-gray-400">
+                  ¿No tienes posicion? Omitela, no afecta tu resultado
+                </span>
+              </motion.div>
             </motion.div>
           )}
         </motion.div>
@@ -458,7 +477,7 @@ export function BrujulaEngine() {
       </div>
 
       {/* Button controls (alternative to swiping) */}
-      <div className="mt-6 flex items-center justify-center gap-3">
+      <div className="mt-6 flex items-center justify-center gap-4">
         <Button
           variant="outline"
           size="lg"
@@ -467,16 +486,6 @@ export function BrujulaEngine() {
           disabled={isAnimating}
         >
           <ThumbsDown className="h-6 w-6" />
-        </Button>
-
-        <Button
-          variant="ghost"
-          size="sm"
-          className="h-10 w-10 rounded-full p-0 text-gray-400 hover:text-gray-600"
-          onClick={handleSkip}
-          disabled={isAnimating}
-        >
-          <SkipForward className="h-5 w-5" />
         </Button>
 
         <Button
@@ -490,8 +499,20 @@ export function BrujulaEngine() {
         </Button>
       </div>
 
-      <p className="mt-4 text-center text-[11px] text-gray-400">
-        También puedes deslizar la tarjeta hacia los lados
+      {/* Skip button — separate row, clearly labeled */}
+      <div className="mt-3 flex justify-center">
+        <button
+          onClick={handleSkip}
+          disabled={isAnimating}
+          className="flex items-center gap-1.5 rounded-full border border-dashed border-gray-300 px-4 py-2 text-xs font-medium text-gray-400 transition-colors hover:border-gray-400 hover:bg-gray-50 hover:text-gray-600 disabled:opacity-50"
+        >
+          <SkipForward className="h-3.5 w-3.5" />
+          No tengo posicion, omitir
+        </button>
+      </div>
+
+      <p className="mt-3 text-center text-[11px] text-gray-400">
+        Tambien puedes deslizar la tarjeta hacia los lados
       </p>
     </div>
   );

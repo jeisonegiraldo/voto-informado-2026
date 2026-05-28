@@ -64,9 +64,6 @@ export function FloatingChat() {
   const [feedbackComment, setFeedbackComment] = useState('');
   const [speakingIndex, setSpeakingIndex] = useState<number | null>(null);
 
-  // Hide on /chat page
-  if (pathname === '/chat') return null;
-
   function handleFeedback(index: number, type: 'up' | 'down') {
     const updated = [...messages];
     if (updated[index].feedback === type) {
@@ -141,6 +138,9 @@ export function FloatingChat() {
     const timer = setTimeout(() => setShowPulse(false), 10000);
     return () => clearTimeout(timer);
   }, []);
+
+  // Hide on /chat page (MUST be after all hooks to respect Rules of Hooks)
+  if (pathname === '/chat') return null;
 
   async function handleSend(text?: string) {
     const messageText = text || input.trim();

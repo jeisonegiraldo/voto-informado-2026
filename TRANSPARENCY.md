@@ -159,7 +159,7 @@ Responde SOLO con un JSON valido con estos campos:
 1. **Verificar prompts:** Compara este documento con los archivos fuente enlazados arriba. Deben ser identicos.
 2. **Verificar datos:** Los 48 posiciones en `src/data/positions.ts` tienen campo `sourceRefs` con referencia a pagina exacta del plan de gobierno. Los PDFs estan en `public/planes_gobierno/`.
 3. **Verificar test de afinidad:** El algoritmo de scoring esta en `src/lib/quiz-scoring.ts`. La formula es transparente: suma ponderada normalizada donde todas las preguntas pesan igual.
-4. **Verificar brujula:** Las 20 tarjetas anonimas estan en `src/data/brujula-cards.ts`. El shuffle es aleatorio (Fisher-Yates) sin sesgo de orden.
+4. **Verificar brujula:** El pool de 40 propuestas anonimas esta en `src/data/brujula-cards.ts` (10 por candidato). En cada sesion se seleccionan 20 al azar (5 por candidato) usando Fisher-Yates shuffle con proteccion anti-consecutivo. La logica de scoring esta en `src/lib/brujula-scoring.ts`. El script de pruebas exhaustivas en `scripts/test-brujula-fairness.ts` verifica imparcialidad con 10,000 simulaciones aleatorias.
 
 ---
 

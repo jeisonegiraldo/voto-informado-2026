@@ -29,3 +29,6 @@ Si encuentras una vulnerabilidad de seguridad, **no abras un Issue publico**. En
 - **Rate limiting:** Anti-spam por sesion en el buzon ciudadano (localStorage)
 - **Datos:** Los datos de candidatos son estaticos y verificables contra los PDFs fuente
 - **IA:** El chat tiene un system prompt con reglas de neutralidad que impiden sesgo
+- **Monitoreo:** Sentry captura errores en cliente, servidor y edge runtime. Tunnel route (`/monitoring`) evita bloqueo por ad-blockers
+- **Sourcemaps:** Se eliminan automaticamente despues del upload a Sentry para no exponer codigo fuente
+- **Privacidad:** No se recopilan datos personales. Analytics de Vercel son anonimos. Session Replay de Sentry se limita a 5% de sesiones

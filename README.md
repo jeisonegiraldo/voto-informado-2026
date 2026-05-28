@@ -14,7 +14,7 @@ Ayudar a los ciudadanos colombianos a tomar decisiones electorales informadas, c
 
 | Feature | Descripcion |
 |---------|-------------|
-| **Brujula Electoral "A Ciegas"** | 20 propuestas reales sin nombres ni colores. Descubre tu candidato basandote solo en ideas. |
+| **Brujula Electoral "A Ciegas"** | Pool de 40 propuestas reales (10 por candidato). Cada sesion presenta 20 al azar, sin nombres ni colores. Descubre tu candidato basandote solo en ideas. |
 | **Comparador Visual** | 12 dimensiones de comparacion con espectros interactivos y propuestas detalladas. |
 | **Descubre tu Afinidad** | 12 preguntas para descubrir con cual candidato coincides mas. |
 | **Chat IA** | Asistente electoral basado en planes de gobierno oficiales. |
@@ -56,7 +56,7 @@ Los datos de posiciones (`src/data/positions.ts`) son el nucleo de la app y fuer
 2. **Colores institucionales** — cada candidato usa el color de su partido, no colores valorativos
 3. **Misma estructura** — todos los perfiles tienen el mismo layout y profundidad
 4. **Test transparente** — la metodologia y formula estan en `/metodologia`
-5. **Brujula sin sesgo** — propuestas anonimas con shuffle aleatorio
+5. **Brujula sin sesgo** — 40 propuestas anonimas con seleccion aleatoria de 20 por sesion, verificada con 10,000 simulaciones estadisticas
 6. **Codigo abierto** — cualquiera puede auditar la logica, los datos y el algoritmo
 7. **Transparencia algoritmica** — todos los prompts de IA son publicos. Ver [TRANSPARENCY.md](TRANSPARENCY.md)
 
@@ -89,19 +89,73 @@ Abrir [http://localhost:3000](http://localhost:3000).
 | `KV_REST_API_TOKEN` | Token de Upstash Redis | Si (para noticias/peticiones) |
 | `CRON_SECRET` | Secret para autenticar cron jobs | Si (para scraping noticias) |
 | `NEXT_PUBLIC_BASE_URL` | URL base del sitio | No (default: votainformadoco.org) |
+| `NEXT_PUBLIC_SENTRY_DSN` | DSN de Sentry para error monitoring | No (desactiva Sentry si falta) |
+| `SENTRY_ORG` | Organizacion de Sentry | No |
+| `SENTRY_PROJECT` | Proyecto de Sentry | No |
+| `SENTRY_AUTH_TOKEN` | Auth token de Sentry para sourcemaps | No |
+
+## Observabilidad
+
+| Herramienta | Proposito |
+|-------------|-----------|
+| **Vercel Analytics** | Page views y metricas de uso |
+| **Vercel Speed Insights** | Core Web Vitals en tiempo real |
+| **Sentry** | Error monitoring, Session Replay, tracing |
 
 ## Estructura del Proyecto
 
 ```
 src/
-  app/           # Paginas (App Router)
-  components/    # Componentes React
-  data/          # Datos estaticos (candidatos, posiciones, afinidad)
-  lib/           # Utilidades (scoring, scraper, cache)
-  types/         # Tipos TypeScript
+  app/                  # Paginas (App Router)
+    api/                # API routes (chat, verificador, noticias, cron)
+    brujula/            # Brujula Electoral "A Ciegas"
+    quiz/               # Descubre tu Afinidad
+    comparar/           # Comparador visual
+    candidatos/         # Perfiles individuales
+    buzon/              # Buzon ciudadano
+    verificador/        # Verificador de afirmaciones
+    buscar/             # Buscador por tema
+    noticias/           # Feed de noticias
+    metodologia/        # Transparencia y metodologia
+    guia-votante/       # Guia para el dia de votacion
+    resumen/            # Resumen ejecutivo de candidatos
+  components/           # Componentes React
+    ui/                 # shadcn/ui (button, card, badge, etc.)
+    layout/             # Header, footer, mobile-nav
+    brujula/            # SwipeCard, BrujulaEngine
+    quiz/               # QuizEngine, QuizQuestion
+    comparison/         # ComparisonMatrix, DimensionRow
+    candidates/         # CandidateCard, CandidateProfile
+    news/               # NewsFeed, NewsCard
+    shared/             # CandidateAvatar, ShareInvite, PartyBadge
+    landing/            # HeroSection, ElectionCountdown
+  data/                 # Datos estaticos
+    candidates.ts       # 4 candidatos con metadata
+    dimensions.ts       # 12 dimensiones de comparacion
+    positions.ts        # 48 posiciones (4x12) con fuentes citadas
+    quiz-questions.ts   # 12 preguntas con scores por candidato
+    brujula-cards.ts    # Pool de 40 propuestas para Brujula
+    sources.ts          # Referencias y fuentes
+  lib/                  # Logica de negocio
+    quiz-scoring.ts     # Algoritmo de afinidad (suma normalizada)
+    brujula-scoring.ts  # Scoring de Brujula (primary + secondary)
+    chat-context.ts     # System prompt del chat electoral
+    verificador-context.ts # System prompt del verificador
+    news-scraper.ts     # Scraping RSS + Cheerio
+    news-summarizer.ts  # Resumenes con Claude API
+    petition-classifier.ts # Clasificacion IA de peticiones
+    kv-cache.ts         # Wrapper de Vercel KV (Redis)
+    redis.ts            # Conexion Upstash Redis
+  types/                # Tipos TypeScript
+    candidate.ts        # CandidateId, Candidate
+    dimension.ts        # DimensionId, Dimension, CandidatePosition
+    quiz.ts             # QuizQuestion, QuizResult
+    news.ts             # NewsArticle, NewsSource
 public/
-  images/        # Fotos de candidatos
-  planes_gobierno/ # PDFs de planes de gobierno
+  images/               # Fotos de candidatos y partidos
+  planes_gobierno/      # PDFs de planes de gobierno oficiales
+scripts/
+  test-brujula-fairness.ts  # Tests de imparcialidad (10,000 sims)
 ```
 
 ## Transparencia Algoritmica
@@ -116,6 +170,20 @@ En resumen:
 1. Abre un **Issue** describiendo el problema o mejora
 2. Si quieres contribuir codigo, haz un **Fork** y envia un **Pull Request**
 3. Para reportar sesgo o inexactitudes en datos, usa el tag `datos` o `sesgo`
+
+## Changelog
+
+Ver [CHANGELOG.md](CHANGELOG.md) para el historial completo de cambios.
+
+## Documentacion Completa
+
+| Documento | Contenido |
+|-----------|-----------|
+| [PROJECT.md](PROJECT.md) | Arquitectura completa, decisiones tecnicas, algoritmos y guia para equipos nuevos |
+| [CHANGELOG.md](CHANGELOG.md) | Historial cronologico de cambios |
+| [TRANSPARENCY.md](TRANSPARENCY.md) | System Prompts de IA (auditoria publica) |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Guia de contribucion y reglas de neutralidad |
+| [SECURITY.md](SECURITY.md) | Politica de seguridad y reporte de vulnerabilidades |
 
 ## Licencia
 

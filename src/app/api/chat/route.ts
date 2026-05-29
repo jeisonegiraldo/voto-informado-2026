@@ -80,7 +80,7 @@ export async function POST(req: NextRequest) {
 
     // Stream response
     const stream = await anthropic.messages.stream({
-      model: 'claude-sonnet-4-20250514',
+      model: 'claude-sonnet-4-6',
       max_tokens: 800,
       system: systemPrompt,
       messages: validMessages,

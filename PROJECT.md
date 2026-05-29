@@ -1,6 +1,6 @@
 # VotaInformado 2026 — Documento de Proyecto
 
-Documento tecnico y de contexto para equipos de desarrollo. Ultima actualizacion: 27 de mayo de 2026.
+Documento tecnico y de contexto para equipos de desarrollo. Ultima actualizacion: 28 de mayo de 2026.
 
 ---
 
@@ -47,7 +47,7 @@ Documento tecnico y de contexto para equipos de desarrollo. Ultima actualizacion
 | Animaciones | Framer Motion | 12.x |
 | Graficos | Recharts | 3.x |
 | Iconos | Lucide React | 1.x |
-| IA | Claude API (Anthropic SDK) | 0.98.x |
+| IA | Claude API (Anthropic SDK) — modelo `claude-sonnet-4-6` | 0.98.x |
 | Cache/DB | Upstash Redis (Vercel KV) | 1.38.x |
 | Scraping | RSS Parser + Cheerio | 3.x / 1.x |
 | Markdown | react-markdown | 10.x |
@@ -167,7 +167,7 @@ Los resultados se codifican en base64 en la URL (`?r=...`) usando `encodeBrujula
 
 **Concepto:** Asistente de IA que responde preguntas sobre candidatos y propuestas, basado exclusivamente en los planes de gobierno oficiales.
 
-**Modelo:** Claude (Anthropic) via `@anthropic-ai/sdk`.
+**Modelo:** `claude-sonnet-4-6` (Anthropic) via `@anthropic-ai/sdk`.
 
 **System prompt:** Publicado integramente en [TRANSPARENCY.md](TRANSPARENCY.md). Las 10 reglas fundamentales incluyen: nunca recomendar candidato, nunca tomar posicion ideologica, citar fuentes, y responder en espanol colombiano.
 
@@ -304,6 +304,7 @@ Estos principios son el fundamento del proyecto y deben respetarse en toda contr
 - `sentry.server.config.ts` — Config del servidor (importado por instrumentation.ts)
 - `sentry.edge.config.ts` — Config del edge runtime
 - `src/app/global-error.tsx` — Error boundary global
+- `src/app/chat/error.tsx` — Error boundary de ruta para `/chat`
 
 **Configuracion:**
 - Solo activo en produccion (`enabled: process.env.NODE_ENV === 'production'`)
@@ -330,8 +331,13 @@ Core Web Vitals en tiempo real, insertado en `src/app/layout.tsx` via `<SpeedIns
 | `/api/verificar` | POST | Verificador de afirmaciones | No |
 | `/api/buscar-tema` | POST | Busqueda por tema con IA | No |
 | `/api/news` | GET | Noticias cacheadas | No |
-| `/api/peticiones` | GET/POST | CRUD de peticiones ciudadanas | No |
+| `/api/peticiones` | GET/POST | CRUD de peticiones ciudadanas (long-polling cada 30s) | No |
+| `/api/registrar` | POST | Registro de usuarios / sesiones | No |
+| `/api/analytics` | POST | Eventos de analytics internos | No |
+| `/api/analytics/dashboard` | GET | Dashboard de analytics (admin) | No |
 | `/api/reportar` | POST | Reportes ciudadanos | No |
+| `/api/reportes` | GET | Lista de reportes (admin) | No |
+| `/api/admin/peticiones` | GET | Vista admin de peticiones | No |
 | `/api/cron/scrape-news` | GET | Cron job de scraping | Bearer token (`CRON_SECRET`) |
 | `/api/og` | GET | OG Image dinamica | No |
 | `/monitoring` | POST | Tunnel de Sentry | No (proxy) |

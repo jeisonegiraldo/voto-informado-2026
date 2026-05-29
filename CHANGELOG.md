@@ -6,6 +6,22 @@ El formato esta basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.
 
 ---
 
+## [1.5.0] - 2026-05-28
+
+### Corregido
+- **Crash en `/chat`** — `FloatingChat` tenia un `return null` entre llamadas a hooks violando React Rules of Hooks. Movido el early return al final de todos los hooks.
+- **Animacion incorrecta en Brujula** — El boton "de acuerdo" disparaba la animacion de salida hacia la izquierda (dislike). Causa: `x.get()` vale `0` cuando el swipe es por boton (sin arrastre), por lo que `x.get() > 0` siempre era `false`. Solucion: estado `forcedDirection` + `animate(x, ±300)` imperativo para posicionar correctamente el `useMotionValue` antes del exit.
+- **Hydration error en countdown** — `ElectionCountdown` inicializaba el estado con `getTimeUntilElection()` en el servidor (SSR) produciendo 407 errores de hidratacion en Sentry (VOTA-INFORMADO-3). Corregido inicializando con ceros estaticos y actualizando en `useEffect`.
+- **Falsos positivos de Sentry** — Extensiones de Firefox/Brave y wallets de crypto (Ethereum) generaban ruido en Sentry. Agregados filtros en `ignoreErrors` para `__firefox__`, `window.__firefox__`, y `window.ethereum`.
+
+### Cambiado
+- **Modelo Claude** — Migrado de `claude-sonnet-4-20250514` (deprecado, retira el 15 de junio de 2026) a `claude-sonnet-4-6` en todos los endpoints y helpers: `api/verificar`, `api/chat`, `api/buscar-tema`, `lib/news-summarizer`, `lib/petition-classifier`.
+
+### Agregado
+- `src/app/chat/error.tsx` — Error boundary de ruta para `/chat` que presenta UI de recuperacion en lugar de propagar el error al boundary global.
+
+---
+
 ## [1.4.0] - 2026-05-27
 
 ### Cambiado

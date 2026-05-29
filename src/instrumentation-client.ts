@@ -24,6 +24,9 @@ Sentry.init({
     "window.__firefox__",
     /Can't find variable: __firefox__/,
     /undefined is not an object.*__firefox__/,
+    // Crypto wallet extensions (MetaMask, Brave Wallet) inject window.ethereum
+    /window\.ethereum/,
+    /undefined is not an object.*ethereum/,
   ],
 
   environment: process.env.NODE_ENV,

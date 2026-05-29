@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { SwipeCard } from './swipe-card';
@@ -208,7 +208,15 @@ function OnboardingScreen({ onStart }: { onStart: () => void }) {
 
 export function BrujulaEngine() {
   const router = useRouter();
-  const shuffled = useMemo(() => selectAndShuffleBrujulaCards(brujulaCardPool), []);
+
+  // Initialize with empty array so server and client render identical HTML.
+  // Math.random() inside selectAndShuffleBrujulaCards would produce a different
+  // set on each render (SSR vs hydration) causing a hydration mismatch.
+  // useEffect runs only on the client, after hydration is complete.
+  const [shuffled, setShuffled] = useState<BrujulaCard[]>([]);
+  useEffect(() => {
+    setShuffled(selectAndShuffleBrujulaCards(brujulaCardPool));
+  }, []);
 
   const [phase, setPhase] = useState<Phase>('onboarding');
   const [currentIndex, setCurrentIndex] = useState(0);
